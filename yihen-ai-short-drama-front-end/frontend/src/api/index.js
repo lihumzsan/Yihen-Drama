@@ -167,6 +167,7 @@ export const characterApi = {
 export const sceneApi = {
   add: (data) => apiClient.post('/api/scene/add', data),
   update: (data) => apiClient.post('/api/scene/update', data),
+  batchGenerateImage: (data) => apiClient.post('/api/scene/batch-generate-scene-img', data),
   delete: (id) => apiClient.delete(`/api/scene/${id}`),
   listByProject: (projectId, params = {}) => apiClient.get(`/api/scene/project/${projectId}`, { params }),
   searchInProject: (projectId, params = {}) => apiClient.get(`/api/scene/${projectId}/search`, { params }),

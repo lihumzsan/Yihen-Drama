@@ -144,6 +144,34 @@ public class EpisodeExtractOrchestrator {
         );
     }
 
+    public void generateSceneAndSaveAssetsAsync(
+            List<SceneRequestVO> requestList,
+            Consumer<Scene> onSuccess,
+            BiConsumer<SceneRequestVO, Throwable> onError
+    ) {
+        if (ObjectUtils.isEmpty(requestList)) {
+            throw new RuntimeException("批量生成场景请求不能为空");
+        }
+        if (requestList.size() > 20) {
+            throw new RuntimeException("单次批量生成不能超过20个场景");
+        }
+
+        requestList.forEach(request ->
+                CompletableFuture.runAsync(() -> {
+                    try {
+                        Scene scene = generateSceneAndSaveAssets(request);
+                        if (onSuccess != null) {
+                            onSuccess.accept(scene);
+                        }
+                    } catch (Exception e) {
+                        if (onError != null) {
+                            onError.accept(request, e);
+                        }
+                    }
+                }, episodeExecutor)
+        );
+    }
+
    // 创建生成人物视频人物
     public VideoTask createCharacterVideoTaskAndSaveAssets(CharactersRequestVO charactersRequestVO) throws Exception {
         // 非空校验

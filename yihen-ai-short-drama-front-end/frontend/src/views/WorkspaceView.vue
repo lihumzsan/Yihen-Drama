@@ -619,16 +619,39 @@
                   <div class="generation-section" v-if="extractedInfo.scenes.length > 0">
                     <div class="section-title-row">
                       <h4 class="section-title">本章场景</h4>
-                      <button class="btn btn-primary btn-sm add-character-btn" @click="openAddSceneDrawer">
-                        添加场景
-                      </button>
+                      <div class="section-header-actions">
+                        <button class="btn btn-secondary btn-sm add-character-btn" @click="generateAllScenes">
+                          一键生成
+                        </button>
+                        <button
+                          class="btn btn-secondary btn-sm add-character-btn"
+                          @click="generateSelectedScenes"
+                          :disabled="selectedSceneCount === 0"
+                        >
+                          批量生成({{ selectedSceneCount }})
+                        </button>
+                        <button class="btn btn-primary btn-sm add-character-btn" @click="openAddSceneDrawer">
+                          添加场景
+                        </button>
+                      </div>
                     </div>
                     <div class="character-grid">
                       <div
                         v-for="scene in extractedInfo.scenes"
                         :key="scene.id"
                         class="character-card scene-card"
+                        :class="{ selectedForBatch: isSceneSelected(scene.id) }"
                       >
+                        <button
+                          class="card-select-toggle"
+                          type="button"
+                          @click.stop="toggleSceneSelection(scene.id)"
+                          :title="isSceneSelected(scene.id) ? '取消勾选' : '勾选用于批量生成'"
+                        >
+                          <svg v-if="isSceneSelected(scene.id)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                          </svg>
+                        </button>
                         <div 
                           class="character-avatar scene-avatar"
                           @dragover.prevent="handleSceneDragOver(scene)"
@@ -2069,6 +2092,7 @@ const projectScenes = ref([])
 const imageTabs = ['人物', '场景']
 const generatingCharacter = ref(new Set())
 const selectedCharacterIds = ref(new Set())
+const selectedSceneIds = ref(new Set())
 const generatingVideo = ref(new Set())
 const videoTasks = ref({}) // characterId -> VideoTask
 const videoPollingIntervals = ref({}) // characterId -> intervalId
@@ -2224,6 +2248,22 @@ const clearCharacterSelection = () => {
   selectedCharacterIds.value = new Set()
 }
 
+const isSceneSelected = (sceneId) => selectedSceneIds.value.has(sceneId)
+
+const toggleSceneSelection = (sceneId) => {
+  const next = new Set(selectedSceneIds.value)
+  if (next.has(sceneId)) {
+    next.delete(sceneId)
+  } else {
+    next.add(sceneId)
+  }
+  selectedSceneIds.value = next
+}
+
+const clearSceneSelection = () => {
+  selectedSceneIds.value = new Set()
+}
+
 const mapExtractedInfo = (data) => ({
   characters: (data?.characters || []).map(c => ({
     id: c.id,
@@ -2304,6 +2344,10 @@ const extractedInfo = ref({
 
 const selectedCharacterCount = computed(() =>
   extractedInfo.value.characters.filter(c => selectedCharacterIds.value.has(c.id)).length
+)
+
+const selectedSceneCount = computed(() =>
+  extractedInfo.value.scenes.filter(s => selectedSceneIds.value.has(s.id)).length
 )
 
 const hasExtractedInfo = computed(() => {
@@ -2440,6 +2484,7 @@ const selectEpisode = async (episodeId, forceStepZero = false) => {
   }
   activeEpisode.value = episodeId
   clearCharacterSelection()
+  clearSceneSelection()
   generatingCharacter.value.clear()
   generatingScene.value.clear()
   // 如果是强制设置为步骤0（比如刚创建的章节），否则保持原有步骤
@@ -2543,6 +2588,7 @@ const loadExtractedInfo = async (episodeId) => {
         }))
       }
       clearCharacterSelection()
+      clearSceneSelection()
     }
   } catch (err) {
     console.log('暂无提取信息或获取失败')
@@ -2665,6 +2711,69 @@ const generateSelectedCharacters = async () => {
   const ok = await submitBatchGenerateCharacters(selectedList)
   if (ok) {
     clearCharacterSelection()
+  }
+}
+
+const submitBatchGenerateScenes = async (sceneList) => {
+  if (!Array.isArray(sceneList) || sceneList.length === 0) return false
+  try {
+    if (sceneList.some(s => !s?.id) && activeEpisode.value) {
+      await loadExtractedInfo(activeEpisode.value)
+    }
+    const validScenes = sceneList.filter(s => !!s?.id)
+    if (validScenes.length === 0) {
+      toast.warning('场景尚未保存完成，请稍后重试')
+      return false
+    }
+    if (validScenes.length < sceneList.length) {
+      toast.warning('部分场景尚未保存，已跳过')
+    }
+
+    const defaultRes = await modelInstanceApi.getDefault('IMAGE')
+    const defaultModel = defaultRes?.data
+    if (!defaultModel) {
+      toast.error('未找到默认图像生成模型，请先配置模型')
+      return false
+    }
+
+    const requestList = validScenes.map(scene => ({
+      modelInstanceId: defaultModel.id,
+      sceneId: scene.id,
+      projectId: projectId,
+      description: scene.description || `${scene.name}的场景描述`
+    }))
+
+    validScenes.forEach(scene => generatingScene.value.add(scene.id))
+    await sceneApi.batchGenerateImage(requestList)
+    toast.success(`已提交 ${requestList.length} 个场景生成任务`)
+    return true
+  } catch (err) {
+    sceneList.forEach(scene => {
+      if (scene?.id) generatingScene.value.delete(scene.id)
+    })
+    toast.error(err.message || '批量生成提交失败')
+    return false
+  }
+}
+
+const generateAllScenes = async () => {
+  const scenesWithoutImage = extractedInfo.value.scenes.filter(s => !s?.thumbnail)
+  if (scenesWithoutImage.length === 0) {
+    toast.warning('所有场景已有图片')
+    return
+  }
+  await submitBatchGenerateScenes(scenesWithoutImage)
+}
+
+const generateSelectedScenes = async () => {
+  const selectedList = extractedInfo.value.scenes.filter(s => selectedSceneIds.value.has(s.id))
+  if (selectedList.length === 0) {
+    toast.warning('请先勾选场景')
+    return
+  }
+  const ok = await submitBatchGenerateScenes(selectedList)
+  if (ok) {
+    clearSceneSelection()
   }
 }
 
@@ -2818,6 +2927,26 @@ const updateCharacterImageByPayload = (characterPayload) => {
   generatingCharacter.value.delete(characterId)
 }
 
+const updateSceneImageByPayload = (scenePayload) => {
+  if (!scenePayload || !scenePayload.id) return
+  const sceneId = scenePayload.id
+  const updateList = (list) => {
+    const idx = list.findIndex(s => String(s.id) === String(sceneId))
+    if (idx !== -1) {
+      list[idx] = {
+        ...list[idx],
+        ...scenePayload,
+        thumbnail: scenePayload.thumbnail || list[idx].thumbnail
+      }
+      return true
+    }
+    return false
+  }
+  updateList(extractedInfo.value.scenes)
+  updateList(projectScenes.value)
+  generatingScene.value.delete(sceneId)
+}
+
 const updateShotVideo = (shotId, videoUrl) => {
   if (!shotId || !videoUrl) return
   const idx = storyboards.value.findIndex(sb => String(sb.id) === String(shotId))
@@ -2858,6 +2987,20 @@ const handleWsMessage = (event) => {
         generatingCharacter.value.delete(payload.targetId)
       }
       toast.error(payload.errorMessage || '角色图片生成失败')
+      return
+    }
+  }
+  if (payload.bizType === 'SCENE_IMAGE_BATCH') {
+    const batchStatus = String(payload.status || '').toUpperCase()
+    if (batchStatus === 'SUCCESS' && payload.scene) {
+      updateSceneImageByPayload(payload.scene)
+      return
+    }
+    if (batchStatus === 'FAIL') {
+      if (payload.targetId != null) {
+        generatingScene.value.delete(payload.targetId)
+      }
+      toast.error(payload.errorMessage || '场景图片生成失败')
       return
     }
   }
@@ -3239,6 +3382,11 @@ const deleteScene = async () => {
     await sceneApi.delete(id)
     extractedInfo.value.scenes = extractedInfo.value.scenes.filter(s => s.id !== id)
     projectScenes.value = projectScenes.value.filter(s => s.id !== id)
+    if (selectedSceneIds.value.has(id)) {
+      const next = new Set(selectedSceneIds.value)
+      next.delete(id)
+      selectedSceneIds.value = next
+    }
     closeDeleteSceneConfirm()
     toast.success('删除场景成功')
   } catch (err) {

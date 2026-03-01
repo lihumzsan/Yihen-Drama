@@ -3,6 +3,7 @@ package com.yihen.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yihen.common.Result;
 import com.yihen.controller.vo.*;
+import com.yihen.core.model.impl.EpisodeExtractOrchestrator;
 import com.yihen.entity.Characters;
 import com.yihen.entity.Scene;
 import com.yihen.search.doc.CharactersDoc;
@@ -10,6 +11,7 @@ import com.yihen.search.doc.SceneDoc;
 import com.yihen.search.service.SceneSearchService;
 import com.yihen.service.CharacterService;
 import com.yihen.service.SceneService;
+import com.yihen.websocket.TaskStatusWebSocketHandler;
 import io.minio.errors.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,7 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Tag(name = "场景接口", description = "场景管理")
 @RestController
@@ -34,6 +38,12 @@ public class SceneController {
 
     @Autowired
     private SceneSearchService sceneSearchService;
+
+    @Autowired
+    private EpisodeExtractOrchestrator episodeExtractOrchestrator;
+
+    @Autowired
+    private TaskStatusWebSocketHandler taskStatusWebSocketHandler;
 
     @PostMapping("/add")
     @Operation(summary = "添加场景")
@@ -73,6 +83,33 @@ public class SceneController {
         Page<Scene> scenePage = new Page<>();
         sceneService.getByProjectId(projectId, scenePage);
         return Result.success(scenePage);
+    }
+
+    @PostMapping("/batch-generate-scene-img")
+    @Operation(summary = "批量生成场景图片")
+    public Result<List<Scene>> batchGenerateSceneImage(@RequestBody List<SceneRequestVO> sceneRequestVOList) throws Exception {
+        episodeExtractOrchestrator.generateSceneAndSaveAssetsAsync(
+                sceneRequestVOList,
+                scene -> {
+                    Map<String, Object> payload = new HashMap<>();
+                    payload.put("bizType", "SCENE_IMAGE_BATCH");
+                    payload.put("status", "SUCCESS");
+                    payload.put("targetId", scene.getId());
+                    payload.put("projectId", scene.getProjectId());
+                    payload.put("scene", scene);
+                    taskStatusWebSocketHandler.sendInfo(scene.getProjectId(), payload);
+                },
+                (request, throwable) -> {
+                    Map<String, Object> payload = new HashMap<>();
+                    payload.put("bizType", "SCENE_IMAGE_BATCH");
+                    payload.put("status", "FAIL");
+                    payload.put("targetId", request.getSceneId());
+                    payload.put("projectId", request.getProjectId());
+                    payload.put("errorMessage", throwable.getMessage());
+                    taskStatusWebSocketHandler.sendInfo(request.getProjectId(), payload);
+                }
+        );
+        return Result.<List<Scene>>success("批量生成任务已提交，结果将逐条推送");
     }
 
     /**
