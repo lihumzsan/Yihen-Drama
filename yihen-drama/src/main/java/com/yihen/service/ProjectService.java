@@ -6,7 +6,12 @@ import com.yihen.controller.vo.ExtractionResultVO;
 import com.yihen.controller.vo.ProjectCreateRequestVO;
 import com.yihen.entity.Project;
 import com.yihen.enums.ProjectStyle;
+import io.minio.errors.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public interface ProjectService extends IService<Project> {
@@ -40,4 +45,6 @@ public interface ProjectService extends IService<Project> {
     void updateProjectById(Project project);
 
     List<Project> getProject(Page<Project> projectPage);
+
+    Project upload(Long projectId, MultipartFile file) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException;
 }

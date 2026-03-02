@@ -5,10 +5,12 @@ import com.yihen.common.Result;
 import com.yihen.controller.vo.ExtractionResultVO;
 import com.yihen.controller.vo.ProjectCreateRequestVO;
 import com.yihen.controller.vo.ProjectUpdateRequestVO;
+import com.yihen.entity.Characters;
 import com.yihen.entity.Project;
 import com.yihen.search.doc.ProjectDoc;
 import com.yihen.search.service.ProjectSearchService;
 import com.yihen.service.ProjectService;
+import io.minio.errors.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,7 +19,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 
@@ -86,6 +92,14 @@ public class ProjectController {
         projectService.updateProjectById(project);
         return Result.success(project);
     }
+
+    @PostMapping("/upload/{projectId}")
+    @Operation(summary = "上传项目封面")
+    public Result<Project> uploadCharacter(@PathVariable("projectId") Long projectId, @RequestParam("file") MultipartFile file) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        Project project= projectService.upload(projectId, file);
+        return Result.success(project);
+    }
+
 
     /**
      * 项目搜索接口（ES）

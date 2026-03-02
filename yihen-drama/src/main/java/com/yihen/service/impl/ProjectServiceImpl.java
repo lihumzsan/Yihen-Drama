@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yihen.asyn.ProjectPersistFacade;
+import com.yihen.config.properties.MinioProperties;
+import com.yihen.constant.MinioConstant;
 import com.yihen.controller.vo.ExtractionResultVO;
 import com.yihen.controller.vo.ProjectCreateRequestVO;
 import com.yihen.entity.Characters;
@@ -19,10 +21,18 @@ import com.yihen.service.CharacterService;
 import com.yihen.service.EpisodeService;
 import com.yihen.service.ProjectService;
 import com.yihen.service.SceneService;
+import com.yihen.util.MinioUtil;
+import com.yihen.util.UrlUtils;
+import io.minio.errors.*;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -41,6 +51,12 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
 
     @Autowired
     private ProjectPersistFacade projectPersistFacade;
+
+    @Autowired
+    private MinioProperties minioProperties;
+
+    @Autowired
+    private MinioUtil minioUtil;
 
     private static final ExecutorService EXECUTORSERVICE = Executors.newFixedThreadPool(5);
 
@@ -117,6 +133,40 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
     public List<Project> getProject(Page<Project> projectPage) {
         Page<Project> page = page(projectPage);
         return page.getRecords();
+    }
+
+    @Override
+    public Project upload(Long projectId, MultipartFile file) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        Project project = getById(projectId);
+
+        // 生成保存路径
+        String originalFilename = file.getOriginalFilename();
+        String extension = UrlUtils.extractFileExtension(originalFilename);
+        // 项目封面图片路径 /project/{projectId}/cover/{projectId-projectName.xxx}
+        String imgName = project.getId() + "-" +project.getName() + "." + extension;
+        String objectName = MinioConstant.PROJECT_COVER_IMG_PATH.formatted(project.getId(), imgName);
+
+
+
+        // 修改场景图片url
+        String cover = minioProperties.getEndPoint() + "/" + MinioConstant.BUCKET_NAME + "/" + objectName;
+
+        // 校验：是否 Minio中存在图片
+        if (!org.springframework.util.ObjectUtils.isEmpty(project.getCover()) && !project.getCover().equals(cover)) {
+            // 存在且不相同，则删除原来的
+            String oldObjectName = project.getCover().replace(minioProperties.getEndPoint() + "/" + MinioConstant.BUCKET_NAME + "/", "");
+            minioUtil.deleteObject(MinioConstant.BUCKET_NAME, oldObjectName);
+        }
+
+        project.setCover(cover);
+        updateById(project);
+
+
+        // 上传文件到Minio
+        InputStream inputStream = file.getInputStream();
+        long size = file.getSize();
+        minioUtil.uploadFile(inputStream, (int) size,MinioConstant.BUCKET_NAME, objectName);
+        return project;
     }
 
 
