@@ -44,7 +44,7 @@ public class StoryboardController {
     @PostMapping("/generate")
     @Operation(summary = "生成分镜")
     public Result<List<Storyboard>> generate(@RequestBody StoryboardRequestVO storyboardRequestVO) throws Exception {
-        List<Storyboard> storyboards = storyboardService.generate(storyboardRequestVO.getEpisodeId(),storyboardRequestVO.getProjectId(),storyboardRequestVO.getModelId());
+        List<Storyboard> storyboards = storyboardService.generate(storyboardRequestVO.getEpisodeId(),storyboardRequestVO.getProjectId(),storyboardRequestVO.getModelId(), storyboardRequestVO.isUsedVector());
         return Result.success(storyboards);
     }
 

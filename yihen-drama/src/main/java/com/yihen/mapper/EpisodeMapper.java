@@ -19,6 +19,10 @@ public interface EpisodeMapper extends BaseMapper<Episode> {
     @Select("SELECT content FROM episode WHERE id = #{episodeId}")
     String getContentByEpisodeId(@Param("episodeId") Long episodeId);
 
+    // 根据章节Id获取章节摘要
+    @Select("SELECT abstraction FROM episode WHERE id = #{episodeId}")
+    String getAbstractionByEpisodeId(@Param("episodeId") Long episodeId);
+
     // 根据项目Id获取所有关联的章节Id
     @Select("SELECT id FROM episode WHERE project_id = #{projectId}")
     List<Long> getEpisodeIdByProjectId(@Param("projectId") Long projectId);

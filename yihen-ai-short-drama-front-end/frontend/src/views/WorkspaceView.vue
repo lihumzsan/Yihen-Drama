@@ -1141,6 +1141,11 @@
                   </p>
                 </div>
                 <div class="storyboard-actions">
+                  <label class="vector-usage-toggle" title="是否在生成分镜时启用向量检索">
+                    <input type="checkbox" v-model="storyboardUsedVector" class="vector-usage-toggle-input" />
+                    <span class="vector-usage-toggle-switch" aria-hidden="true"></span>
+                    <span>使用向量检索</span>
+                  </label>
                   <button class="btn btn-secondary" @click="generateStoryboards" :disabled="generatingStoryboard">
                     <svg v-if="generatingStoryboard" class="spinner" viewBox="0 0 24 24" width="14" height="14">
                       <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="31.416" stroke-dashoffset="31.416">
@@ -3939,6 +3944,7 @@ const uploadSceneFile = async (scene, file) => {
 
 const storyboards = ref([])
 const generatingStoryboard = ref(false)
+const storyboardUsedVector = ref(false)
 const selectedStoryboardIndex = ref(0)
 const selectedStoryboard = computed(() => storyboards.value[selectedStoryboardIndex.value] || null)
 const selectedScene = computed(() => selectedStoryboard.value?.scenes?.[0] || null)
@@ -4378,7 +4384,8 @@ const generateStoryboards = async () => {
     const res = await storyboardApi.generate({
       episodeId: activeEpisode.value,
       projectId: projectId,
-      modelId
+      modelId,
+      usedVector: storyboardUsedVector.value
     })
     if (res.code === 200 && res.data) {
       storyboards.value = res.data
@@ -6899,7 +6906,67 @@ onUnmounted(() => {
 
 .storyboard-actions {
   display: flex;
+  align-items: center;
   gap: 10px;
+}
+
+.vector-usage-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.vector-usage-toggle-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.vector-usage-toggle-switch {
+  width: 38px;
+  height: 22px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.vector-usage-toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #f5e7be;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.vector-usage-toggle-input:checked + .vector-usage-toggle-switch {
+  background: rgba(212, 175, 55, 0.32);
+  border-color: var(--gold-primary);
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.22);
+}
+
+.vector-usage-toggle-input:checked + .vector-usage-toggle-switch::after {
+  transform: translateX(16px);
+  background: var(--gold-light);
+}
+
+.vector-usage-toggle-input:focus-visible + .vector-usage-toggle-switch {
+  outline: 2px solid rgba(212, 175, 55, 0.45);
+  outline-offset: 2px;
 }
 
 .storyboard-list {

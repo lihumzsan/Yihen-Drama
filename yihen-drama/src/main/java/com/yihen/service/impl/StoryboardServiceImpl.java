@@ -14,12 +14,14 @@ import com.yihen.core.model.strategy.image.ImageModelFactory;
 import com.yihen.core.model.strategy.image.ImageModelStrategy;
 import com.yihen.core.model.strategy.video.VideoModelFactory;
 import com.yihen.core.model.strategy.video.VideoModelStrategy;
+import com.yihen.dto.NovelChunk;
 import com.yihen.entity.*;
 import com.yihen.enums.SceneCode;
 import com.yihen.enums.TaskType;
 import com.yihen.mapper.EpisodeMapper;
 import com.yihen.mapper.StoryboardMapper;
 import com.yihen.service.*;
+import com.yihen.util.QdrantUtils;
 import kotlin.jvm.internal.Lambda;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,6 +76,11 @@ public class StoryboardServiceImpl extends ServiceImpl<StoryboardMapper, Storybo
 
     @Autowired
     private StoryboardMapper storyboardMapper;
+
+    @Autowired
+    private QdrantUtils qdrantUtils;
+
+
 
 
     @Override
@@ -241,11 +248,29 @@ public class StoryboardServiceImpl extends ServiceImpl<StoryboardMapper, Storybo
 
 
     @Override
-    public List<Storyboard> generate(Long episodeId,Long projectId , Long modelId) throws Exception {
-        // 1. 获取章节内容
-        String content = episodeMapper.getContentByEpisodeId(episodeId);
+    public List<Storyboard> generate(Long episodeId,Long projectId , Long modelId, boolean usedVector) throws Exception {
         TextModelRequestVO textModelRequestVO = new TextModelRequestVO();
         textModelRequestVO.setModelId(modelId);
+        String content;
+        if (usedVector) {
+
+            // 章节内容来自于向量切片
+
+            // 1. 获取章节摘要
+            String abstractionByEpisodeId = episodeMapper.getAbstractionByEpisodeId(episodeId);
+            // 2. 根据章节摘要搜索相关片段
+            NovelChunk novelChunk = new NovelChunk();
+            novelChunk.setEpisodeId(episodeId);
+            List<String> search = qdrantUtils.search(abstractionByEpisodeId, novelChunk);
+            content = search.toString();
+        }else {
+            // 章节内容来自于全文
+            content = episodeMapper.getContentByEpisodeId(episodeId);
+
+        }
+
+
+
         textModelRequestVO.setText(content);
         textModelRequestVO.setSceneCode(SceneCode.STORYBOARD_GEN);
         textModelRequestVO.setProjectId(projectId);

@@ -15,7 +15,7 @@ public interface StoryboardService extends IService<Storyboard> {
     Storyboard getStoryboardsById(Long id);
 
 
-    List<Storyboard> generate(Long episodeId,Long projectId ,Long modelId) throws Exception;
+    List<Storyboard> generate(Long episodeId,Long projectId ,Long modelId , boolean usedVector) throws Exception;
 
     /**
      * 生成首帧提示词

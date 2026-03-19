@@ -14,4 +14,7 @@ public class StoryboardRequestVO {
 
     @Schema(description = "模型id")
     private Long modelId;
+
+    @Schema(description = "是否使用向量检索")
+    private boolean usedVector;
 }
