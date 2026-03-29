@@ -1,9 +1,12 @@
 package com.yihen.http;
 
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.reactive.function.BodyInserters;
 import reactor.core.publisher.Mono;
 
 import java.net.URLDecoder;
@@ -26,7 +29,7 @@ public class HttpExecutor {
         return webClientFactory.getWebClient(baseUrl)
                 .post()
                 .uri(path)
-                .header("Authorization", "Bearer " + apiKey)
+                .headers(headers -> applyAuthorization(headers, apiKey))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .bodyValue(body)
@@ -42,8 +45,24 @@ public class HttpExecutor {
         return webClientFactory.getWebClient(baseUrl)
                 .get()
                 .uri(path)
-                .header("Authorization", "Bearer " + apiKey)
+                .headers(headers -> applyAuthorization(headers, apiKey))
                 .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(String.class);
+    }
+
+    public Mono<String> postMultipart(
+            String baseUrl,
+            String path,
+            String apiKey,
+            MultiValueMap<String, ?> body
+    ){
+        return webClientFactory.getWebClient(baseUrl)
+                .post()
+                .uri(path)
+                .headers(headers -> applyAuthorization(headers, apiKey))
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData(body))
                 .retrieve()
                 .bodyToMono(String.class);
     }
@@ -63,6 +82,12 @@ public class HttpExecutor {
                 .uri(decodedUrl)
                 .retrieve()
                 .toEntity(Resource.class);
+    }
+
+    private void applyAuthorization(HttpHeaders headers, String apiKey) {
+        if (apiKey != null && !apiKey.isBlank()) {
+            headers.setBearerAuth(apiKey);
+        }
     }
 
 

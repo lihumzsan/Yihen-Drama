@@ -44,8 +44,18 @@ public class VolcanoImageModelStrategy implements ImageModelStrategy {
 
     @Override
     public String create(ImageModelRequestVO imageModelRequestVO) throws Exception {
-        // TODO
-        return "";
+        ModelInstance modelInstance = modelManageService.getModelInstanceById(imageModelRequestVO.getModelInstanceId());
+        String baseUrl = modelDefinitionMapper.getBaseUrlById(modelInstance.getModelDefId());
+
+        HashMap<String, Object> body = (HashMap<String, Object>) modelInstance.getParams();
+        if (ObjectUtils.isEmpty(body)) {
+            body = new HashMap<>();
+        }
+        body.put("model", modelInstance.getModelCode());
+        body.put("prompt", imageModelRequestVO.getDescription());
+
+        String response = httpExecutor.post(baseUrl, modelInstance.getPath(), modelInstance.getApiKey(), body).block();
+        return extractResponse(response);
     }
 
     @Override

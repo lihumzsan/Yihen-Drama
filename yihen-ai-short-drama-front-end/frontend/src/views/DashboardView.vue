@@ -1052,7 +1052,7 @@ onBeforeUnmount(() => {
 }
 
 :deep(.search-highlight) {
-  color: #F7E7BE;
+  color: var(--text-gold);
   font-weight: 600;
   padding: 0 4px;
   border-radius: 4px;
@@ -1090,7 +1090,7 @@ onBeforeUnmount(() => {
   
   &.active {
     background: var(--gold-primary);
-    color: #1A1A1E;
+    color: var(--text-on-accent);
     border-color: var(--gold-primary);
   }
 }
@@ -1159,7 +1159,7 @@ onBeforeUnmount(() => {
   transition: all var(--transition-base);
   
   svg {
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(45, 36, 22, 0.72);
     width: 14px;
     height: 14px;
   }
@@ -1223,7 +1223,7 @@ onBeforeUnmount(() => {
 .project-cover-content {
   width: 100%;
   height: 100%;
-  background: linear-gradient(145deg, #1C1814 0%, #0D0B08 100%);
+  background: var(--panel-gradient);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1322,8 +1322,8 @@ onBeforeUnmount(() => {
   }
   
   &.draft {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
+    background: rgba(255, 252, 247, 0.84);
+    color: var(--text-primary);
   }
 }
 
@@ -1408,7 +1408,7 @@ onBeforeUnmount(() => {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--overlay-medium);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -1576,7 +1576,7 @@ onBeforeUnmount(() => {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--overlay-medium);
   display: flex;
   align-items: center;
   justify-content: center;

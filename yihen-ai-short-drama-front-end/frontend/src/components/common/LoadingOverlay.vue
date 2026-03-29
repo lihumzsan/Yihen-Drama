@@ -38,7 +38,8 @@ defineExpose({ setProgress })
 .loading-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(10, 10, 15, 0.85);
+  background: rgba(255, 252, 247, 0.82);
+  backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -47,6 +48,11 @@ defineExpose({ setProgress })
 
 .loading-content {
   text-align: center;
+  padding: 28px 32px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
 }
 
 .loading-spinner {

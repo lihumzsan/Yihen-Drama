@@ -2,8 +2,8 @@ package com.yihen.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yihen.enums.ModelType;
+import com.yihen.enums.SceneCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,20 +11,22 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @TableName("model_instance_default ")
-@Schema(description = "各类型下默认的模型实例表")
+@Schema(description = "鍚勭被鍨嬩笅榛樿鐨勬ā鍨嬪疄渚嬭〃")
 public class ModelInstanceDefault extends BaseEntity {
 
-    @Schema(description = "模型类型 TEXT/IMAGE")
+    @Schema(description = "妯″瀷绫诲瀷 TEXT/IMAGE")
     private ModelType modelType;
 
-    @Schema(description = "模型实例ID")
+    @Schema(description = "妯″瀷瀹炰緥ID")
     private Long modelInstanceId;
 
-    @Schema(description = "状态", example = "1-启用，0-禁用")
+    @Schema(description = "鐘舵€?, example = \"1-鍚敤锛?-绂佺敤\"")
     private Byte status;
 
-    @Schema(description = "备注说明")
+    @Schema(description = "澶囨敞璇存槑")
     private String remark;
 
-
+    @TableField(exist = false)
+    @Schema(description = "榛樿妯″瀷瀵瑰簲鍦烘櫙")
+    private SceneCode sceneCode;
 }

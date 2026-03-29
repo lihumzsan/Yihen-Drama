@@ -14,6 +14,7 @@ import com.yihen.constant.MinioConstant;
 import com.yihen.core.model.PropertyGenerateImgModelService;
 import com.yihen.entity.*;
 import com.yihen.enums.EpisodeStep;
+import com.yihen.enums.ModelType;
 import com.yihen.enums.SceneCode;
 import com.yihen.http.HttpExecutor;
 import com.yihen.service.*;
@@ -72,6 +73,9 @@ public class EpisodeExtractOrchestrator {
     @Autowired
     private VideoModelFactory videoModelFactory;
 
+    @Autowired
+    private ModelManageService modelManageService;
+
     // 提取资产信息并保存
     public ExtractionResultVO extractAndSaveAssets(ExtractRequestVO request) throws Exception {
         // 1. 根据id获取章节信息
@@ -83,7 +87,7 @@ public class EpisodeExtractOrchestrator {
 
         // 2. 构建提取参数
         TextModelRequestVO textModelRequestVO = new TextModelRequestVO();
-        textModelRequestVO.setModelId(request.getModelId());
+        textModelRequestVO.setModelId(resolveTextModelId(request.getModelId()));
         textModelRequestVO.setSceneCode(SceneCode.INFO_EXTRACT);
         textModelRequestVO.setText(episode.getContent());
         textModelRequestVO.setEpisodeId(episode.getId());
@@ -117,6 +121,20 @@ public class EpisodeExtractOrchestrator {
     }
 
     // 生成人物形象图片并保存
+    private Long resolveTextModelId(Long requestedModelId) {
+        if (requestedModelId != null) {
+            ModelInstance requestedInstance = modelManageService.getModelInstanceById(requestedModelId);
+            if (requestedInstance != null && ModelType.TEXT.equals(requestedInstance.getModelType())) {
+                return requestedModelId;
+            }
+        }
+        ModelInstance defaultTextModel = modelManageService.getDefaultModelInstanceByType(ModelType.TEXT, SceneCode.INFO_EXTRACT);
+        if (defaultTextModel == null || defaultTextModel.getId() == null) {
+            throw new RuntimeException("未配置可用的文本模型，无法提取重要信息");
+        }
+        return defaultTextModel.getId();
+    }
+
     public Characters generateCharacterAndSaveAssets(CharactersRequestVO charactersRequestVO) throws Exception {
         Characters characters = propertyGenerateImgModelService.generateCharacter(charactersRequestVO);
         // 创建异步任务，异步更新数据库

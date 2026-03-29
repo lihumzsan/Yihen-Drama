@@ -48,17 +48,17 @@ const globalStore = useGlobalStore()
   }
 
   &::-webkit-scrollbar-track {
-    background: #1a1815;
+    background: var(--bg-tertiary);
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #8B7355;
+    background: rgba(143, 98, 32, 0.34);
     border-radius: 5px;
     border: 2px solid transparent;
     background-clip: padding-box;
 
     &:hover {
-      background: #D4AF37;
+      background: var(--gold-primary);
     }
   }
 }

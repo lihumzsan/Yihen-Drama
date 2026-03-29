@@ -566,7 +566,7 @@ onMounted(async () => {
     
     svg { width: 16px; height: 16px; }
     
-    &.text { background: rgba(139, 92, 246, 0.15); color: #8B5CF6; }
+    &.text { background: rgba(196, 145, 45, 0.14); color: var(--gold-dark); }
     &.extract { background: rgba(16, 185, 129, 0.15); color: var(--success); }
     &.image { background: rgba(6, 182, 212, 0.15); color: var(--accent); }
     &.storyboard { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
@@ -636,7 +636,7 @@ onMounted(async () => {
   padding: 2px 6px;
   font-size: 10px;
   background: var(--gold-primary);
-  color: #1A1A1E;
+  color: var(--text-on-accent);
   border-radius: 4px;
   font-weight: 600;
   flex-shrink: 0;
@@ -747,7 +747,7 @@ onMounted(async () => {
 }
 .btn-primary {
   background: var(--gold-gradient);
-  color: #1A1A1E;
+  color: var(--text-on-accent);
   border: 1px solid var(--gold-primary);
   &:hover { box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
 }
@@ -761,7 +761,7 @@ onMounted(async () => {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--overlay-medium);
   display: flex;
   align-items: center;
   justify-content: center;

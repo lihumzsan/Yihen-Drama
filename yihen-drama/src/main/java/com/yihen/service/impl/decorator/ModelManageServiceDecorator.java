@@ -8,6 +8,7 @@ import com.yihen.constant.project.ProjectMQConstant;
 import com.yihen.entity.ModelDefinition;
 import com.yihen.entity.ModelInstance;
 import com.yihen.enums.ModelType;
+import com.yihen.enums.SceneCode;
 import com.yihen.init.ModelCacheInitializer;
 import com.yihen.mapper.ModelDefinitionMapper;
 import com.yihen.service.ModelManageService;
@@ -122,10 +123,10 @@ public class ModelManageServiceDecorator extends ServiceImpl<ModelDefinitionMapp
     }
 
     @Override
-    public ModelInstance getDefaultModelInstanceByType(ModelType modelType) {
+    public ModelInstance getDefaultModelInstanceByType(ModelType modelType, SceneCode sceneCode) {
 
 
-        return modelManageService.getDefaultModelInstanceByType(modelType);
+        return modelManageService.getDefaultModelInstanceByType(modelType, sceneCode);
     }
 
     @Override

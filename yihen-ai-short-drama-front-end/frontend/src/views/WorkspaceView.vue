@@ -187,12 +187,15 @@
                         </svg>
                         人物角色 ({{ extractedInfo.characters.length }})
                       </h4>
+                      <span class="section-hint">双击条目查看并编辑</span>
                     </div>
                     <div class="extract-characters-list" v-if="extractedInfo.characters.length > 0">
                       <div 
                         v-for="char in extractedInfo.characters" 
                         :key="char.id"
                         class="extract-character-item"
+                        title="双击查看并编辑角色"
+                        @dblclick="openExtractedResultEditor('character', char)"
                       >
                         <div class="extract-avatar">
                           <img :src="char.avatar" :alt="char.name" />
@@ -218,19 +221,25 @@
                         </svg>
                         场景列表 ({{ extractedInfo.scenes.length }})
                       </h4>
+                      <span class="section-hint">双击条目查看并编辑</span>
                     </div>
                     <div class="scenes-list" v-if="extractedInfo.scenes.length > 0">
                       <div 
                         v-for="scene in extractedInfo.scenes" 
                         :key="scene.id"
                         class="scene-item"
+                        title="双击查看并编辑场景"
+                        @dblclick="openExtractedResultEditor('scene', scene)"
                       >
                         <div class="scene-icon">
                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="3" y="3" width="18" height="18" rx="2"/>
                           </svg>
                         </div>
-                        <span>{{ scene.name }}</span>
+                        <div class="scene-item-content">
+                          <span class="scene-item-name">{{ scene.name }}</span>
+                          <span class="scene-item-desc">{{ scene.description || '双击查看并补充场景描述' }}</span>
+                        </div>
                       </div>
                     </div>
                     <div class="empty-section" v-else>
@@ -844,6 +853,65 @@
                         </circle>
                       </svg>
                       确认
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="modal-overlay" v-if="extractedResultEditor.visible" @click.self="closeExtractedResultEditor">
+                <div class="modal extracted-editor-modal">
+                  <div class="modal-header">
+                    <h4>{{ extractedResultEntityLabel }}详情</h4>
+                    <button class="modal-close" @click="closeExtractedResultEditor" aria-label="关闭">×</button>
+                  </div>
+                  <div class="modal-body extracted-editor-body">
+                    <div class="extracted-editor-preview">
+                      <img
+                        v-if="extractedResultEditor.cover"
+                        :src="extractedResultEditor.cover"
+                        :alt="extractedResultEditor.form.name || extractedResultEntityLabel"
+                      />
+                      <div v-else class="extracted-editor-placeholder">
+                        <svg v-if="extractedResultEditor.type === 'character'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                          <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                          <rect x="3" y="3" width="18" height="18" rx="2"/>
+                          <circle cx="8.5" cy="8.5" r="1.5"/>
+                          <polyline points="21 15 16 10 5 21"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">{{ extractedResultEntityLabel }}名称 <span class="required">*</span></label>
+                      <input
+                        v-model="extractedResultEditor.form.name"
+                        class="form-input"
+                        :placeholder="`请输入${extractedResultEntityLabel}名称`"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">{{ extractedResultEntityLabel }}描述</label>
+                      <textarea
+                        v-model="extractedResultEditor.form.description"
+                        class="form-textarea"
+                        :placeholder="`请输入${extractedResultEntityLabel}描述`"
+                        rows="6"
+                      ></textarea>
+                    </div>
+                    <p class="modal-tip extracted-editor-tip">双击提取结果里的条目，可再次打开查看或修改。</p>
+                    <p class="form-error" v-if="extractedResultEditor.error">{{ extractedResultEditor.error }}</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button class="btn btn-secondary" @click="closeExtractedResultEditor" :disabled="extractedResultEditor.saving">取消</button>
+                    <button class="btn btn-primary" @click="saveExtractedResultEditor" :disabled="!canSaveExtractedResult">
+                      <svg v-if="extractedResultEditor.saving" class="spinner" viewBox="0 0 24 24" width="16" height="16">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="31.416" stroke-dashoffset="31.416">
+                          <animate attributeName="stroke-dashoffset" values="31.416;0" dur="1s" repeatCount="indefinite"/>
+                        </circle>
+                      </svg>
+                      保存修改
                     </button>
                   </div>
                 </div>
@@ -2119,7 +2187,9 @@ const previewVideo = ref({ url: '', name: '' })
 const textModels = ref([])
 const imageModels = ref([])
 const videoModels = ref([])
-const selectedModel = ref(null)
+const selectedTextModelId = ref(null)
+const selectedImageModelId = ref(null)
+const selectedVideoModelId = ref(null)
 const defaultTextModelId = ref(null)
 const defaultImageModelId = ref(null)
 const defaultVideoModelId = ref(null)
@@ -2197,6 +2267,18 @@ const addSceneForm = ref({
 })
 const addSceneError = ref('')
 const addingScene = ref(false)
+const extractedResultEditor = ref({
+  visible: false,
+  type: 'character',
+  itemId: null,
+  cover: '',
+  saving: false,
+  error: '',
+  form: {
+    name: '',
+    description: ''
+  }
+})
 const generatingFirstFrame = ref(false)
 const generatingFirstFrameImage = ref(false)
 const generatingShotVideoPrompt = ref(false)
@@ -2274,7 +2356,7 @@ const mapExtractedInfo = (data) => ({
     id: c.id,
     name: c.name,
     description: c.description,
-    avatar: c.avatar || 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="#D4AF37" width="100" height="100"/><text fill="#fff" x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="40">${c.name?.charAt(0) || '?'}</text></svg>`),
+    avatar: c.avatar || 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="#D4AF37" width="100" height="100"/><text fill="#2A2113" x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="40">${c.name?.charAt(0) || '?'}</text></svg>`),
     videoUrl: c.videoUrl || ''
   })),
   scenes: (data?.scenes || []).map(s => ({
@@ -2290,6 +2372,42 @@ const isImageStep = computed(() => currentStepNum.value === 2)
 
 // 当前步骤是否为角色固定视频步骤（步骤3）
 const isVideoStep = computed(() => currentStepNum.value === 3)
+
+const selectedModel = computed({
+  get: () => {
+    if (isVideoStep.value) {
+      return selectedVideoModelId.value
+    }
+    if (isImageStep.value) {
+      return selectedImageModelId.value
+    }
+    return selectedTextModelId.value
+  },
+  set: (modelId) => {
+    if (isVideoStep.value) {
+      selectedVideoModelId.value = modelId
+      return
+    }
+    if (isImageStep.value) {
+      selectedImageModelId.value = modelId
+      return
+    }
+    selectedTextModelId.value = modelId
+  }
+})
+
+const pickModelId = (models, selectedId, defaultId) => {
+  if (!Array.isArray(models) || models.length === 0) {
+    return null
+  }
+  if (selectedId && models.some(model => model.id === selectedId)) {
+    return selectedId
+  }
+  if (defaultId && models.some(model => model.id === defaultId)) {
+    return defaultId
+  }
+  return models[0].id
+}
 
 // 当前应该显示的模型列表
 const currentModels = computed(() => {
@@ -2338,7 +2456,7 @@ const saveStatusText = computed(() => {
 
 const currentStepNum = computed(() => Number(currentStep.value) || 0)
 
-const defaultAvatar = 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><circle fill="#D4AF37" cx="24" cy="24" r="24"/><text fill="#fff" x="24" y="28" text-anchor="middle" font-size="16">?</text></svg>`)
+const defaultAvatar = 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><circle fill="#D4AF37" cx="24" cy="24" r="24"/><text fill="#2A2113" x="24" y="28" text-anchor="middle" font-size="16">?</text></svg>`)
 
 const episodes = ref([])
 
@@ -2358,6 +2476,15 @@ const selectedSceneCount = computed(() =>
 const hasExtractedInfo = computed(() => {
   return extractedInfo.value.characters.length > 0 || extractedInfo.value.scenes.length > 0
 })
+
+const extractedResultEntityLabel = computed(() =>
+  extractedResultEditor.value.type === 'scene' ? '场景' : '角色'
+)
+
+const canSaveExtractedResult = computed(() =>
+  !extractedResultEditor.value.saving
+  && String(extractedResultEditor.value.form.name || '').trim().length > 0
+)
 
 const addChapter = () => {
   newEpisode.value = {
@@ -2583,7 +2710,7 @@ const loadExtractedInfo = async (episodeId) => {
           id: c.id,
           name: c.name,
           description: c.description,
-          avatar: c.avatar || 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="#D4AF37" width="100" height="100"/><text fill="#fff" x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="40">${c.name?.charAt(0) || '?'}</text></svg>`)
+          avatar: c.avatar || 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="#D4AF37" width="100" height="100"/><text fill="#2A2113" x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="40">${c.name?.charAt(0) || '?'}</text></svg>`)
         })),
         scenes: (propertyResult.data.scenes || []).map(s => ({
           id: s.id,
@@ -2607,8 +2734,7 @@ const generateCharacterImage = async (character, actionType) => {
   generatingCharacter.value.add(character.id)
 
   try {
-    const defaultRes = await modelInstanceApi.getDefault('IMAGE')
-    const defaultModel = defaultRes?.data
+    const defaultModel = await getDefaultModelByScene('IMAGE', 'CHARACTER_GEN')
 
     if (!defaultModel) {
       toast.error('未找到默认图像生成模型，请先配置模型')
@@ -2669,8 +2795,7 @@ const submitBatchGenerateCharacters = async (characterList) => {
       toast.warning('部分角色尚未保存，已跳过')
     }
 
-    const defaultRes = await modelInstanceApi.getDefault('IMAGE')
-    const defaultModel = defaultRes?.data
+    const defaultModel = await getDefaultModelByScene('IMAGE', 'CHARACTER_GEN')
     if (!defaultModel) {
       toast.error('未找到默认图像生成模型，请先配置模型')
       return false
@@ -2734,8 +2859,7 @@ const submitBatchGenerateScenes = async (sceneList) => {
       toast.warning('部分场景尚未保存，已跳过')
     }
 
-    const defaultRes = await modelInstanceApi.getDefault('IMAGE')
-    const defaultModel = defaultRes?.data
+    const defaultModel = await getDefaultModelByScene('IMAGE', 'SCENE_GEN')
     if (!defaultModel) {
       toast.error('未找到默认图像生成模型，请先配置模型')
       return false
@@ -2793,7 +2917,7 @@ const generateCharacterVideo = async (character) => {
     if (videoModels.value.length === 0) {
       await loadVideoModels()
     }
-    const modelInstanceId = selectedModel.value || defaultVideoModelId.value
+    const modelInstanceId = pickModelId(videoModels.value, selectedVideoModelId.value, defaultVideoModelId.value)
     if (!modelInstanceId) {
       result.value = { success: false, message: '未找到默认视频模型，请先在右侧选择模型' }
       showResult.value = true
@@ -3074,8 +3198,154 @@ const openVideoPreview = (videoSrc, videoName) => {
   videoPreview.value = true
 }
 
+const patchCharacterAcrossWorkspace = (characterId, patch = {}) => {
+  if (!characterId) return
+  const applyToList = (list) => {
+    const idx = list.findIndex(item => String(item.id) === String(characterId))
+    if (idx !== -1) {
+      list[idx] = {
+        ...list[idx],
+        ...patch,
+        avatar: patch.avatar ?? list[idx].avatar,
+        videoUrl: patch.videoUrl ?? list[idx].videoUrl
+      }
+      return true
+    }
+    return false
+  }
+  applyToList(extractedInfo.value.characters)
+  applyToList(projectCharacters.value)
+  storyboards.value = storyboards.value.map((storyboard) => {
+    if (!Array.isArray(storyboard.characters) || storyboard.characters.length === 0) {
+      return storyboard
+    }
+    let changed = false
+    const characters = storyboard.characters.map((item) => {
+      if (String(item.id) !== String(characterId)) {
+        return item
+      }
+      changed = true
+      return {
+        ...item,
+        ...patch,
+        avatar: patch.avatar ?? item.avatar,
+        videoUrl: patch.videoUrl ?? item.videoUrl
+      }
+    })
+    return changed ? { ...storyboard, characters } : storyboard
+  })
+}
+
+const patchSceneAcrossWorkspace = (sceneId, patch = {}) => {
+  if (!sceneId) return
+  const applyToList = (list) => {
+    const idx = list.findIndex(item => String(item.id) === String(sceneId))
+    if (idx !== -1) {
+      list[idx] = {
+        ...list[idx],
+        ...patch,
+        thumbnail: patch.thumbnail ?? list[idx].thumbnail
+      }
+      return true
+    }
+    return false
+  }
+  applyToList(extractedInfo.value.scenes)
+  applyToList(projectScenes.value)
+  storyboards.value = storyboards.value.map((storyboard) => {
+    if (!Array.isArray(storyboard.scenes) || storyboard.scenes.length === 0) {
+      return storyboard
+    }
+    let changed = false
+    const scenes = storyboard.scenes.map((item) => {
+      if (String(item.id) !== String(sceneId)) {
+        return item
+      }
+      changed = true
+      return {
+        ...item,
+        ...patch,
+        thumbnail: patch.thumbnail ?? item.thumbnail
+      }
+    })
+    return changed ? { ...storyboard, scenes } : storyboard
+  })
+}
+
+const openExtractedResultEditor = (type, item) => {
+  if (!item?.id) return
+  extractedResultEditor.value = {
+    visible: true,
+    type,
+    itemId: item.id,
+    cover: type === 'scene' ? getSceneThumbnail(item) : (item.avatar || ''),
+    saving: false,
+    error: '',
+    form: {
+      name: item.name || '',
+      description: item.description || ''
+    }
+  }
+}
+
+const closeExtractedResultEditor = (force = false) => {
+  if (extractedResultEditor.value.saving && !force) return
+  extractedResultEditor.value = {
+    visible: false,
+    type: 'character',
+    itemId: null,
+    cover: '',
+    saving: false,
+    error: '',
+    form: {
+      name: '',
+      description: ''
+    }
+  }
+}
+
+const saveExtractedResultEditor = async () => {
+  if (!canSaveExtractedResult.value) return
+  const name = String(extractedResultEditor.value.form.name || '').trim()
+  const description = String(extractedResultEditor.value.form.description || '').trim()
+  if (!name) {
+    extractedResultEditor.value.error = `${extractedResultEntityLabel.value}名称不能为空`
+    return
+  }
+  extractedResultEditor.value.error = ''
+  extractedResultEditor.value.saving = true
+  try {
+    if (extractedResultEditor.value.type === 'scene') {
+      await sceneApi.update({
+        id: extractedResultEditor.value.itemId,
+        name,
+        description
+      })
+      patchSceneAcrossWorkspace(extractedResultEditor.value.itemId, { name, description })
+    } else {
+      await characterApi.update({
+        id: extractedResultEditor.value.itemId,
+        name,
+        description
+      })
+      patchCharacterAcrossWorkspace(extractedResultEditor.value.itemId, { name, description })
+    }
+    toast.success(`${extractedResultEntityLabel.value}信息已保存`)
+    closeExtractedResultEditor(true)
+  } catch (err) {
+    console.error(`保存${extractedResultEntityLabel.value}失败`, err)
+    extractedResultEditor.value.error = err.message || `${extractedResultEntityLabel.value}保存失败`
+  } finally {
+    extractedResultEditor.value.saving = false
+  }
+}
+
 const saveCharacterInfo = (character) => {
   if (!character || !character.id) return
+  patchCharacterAcrossWorkspace(character.id, {
+    name: character.name,
+    description: character.description
+  })
   const id = String(character.id)
   if (saveCharacterTimers.has(id)) {
     clearTimeout(saveCharacterTimers.get(id))
@@ -3128,7 +3398,7 @@ const submitAddCharacter = async () => {
     if (newChar && newChar.id) {
       extractedInfo.value.characters.push({
         ...newChar,
-        avatar: newChar.avatar || 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="#8B7355" width="100" height="100"/><text fill="#F4E4BA" x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="40">${(newChar.name || '?').charAt(0)}</text></svg>`),
+        avatar: newChar.avatar || 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="#D7B088" width="100" height="100"/><text fill="#2A2113" x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="40">${(newChar.name || '?').charAt(0)}</text></svg>`),
         videoUrl: newChar.videoUrl || ''
       })
       await loadProjectAssets()
@@ -3199,8 +3469,7 @@ const generateSceneImage = async (scene, actionType) => {
   generatingScene.value.add(id)
   try {
     // 获取默认图像模型
-    const defaultRes = await modelInstanceApi.getDefault('IMAGE')
-    const defaultModel = defaultRes?.data
+    const defaultModel = await getDefaultModelByScene('IMAGE', 'SCENE_GEN')
     if (!defaultModel) {
       toast.error('未找到默认图像生成模型，请先配置模型')
       return
@@ -3237,6 +3506,10 @@ const generateSceneImage = async (scene, actionType) => {
 
 const saveSceneInfo = (scene) => {
   if (!scene || !scene.id) return
+  patchSceneAcrossWorkspace(scene.id, {
+    name: scene.name,
+    description: scene.description
+  })
   const id = String(scene.id)
   if (saveSceneTimers.has(id)) {
     clearTimeout(saveSceneTimers.get(id))
@@ -4016,8 +4289,8 @@ const generateFirstFramePrompt = async () => {
       await loadTextModels()
     }
     if (!modelId) {
-      const defRes = await modelInstanceApi.getDefault('TEXT')
-      modelId = defRes?.data?.id || null
+      const defaultModel = await getDefaultModelByScene('TEXT')
+      modelId = defaultModel?.id || null
       defaultTextModelId.value = modelId
     }
     if (!modelId && textModels.value.length > 0) {
@@ -4055,8 +4328,8 @@ const generateShotVideoPrompt = async () => {
       await loadTextModels()
     }
     if (!modelId) {
-      const defRes = await modelInstanceApi.getDefault('TEXT')
-      modelId = defRes?.data?.id || null
+      const defaultModel = await getDefaultModelByScene('TEXT')
+      modelId = defaultModel?.id || null
       defaultTextModelId.value = modelId
     }
     if (!modelId && textModels.value.length > 0) {
@@ -4276,7 +4549,7 @@ const generateFirstFrameImage = async () => {
     if (!imageModels.value.length) {
       await loadImageModels()
     }
-    let modelId = defaultImageModelId.value
+    let modelId = (await getDefaultModelByScene('IMAGE', 'FIRST_FRAME_GEN'))?.id || null
     if (!modelId && imageModels.value.length > 0) {
       modelId = imageModels.value[0].id
     }
@@ -4376,10 +4649,9 @@ const generateStoryboards = async () => {
   if (!activeEpisode.value || generatingStoryboard.value) return
   generatingStoryboard.value = true
   try {
-    let modelId = selectedModel.value
+    const modelId = await getSelectedTextModelId()
     if (!modelId) {
-      const defaultModel = await loadDefaultModel()
-      modelId = defaultModel?.id
+      throw new Error('未找到默认文本模型，请先在右侧选择模型')
     }
     const res = await storyboardApi.generate({
       episodeId: activeEpisode.value,
@@ -4453,7 +4725,7 @@ const loadProjectAssets = async () => {
       }))
       projectScenes.value = (result.data.scenes || []).map(s => ({
         ...s,
-        thumbnail: s.thumbnail || 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><rect fill="#8B7355" width="48" height="48"/><text fill="#F4E4BA" x="24" y="28" text-anchor="middle" font-size="10">${s.name?.substring(0, 4) || '场景'}</text></svg>`)
+        thumbnail: s.thumbnail || 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><rect fill="#D7B088" width="48" height="48"/><text fill="#2A2113" x="24" y="28" text-anchor="middle" font-size="10">${s.name?.substring(0, 4) || '场景'}</text></svg>`)
       }))
       // 将项目场景的缩略图合并回当前章节场景列表
       projectScenes.value.forEach(ps => {
@@ -4476,16 +4748,39 @@ const getEpisodeName = (episodeId) => {
   return episode ? episode.name : '未知章节'
 }
 
+const getDefaultModelByScene = async (modelType, sceneCode = null) => {
+  const result = await modelInstanceApi.getDefault(modelType, sceneCode ? { sceneCode } : {})
+  if (result.code === 200 && result.data) {
+    return result.data
+  }
+  return null
+}
+
 const loadDefaultModel = async () => {
   try {
-    const result = await modelInstanceApi.getDefault('TEXT')
-    if (result.code === 200 && result.data) {
-      return result.data
-    }
+    return await getDefaultModelByScene('TEXT')
   } catch (err) {
     console.warn('获取默认模型失败:', err)
   }
   return null
+}
+
+const getSelectedTextModelId = async () => {
+  if (!textModels.value.length) {
+    await loadTextModels()
+  }
+  let modelId = pickModelId(textModels.value, selectedTextModelId.value, defaultTextModelId.value)
+  if (!modelId) {
+    const defaultModel = await loadDefaultModel()
+    modelId = defaultModel?.id || null
+  }
+  if (modelId) {
+    selectedTextModelId.value = modelId
+    if (!defaultTextModelId.value) {
+      defaultTextModelId.value = modelId
+    }
+  }
+  return modelId
 }
 
 const loadTextModels = async () => {
@@ -4494,10 +4789,10 @@ const loadTextModels = async () => {
     if (result.code === 200 && result.data) {
       textModels.value = result.data.records || result.data.modelInstances || result.data || []
       if (textModels.value.length > 0) {
-        const defRes = await modelInstanceApi.getDefault('TEXT')
-        const defaultId = defRes?.data?.id || null
+        const defaultModel = await getDefaultModelByScene('TEXT')
+        const defaultId = defaultModel?.id || null
         defaultTextModelId.value = defaultId
-        selectedModel.value = defaultId || textModels.value[0].id
+        selectedTextModelId.value = pickModelId(textModels.value, selectedTextModelId.value, defaultId)
       }
     }
   } catch (err) {
@@ -4511,10 +4806,10 @@ const loadImageModels = async () => {
     if (result.code === 200 && result.data) {
       imageModels.value = result.data.records || result.data.modelInstances || result.data || []
       if (imageModels.value.length > 0) {
-        const defRes = await modelInstanceApi.getDefault('IMAGE')
-        const defaultId = defRes?.data?.id || null
+        const defaultModel = await getDefaultModelByScene('IMAGE', 'CHARACTER_GEN')
+        const defaultId = defaultModel?.id || null
         defaultImageModelId.value = defaultId
-        selectedModel.value = defaultId || imageModels.value[0].id
+        selectedImageModelId.value = pickModelId(imageModels.value, selectedImageModelId.value, defaultId)
       }
     }
   } catch (err) {
@@ -4528,10 +4823,10 @@ const loadVideoModels = async () => {
     if (result.code === 200 && result.data) {
       videoModels.value = result.data.records || result.data.modelInstances || result.data || []
       if (videoModels.value.length > 0) {
-        const defRes = await modelInstanceApi.getDefault('VIDEO')
-        const defaultId = defRes?.data?.id || null
+        const defaultModel = await getDefaultModelByScene('VIDEO', 'VIDEO_GEN')
+        const defaultId = defaultModel?.id || null
         defaultVideoModelId.value = defaultId
-        selectedModel.value = defaultId || videoModels.value[0].id
+        selectedVideoModelId.value = pickModelId(videoModels.value, selectedVideoModelId.value, defaultId)
       }
     }
   } catch (err) {
@@ -4576,10 +4871,9 @@ const extractInfo = async () => {
   extracting.value = true
   globalStore.setLoading(true, '正在分析文本内容...')
   try {
-    let modelId = selectedModel.value
+    const modelId = await getSelectedTextModelId()
     if (!modelId) {
-      const defaultModel = await loadDefaultModel()
-      modelId = defaultModel?.id
+      throw new Error('未配置可用的文本模型，请先在模型管理中设置文本模型')
     }
     const result = await episodeApi.extract(activeEpisode.value, modelId)
     // 检查业务码
@@ -4685,7 +4979,7 @@ watch(currentStep, async (newStep) => {
     maxReachedStep.value = Number(newStep)
   }
   if (newStep === 1) {
-    loadTextModels()
+    await loadTextModels()
     // 切换到文本模型时设置默认ѡ
     if (textModels.value.length > 0) {
       const defaultModel = defaultTextModelId.value
@@ -4929,7 +5223,7 @@ onUnmounted(() => {
 .chapters-sidebar {
   width: 220px;
   border-right: 1px solid var(--border-color);
-  background: rgba(20, 18, 15, 0.9);
+  background: rgba(255, 252, 247, 0.88);
   overflow: visible;
   flex-shrink: 0;
   min-height: 0;
@@ -4951,11 +5245,11 @@ onUnmounted(() => {
   }
   
   &::-webkit-scrollbar-thumb {
-    background: rgba(139, 115, 85, 0.5);
+    background: rgba(143, 98, 32, 0.34);
     border-radius: 4px;
     
     &:hover {
-      background: #8B7355;
+      background: var(--gold-primary);
     }
   }
 }
@@ -4988,7 +5282,7 @@ onUnmounted(() => {
   svg {
     width: 14px;
     height: 14px;
-    color: #1A1A1E;
+    color: var(--text-on-accent);
   }
 }
 
@@ -5138,7 +5432,7 @@ onUnmounted(() => {
   
   &.completed .step-indicator {
     background: var(--gold-gradient);
-    color: #1A1A1E;
+    color: var(--text-on-accent);
   }
 }
 
@@ -5165,7 +5459,7 @@ onUnmounted(() => {
 .workflow-step.active .step-indicator {
   background: var(--gold-gradient);
   border-color: var(--gold-primary);
-  color: #1A1A1E;
+  color: var(--text-on-accent);
 }
 
 .step-label {
@@ -5202,17 +5496,17 @@ onUnmounted(() => {
   }
   
   &::-webkit-scrollbar-track {
-    background: #1a1815;
+    background: var(--bg-tertiary);
   }
   
   &::-webkit-scrollbar-thumb {
-    background: #8B7355;
+    background: rgba(143, 98, 32, 0.34);
     border-radius: 5px;
     border: 2px solid transparent;
     background-clip: padding-box;
     
     &:hover {
-      background: #D4AF37;
+      background: var(--gold-primary);
     }
   }
 }
@@ -5447,6 +5741,11 @@ onUnmounted(() => {
   }
 }
 
+.section-hint {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
 .extract-character-item {
   display: flex;
   align-items: center;
@@ -5456,11 +5755,12 @@ onUnmounted(() => {
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   transition: all var(--transition-base);
-  cursor: default;
+  cursor: pointer;
 
   &:hover {
     border-color: var(--border-hover);
     background: var(--bg-card);
+    transform: translateY(-1px);
   }
 }
 
@@ -5470,7 +5770,7 @@ onUnmounted(() => {
   border-radius: var(--radius-full);
   overflow: hidden;
   flex-shrink: 0;
-  background: linear-gradient(145deg, #2C2520 0%, #1C1814 100%);
+  background: var(--panel-gradient);
   
   img {
     width: 100%;
@@ -5514,7 +5814,7 @@ onUnmounted(() => {
 
   &:hover {
     border-color: var(--border-hover);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--shadow-md);
   }
 }
 
@@ -5522,7 +5822,7 @@ onUnmounted(() => {
   aspect-ratio: 1;
   width: 100%;
   overflow: hidden;
-  background: linear-gradient(145deg, #2C2520 0%, #1C1814 100%);
+  background: var(--panel-gradient);
   position: relative;
   
   img {
@@ -5540,7 +5840,7 @@ onUnmounted(() => {
   .generating-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: var(--overlay-medium);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -5611,13 +5911,13 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.45);
-  color: #f5d77b;
+  background: rgba(255, 252, 247, 0.86);
+  color: var(--gold-dark);
   font-size: 14px;
   font-weight: 600;
   z-index: 4;
   pointer-events: none;
-  border: 1px dashed rgba(245, 215, 123, 0.6);
+  border: 1px dashed rgba(196, 145, 45, 0.48);
 }
 
 .avatar-video-action-fixed {
@@ -5830,7 +6130,7 @@ onUnmounted(() => {
 .drawer-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: var(--overlay-soft);
   display: flex;
   justify-content: flex-end;
   z-index: 2000;
@@ -5839,11 +6139,11 @@ onUnmounted(() => {
 .drawer {
   width: 360px;
   max-width: 90vw;
-  background: #1f1f24;
+  background: var(--panel-solid);
   color: var(--text-primary);
   height: 100%;
   padding: 20px;
-  box-shadow: -8px 0 24px rgba(0, 0, 0, 0.35);
+  box-shadow: -8px 0 24px rgba(113, 84, 37, 0.18);
   display: flex;
   flex-direction: column;
 }
@@ -5858,7 +6158,7 @@ onUnmounted(() => {
 .drawer-close {
   border: none;
   background: transparent;
-  color: #999;
+  color: var(--text-tertiary);
   font-size: 20px;
   cursor: pointer;
 }
@@ -5879,19 +6179,19 @@ onUnmounted(() => {
 
 .form-label {
   font-size: 13px;
-  color: #ccc;
+  color: var(--text-secondary);
 }
 
 .required {
-  color: #ff6b6b;
+  color: var(--error);
   margin-left: 4px;
 }
 
 .form-input,
 .form-textarea {
   width: 100%;
-  border: 1px solid #2c2c33;
-  background: #15151a;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
   color: var(--text-primary);
   border-radius: 8px;
   padding: 10px 12px;
@@ -5906,14 +6206,14 @@ onUnmounted(() => {
 
 .form-error {
   font-size: 12px;
-  color: #ff6b6b;
+  color: var(--error);
   margin: 4px 0 0;
 }
 
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: var(--overlay-medium);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -5923,10 +6223,10 @@ onUnmounted(() => {
 .modal {
   width: 420px;
   max-width: 92vw;
-  background: #1f1f24;
+  background: var(--panel-solid);
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  box-shadow: var(--shadow-lg);
   color: var(--text-primary);
   padding: 18px 20px;
 }
@@ -5941,7 +6241,7 @@ onUnmounted(() => {
 .modal-close {
   border: none;
   background: transparent;
-  color: #999;
+  color: var(--text-tertiary);
   font-size: 20px;
   cursor: pointer;
 }
@@ -5954,7 +6254,7 @@ onUnmounted(() => {
 
 .modal-tip {
   font-size: 12px;
-  color: #aaa;
+  color: var(--text-tertiary);
   margin-top: 6px;
 }
 
@@ -5981,7 +6281,7 @@ onUnmounted(() => {
   padding: 6px 8px;
   font-size: 12px;
   color: var(--text-secondary);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--surface-subtle);
   border: 1px solid transparent;
   border-radius: var(--radius-sm);
   resize: none;
@@ -5996,12 +6296,12 @@ onUnmounted(() => {
   }
   
   &:focus {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--surface-muted);
     border-color: var(--gold-primary);
   }
   
   &:hover:not(:focus) {
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--surface-soft);
   }
 }
 
@@ -6011,12 +6311,12 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(145deg, #2C2520 0%, #1C1814 100%);
+  background: var(--panel-gradient);
   
   svg {
     width: 48px;
     height: 48px;
-    color: rgba(212, 175, 55, 0.3);
+    color: rgba(196, 145, 45, 0.42);
   }
 }
 
@@ -6059,13 +6359,13 @@ onUnmounted(() => {
   }
   
   &.secondary {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: var(--surface-subtle);
+    border-color: var(--border-color);
     color: var(--text-secondary);
     
     &:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.2);
+      background: var(--surface-hover);
+      border-color: var(--border-hover);
       color: var(--text-primary);
     }
   }
@@ -6133,9 +6433,18 @@ onUnmounted(() => {
   gap: 10px;
   padding: 10px 14px;
   background: var(--bg-glass);
+  border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   font-size: 14px;
   color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-base);
+
+  &:hover {
+    border-color: var(--border-hover);
+    background: var(--bg-card);
+    transform: translateY(-1px);
+  }
 }
 
 .scene-icon {
@@ -6147,6 +6456,77 @@ onUnmounted(() => {
     width: 100%;
     height: 100%;
   }
+}
+
+.scene-item-content {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.scene-item-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.scene-item-desc {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.extracted-editor-modal {
+  width: 560px;
+  max-width: 92vw;
+}
+
+.extracted-editor-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.extracted-editor-preview {
+  width: 100%;
+  height: 220px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background: var(--panel-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.extracted-editor-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.extracted-editor-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(196, 145, 45, 0.46);
+}
+
+.extracted-editor-placeholder svg {
+  width: 56px;
+  height: 56px;
+}
+
+.extracted-editor-tip {
+  margin-top: -4px;
 }
 
 .empty-section, .empty-models, .empty-assets {
@@ -6315,7 +6695,7 @@ onUnmounted(() => {
 .info-panel {
   width: 260px;
   border-left: 1px solid var(--border-color);
-  background: rgba(20, 18, 15, 0.9);
+  background: rgba(255, 252, 247, 0.88);
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
@@ -6338,11 +6718,11 @@ onUnmounted(() => {
   }
   
   &::-webkit-scrollbar-thumb {
-    background: rgba(139, 115, 85, 0.5);
+    background: rgba(143, 98, 32, 0.34);
     border-radius: 3px;
     
     &:hover {
-      background: #8B7355;
+      background: var(--gold-primary);
     }
   }
 }
@@ -6356,7 +6736,7 @@ onUnmounted(() => {
   border-radius: 0;
   background: transparent;
   border: none;
-  color: rgba(225, 210, 170, 0.95);
+  color: rgba(143, 98, 32, 0.92);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -6369,13 +6749,13 @@ onUnmounted(() => {
   span {
     font-size: 18px;
     font-weight: 700;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+    text-shadow: none;
     line-height: 1;
   }
 
   &:hover {
-    color: #f1dfb6;
-    background: rgba(34, 29, 22, 0.35);
+    color: var(--gold-dark);
+    background: var(--surface-soft);
     border-radius: 8px;
   }
 }
@@ -6633,7 +7013,7 @@ onUnmounted(() => {
 .image-preview-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.9);
+  background: var(--overlay-strong);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -6718,7 +7098,7 @@ onUnmounted(() => {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--overlay-medium);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -7041,7 +7421,7 @@ onUnmounted(() => {
 }
 
 .storyboard-text {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--surface-subtle);
   border: 1px solid var(--border-color);
   border-radius: 10px;
   padding: 12px 44px 12px 12px;
@@ -7093,13 +7473,13 @@ onUnmounted(() => {
 .storyboard-meta .meta-row-characters .tag {
   background: rgba(212, 175, 55, 0.18);
   border-color: rgba(212, 175, 55, 0.55);
-  color: #f6e1a6;
+  color: var(--gold-dark);
 }
 
 .storyboard-meta .meta-row-scenes .tag {
   background: rgba(139, 115, 85, 0.22);
   border-color: rgba(139, 115, 85, 0.6);
-  color: #f0d7b2;
+  color: var(--text-secondary);
 }
 
 .character-picker-modal {
@@ -7121,7 +7501,7 @@ onUnmounted(() => {
   margin: 2px 6px 14px;
   border: 1px solid rgba(212, 175, 55, 0.26);
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--bg-secondary);
   transition: all 0.2s ease;
 }
 
@@ -7184,10 +7564,10 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   z-index: 22;
-  background: #17120d;
+  background: var(--panel-solid);
   border: 1px solid rgba(212, 175, 55, 0.26);
   border-radius: 10px;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.42);
+  box-shadow: var(--shadow-md);
   padding: 6px;
   max-height: 220px;
   overflow-y: auto;
@@ -7211,7 +7591,7 @@ onUnmounted(() => {
 
 .character-picker-suggest-item:hover {
   background: rgba(212, 175, 55, 0.12);
-  color: var(--gold-light);
+  color: var(--gold-dark);
 }
 
 .character-picker-suggest-avatar {
@@ -7220,7 +7600,7 @@ onUnmounted(() => {
   border-radius: 50%;
   object-fit: cover;
   border: 1px solid rgba(212, 175, 55, 0.28);
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--surface-soft);
 }
 
 .character-picker-suggest-text {
@@ -7537,8 +7917,8 @@ onUnmounted(() => {
   font-size: 11px;
   padding: 2px 6px;
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
+  background: var(--overlay-medium);
+  color: var(--bg-secondary);
 }
 
 .video-edit-step .clip-title {
@@ -7572,7 +7952,7 @@ onUnmounted(() => {
 }
 
 .video-edit-step .timeline-track {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--surface-subtle);
   border: 1px dashed var(--border-color);
   border-radius: 10px;
   padding: 10px;
@@ -7612,12 +7992,12 @@ onUnmounted(() => {
   height: 26px;
   border-radius: 6px;
   border: 1px solid var(--border-color);
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--surface-subtle);
   color: var(--text-secondary);
 }
 
 .video-edit-step .clip-actions .icon-btn.danger {
-  color: #ff7b7b;
+  color: var(--error);
   border-color: rgba(255, 123, 123, 0.4);
 }
 

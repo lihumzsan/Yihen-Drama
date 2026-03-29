@@ -794,9 +794,9 @@ onBeforeUnmount(() => {
   right: 0;
   z-index: 30;
   border-radius: 10px;
-  background: #17120d;
+  background: var(--panel-solid);
   border: 1px solid rgba(212, 175, 55, 0.26);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  box-shadow: var(--shadow-md);
   padding: 6px;
   max-height: 220px;
   overflow-y: auto;
@@ -870,7 +870,7 @@ onBeforeUnmount(() => {
 .asset-thumb {
   width: 100%;
   height: 160px;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--surface-subtle);
 }
 
 .asset-thumb img {
@@ -930,7 +930,7 @@ onBeforeUnmount(() => {
 }
 
 .asset-desc::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--surface-subtle);
 }
 
 .action-btn {
@@ -944,7 +944,7 @@ onBeforeUnmount(() => {
 }
 
 .action-btn.danger {
-  color: #f2a3a3;
+  color: var(--error);
   border-color: rgba(239, 68, 68, 0.35);
 }
 
@@ -996,7 +996,7 @@ onBeforeUnmount(() => {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.65);
+  background: var(--overlay-medium);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -11,8 +11,8 @@
             <line x1="8" y1="24" x2="32" y2="24" stroke="url(#logo-grad)" stroke-width="2" stroke-linecap="round"/>
             <defs>
               <linearGradient id="logo-grad" x1="4" y1="8" x2="36" y2="32">
-                <stop stop-color="#8B5CF6"/>
-                <stop offset="1" stop-color="#06B6D4"/>
+                <stop stop-color="#D2A641"/>
+                <stop offset="1" stop-color="#A87522"/>
               </linearGradient>
             </defs>
           </svg>
@@ -122,7 +122,7 @@ const navItems = [
   top: 0;
   bottom: 0;
   width: 260px;
-  background: rgba(20, 18, 15, 0.95);
+  background: rgba(255, 252, 247, 0.94);
   backdrop-filter: blur(10px);
   border-right: 1px solid var(--border-color);
   display: flex;
@@ -145,11 +145,11 @@ const navItems = [
   }
 
   &::-webkit-scrollbar-thumb {
-    background: rgba(139, 115, 85, 0.5);
+    background: rgba(143, 98, 32, 0.34);
     border-radius: 3px;
 
     &:hover {
-      background: #8B7355;
+      background: var(--gold-primary);
     }
   }
 }
@@ -242,9 +242,9 @@ const navItems = [
   }
 
   &.active {
-    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.08));
-    color: var(--gold-light);
-    border: 1px solid rgba(212, 175, 55, 0.3);
+    background: linear-gradient(135deg, rgba(196, 145, 45, 0.16), rgba(196, 145, 45, 0.08));
+    color: var(--text-gold);
+    border: 1px solid rgba(196, 145, 45, 0.28);
   }
 }
 
@@ -286,7 +286,7 @@ const navItems = [
   justify-content: center;
   font-weight: 600;
   font-size: 14px;
-  color: #1A1A1E;
+  color: var(--text-on-accent);
   flex-shrink: 0;
 }
 

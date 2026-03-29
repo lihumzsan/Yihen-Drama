@@ -67,7 +67,7 @@ const handleCancel = () => {
 .confirm-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--overlay-medium);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -83,7 +83,7 @@ const handleCancel = () => {
   max-width: 400px;
   width: 90%;
   text-align: center;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--shadow-lg);
 }
 
 .confirm-icon {
@@ -135,7 +135,7 @@ const handleCancel = () => {
       color: var(--text-primary);
 
       &:hover {
-        background: var(--bg-hover);
+        background: var(--surface-soft);
       }
     }
 

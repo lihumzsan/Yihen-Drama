@@ -60,7 +60,7 @@ const { toasts } = useToast()
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-md);
   max-width: 360px;
   will-change: transform, opacity;
 
@@ -81,7 +81,7 @@ const { toasts } = useToast()
 
   &.info {
     border-color: rgba(139, 92, 246, 0.4);
-    .toast-icon { color: var(--primary-light); }
+    .toast-icon { color: var(--info); }
   }
 }
 

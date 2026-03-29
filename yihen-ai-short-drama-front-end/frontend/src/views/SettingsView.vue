@@ -140,6 +140,7 @@
                 <div class="instance-info">
                   <span class="instance-name">{{ instance.name }}</span>
                   <span class="instance-provider">{{ getProviderName(activeModelType, instance.config.provider) }}</span>
+                  <span class="instance-scene">{{ getSceneLabel(instance.type, instance.config.sceneCode) }}</span>
                 </div>
                 <div class="instance-badges">
                   <span v-if="instance.isDefault" class="badge default">默认</span>
@@ -257,6 +258,15 @@
               </select>
               <span class="provider-tip">选择已有厂商定义</span>
             </div>
+
+            <div class="config-row">
+              <label class="config-label">场景</label>
+              <select class="config-select" v-model="currentConfig.config.sceneCode">
+                <option v-for="option in getSceneOptions(activeModelType)" :key="option.value" :value="option.value">
+                  {{ option.label }}
+                </option>
+              </select>
+            </div>
             
             <!-- 基础配置（通用） -->
             <div class="config-row">
@@ -265,7 +275,7 @@
                 type="text" 
                 class="config-input" 
                 v-model="currentConfig.config.path"
-                placeholder="如: /v1/chat/completions" 
+                :placeholder="getPathPlaceholder(activeModelType)" 
               />
             </div>
             
@@ -275,7 +285,7 @@
                 type="password"
                 class="config-input"
                 v-model="currentConfig.config.apiKey"
-                placeholder="输入API Key"
+                :placeholder="isComfyUiConfig() ? 'ComfyUI 本地通常可留空' : '输入 API Key'"
               />
             </div>
 
@@ -378,6 +388,70 @@
                       {{ d.label }}
                     </option>
                   </select>
+                </div>
+              </template>
+
+              <template v-if="(activeModelType === 'image' || activeModelType === 'video') && isComfyUiConfig()">
+                <div class="config-row">
+                  <label class="config-label">工作流模式</label>
+                  <select class="config-select" v-model="currentConfig.config.workflowMode">
+                    <option value="auto">auto</option>
+                    <option value="txt2img">txt2img</option>
+                    <option value="multi_ref_edit">multi_ref_edit</option>
+                    <option value="i2v">i2v</option>
+                  </select>
+                </div>
+                <div class="config-row">
+                  <label class="config-label">工作流文件</label>
+                  <textarea
+                    class="config-input config-textarea"
+                    v-model="currentConfig.config.workflowPath"
+                    placeholder="例如: D:\comfui\workflows\baseimage\..."
+                  />
+                </div>
+                <div class="config-row">
+                  <label class="config-label">API工作流</label>
+                  <textarea
+                    class="config-input config-textarea"
+                    v-model="currentConfig.config.apiWorkflowPath"
+                    placeholder="例如: D:\comfui\workflows\api\image\..."
+                  />
+                </div>
+                <div class="config-row">
+                  <label class="config-label">输入映射</label>
+                  <textarea
+                    class="config-input config-textarea config-code"
+                    v-model="currentConfig.config.inputMappingText"
+                    placeholder='例如: {&#10;  "prompt": { "nodeId": "13", "field": "value" }&#10;}'
+                  />
+                </div>
+                <div class="config-row">
+                  <label class="config-label">输出映射</label>
+                  <textarea
+                    class="config-input config-textarea config-code"
+                    v-model="currentConfig.config.outputMappingText"
+                    placeholder='例如: {&#10;  "nodeId": "9",&#10;  "type": "image"&#10;}'
+                  />
+                </div>
+                <div class="config-row">
+                  <label class="config-label">轮询间隔</label>
+                  <input
+                    type="number"
+                    class="config-input small"
+                    v-model="currentConfig.config.pollIntervalMs"
+                    min="500"
+                    step="500"
+                  />
+                </div>
+                <div class="config-row">
+                  <label class="config-label">超时毫秒</label>
+                  <input
+                    type="number"
+                    class="config-input small"
+                    v-model="currentConfig.config.historyTimeoutMs"
+                    min="1000"
+                    step="1000"
+                  />
                 </div>
               </template>
               
@@ -772,17 +846,41 @@ const getProviderDesc = () => {
 const getModelPlaceholder = (type) => {
   const placeholders = {
     text: '如: gpt-4o, qwen-max',
-    image: '如: dall-e-3, stable-diffusion',
-    video: '如: kling, runway-gen-2',
+    image: '如: comfyui-scene-zimage',
+    video: '如: comfyui-ltx23-i2v',
     audio: '如: azure-tts, elevenlabs',
     vector: '如: text-embedding-3-large, bge-m3'
   }
   return placeholders[type] || '输入模型名称'
 }
 
+const getPathPlaceholder = (type) => {
+  if ((type === 'image' || type === 'video') && isComfyUiConfig()) {
+    return '如: /prompt'
+  }
+  const placeholders = {
+    text: '如: /chat/completions',
+    image: '如: /images/generations',
+    video: '如: /contents/generations/tasks',
+    audio: '如: /audio/speech',
+    vector: '如: /embeddings'
+  }
+  return placeholders[type] || '输入 API 路径'
+}
+
 const getSceneOptions = (type) => {
   return sceneCodeOptions[type] || sceneCodeOptions.text
 }
+
+const getSceneLabel = (type, sceneCode) => {
+  const options = getSceneOptions(type)
+  const match = options.find(option => option.value === sceneCode)
+  return match ? match.label : sceneCode || '未设置场景'
+}
+
+const isComfyUiProvider = (provider) => String(provider || '').toLowerCase() === 'comfyui'
+
+const isComfyUiConfig = () => isComfyUiProvider(currentConfig.config.provider)
 
 const handleSelectInstance = (instance) => {
   selectedInstance.value = instance
@@ -804,7 +902,7 @@ const handleSave = async () => {
     return
   }
 
-  if (!currentConfig.config.apiKey.trim()) {
+  if (!isComfyUiConfig() && !currentConfig.config.apiKey.trim()) {
     testResult.value = { success: false, message: '请填写API Key' }
     showResult.value = true
     return
@@ -861,7 +959,9 @@ const handleSaveAsNew = (instance) => {
   activeModelType.value = instance.type
 }
 
-const handleSetDefault = async (instance) => await setAsDefault(instance.id)
+const handleSetDefault = async (instance) => {
+  await setAsDefault(instance.id, instance.config?.sceneCode || instance.sceneCode || null)
+}
 const handleDelete = (instance) => {
   deleteTargetId.value = instance.id
   deleteTargetType.value = 'instance'
@@ -880,6 +980,10 @@ const onProviderChange = () => {
   } else {
     currentConfig.config.baseUrl = ''
     currentConfig.config.modelDefId = null
+  }
+
+  if (isComfyUiConfig() && (activeModelType.value === 'image' || activeModelType.value === 'video') && !currentConfig.config.path) {
+    currentConfig.config.path = '/prompt'
   }
 }
 </script>
@@ -905,13 +1009,13 @@ const onProviderChange = () => {
 .tab-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 6px;
   svg { width: 18px; height: 18px; }
   &.purple { background: rgba(212, 175, 55, 0.15); color: var(--gold-light); }
-  &.blue { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+  &.blue { background: rgba(59, 130, 246, 0.14); color: #3b82f6; }
   &.cyan { background: rgba(6, 182, 212, 0.15); color: var(--accent); }
   &.green { background: rgba(16, 185, 129, 0.15); color: var(--success); }
   &.orange { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
 }
 .tab-count { padding: 2px 8px; font-size: 12px; background: var(--bg-tertiary); border-radius: 4px; color: var(--text-muted); }
-.active .tab-count { background: var(--gold-primary); color: #1A1A1E; }
+.active .tab-count { background: var(--gold-primary); color: var(--text-on-accent); }
 
 .instances-container { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; }
 .instances-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -936,16 +1040,17 @@ const onProviderChange = () => {
 .instance-info { display: flex; flex-direction: column; gap: 4px; }
 .instance-name { font-size: 15px; font-weight: 600; }
 .instance-provider { font-size: 12px; color: var(--text-tertiary); }
+.instance-scene { font-size: 12px; color: var(--text-muted); }
 .instance-badges { display: flex; gap: 8px; }
 .badge { padding: 4px 10px; font-size: 11px; border-radius: 4px;
-  &.default { background: var(--gold-primary); color: #1A1A1E; font-weight: 600; }
+  &.default { background: var(--gold-primary); color: var(--text-on-accent); font-weight: 600; }
 }
 .instance-actions { display: flex; gap: 8px; margin-bottom: 12px; }
 .action-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 12px; font-size: 13px; color: var(--text-secondary); background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer; transition: all var(--transition-base);
   svg { width: 16px; height: 16px; }
   &:hover:not(:disabled) { background: var(--bg-glass); color: var(--text-primary); border-color: var(--border-hover); }
   &:disabled { opacity: 0.6; cursor: not-allowed; }
-  &.primary { background: var(--gold-gradient); color: #1A1A1E; border-color: var(--gold-primary);
+  &.primary { background: var(--gold-gradient); color: var(--text-on-accent); border-color: var(--gold-primary);
     &:hover:not(:disabled) { box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
   }
 }
@@ -990,6 +1095,8 @@ const onProviderChange = () => {
   &:focus { border-color: var(--gold-primary); box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15); }
   &.small { width: 150px; flex: none; }
 }
+.config-textarea { min-height: 96px; resize: vertical; font-family: inherit; }
+.config-code { font-family: "Consolas", "Courier New", monospace; }
 .input-with-action { flex: 1; display: flex; align-items: center; position: relative;
   .config-input { flex: 1; padding-right: 44px; }
   .input-action { position: absolute; right: 8px; width: 32px; height: 32px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
@@ -1020,7 +1127,7 @@ const onProviderChange = () => {
   &:hover { background: var(--bg-glass); color: var(--text-primary); border-color: var(--border-hover); }
 }
 
-.modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; will-change: opacity; }
+.modal-overlay { position: fixed; inset: 0; background: var(--overlay-medium); display: flex; align-items: center; justify-content: center; z-index: 1000; will-change: opacity; }
 .result-modal { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px 32px; min-width: 320px; max-width: 420px; will-change: transform, opacity; }
 .result-content { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
 .result-icon { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; svg { width: 24px; height: 24px; } &.success { background: rgba(16, 185, 129, 0.15); svg { color: var(--success); } } &.error { background: rgba(239, 68, 68, 0.15); svg { color: var(--error); } } }

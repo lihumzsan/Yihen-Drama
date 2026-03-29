@@ -33,6 +33,9 @@ public class TextModelServiceImpl extends ServiceImpl<ModelInstanceMapper, Model
 
         // 1. 获取模型实例信息
         ModelInstance modelInstance = getById(modelId);
+        if (modelInstance == null) {
+            throw new Exception("未找到可用的文本模型实例");
+        }
 
         // 2. 获取厂商定义的baseurl
         String baseUrl = modelDefinitionMapper.getBaseUrlById(modelInstance.getModelDefId());
@@ -53,7 +56,12 @@ public class TextModelServiceImpl extends ServiceImpl<ModelInstanceMapper, Model
 
         // 4. 发送请求
         // 5. 获取响应结果
-        String response = httpExecutor.post(baseUrl, modelInstance.getPath(), modelInstance.getApiKey(), body).block();
+        String response;
+        try {
+            response = httpExecutor.post(baseUrl, modelInstance.getPath(), modelInstance.getApiKey(), body).block();
+        } catch (Exception e) {
+            throw adaptRequestException(modelInstance, e);
+        }
 
         // 解析结果
         String content = extractResponse(response);
@@ -83,5 +91,19 @@ public class TextModelServiceImpl extends ServiceImpl<ModelInstanceMapper, Model
 
             return content;
 
+    }
+
+    private Exception adaptRequestException(ModelInstance modelInstance, Exception exception) {
+        String message = exception.getMessage();
+        String modelName = modelInstance.getInstanceName() != null
+                ? modelInstance.getInstanceName()
+                : modelInstance.getModelCode();
+        if (message != null && message.contains("401 Unauthorized")) {
+            return new Exception("文本模型「" + modelName + "」认证失败，请检查 API Key 是否有效");
+        }
+        if (message != null && message.contains("404 Not Found")) {
+            return new Exception("文本模型「" + modelName + "」接口地址配置错误，请检查 Base URL 和 Path");
+        }
+        return exception;
     }
 }

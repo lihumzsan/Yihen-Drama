@@ -214,7 +214,7 @@ export const modelInstanceApi = {
   setDefault: (id) => apiClient.put(`/api/models/mod/${id}/default`),
   duplicate: (id) => apiClient.post(`/api/models/mod/${id}/duplicate`),
   test: (id) => apiClient.post(`/api/models/mod/${id}/test`),
-  getDefault: (modelType) => apiClient.get(`/api/models/default-model-instance-by-type/${modelType}`),
+  getDefault: (modelType, params = {}) => apiClient.get(`/api/models/default-model-instance-by-type/${modelType}`, { params }),
   getAllDefaults: () => apiClient.get('/api/models/default-model-instance'),
   updateDefault: (data) => apiClient.put('/api/models/update-default-model-instance', data)
 }

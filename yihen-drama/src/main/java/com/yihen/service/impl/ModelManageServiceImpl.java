@@ -4,14 +4,15 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yihen.asyn.ModelPersistFacade;
-import com.yihen.entity.*;
-import com.yihen.enums.EpisodeStep;
+import com.yihen.entity.ModelDefinition;
+import com.yihen.entity.ModelInstance;
+import com.yihen.entity.ModelInstanceDefault;
 import com.yihen.enums.ModelType;
+import com.yihen.enums.SceneCode;
 import com.yihen.mapper.ModelDefinitionMapper;
 import com.yihen.mapper.ModelInstanceMapper;
 import com.yihen.service.ModelInstanceDefaultService;
 import com.yihen.service.ModelManageService;
-import com.yihen.controller.vo.ModelInstanceResponseVo;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,10 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service("modelManageServiceImpl")
@@ -39,46 +37,44 @@ public class ModelManageServiceImpl extends ServiceImpl<ModelDefinitionMapper, M
 
     @Override
     public void addModelDefinition(ModelDefinition modelDefinition) {
-       save(modelDefinition);
+        save(modelDefinition);
     }
 
     @Override
     public void addModelInstance(ModelInstance modelInstance) {
-        // 字段校验
         checkModelInstance(modelInstance);
-
-
         modelInstanceMapper.insert(modelInstance);
-
-        // 判断是否需要设置为默认
-        // 创建异步任务，异步更新数据库
         modelPersistFacade.addDefaultModel(modelInstance);
     }
 
     @Override
-    public List<ModelInstance> getModelInstanceByType(Page<ModelInstance> modelInstancePage,ModelType modelType) {
-        // 1. 根据modelType查询模型实例
-        LambdaQueryWrapper<ModelInstance> modelInstanceLambdaQueryWrapper = new LambdaQueryWrapper<ModelInstance>().eq(ModelInstance::getModelType, modelType);
-        modelInstanceMapper.selectPage(modelInstancePage, modelInstanceLambdaQueryWrapper);
+    public List<ModelInstance> getModelInstanceByType(Page<ModelInstance> modelInstancePage, ModelType modelType) {
+        LambdaQueryWrapper<ModelInstance> queryWrapper = new LambdaQueryWrapper<ModelInstance>()
+                .eq(ModelInstance::getModelType, modelType);
+        modelInstanceMapper.selectPage(modelInstancePage, queryWrapper);
         List<ModelInstance> modelInstances = modelInstancePage.getRecords();
 
         if (ObjectUtils.isEmpty(modelInstances)) {
-            return new ArrayList<ModelInstance>();
+            return new ArrayList<>();
         }
 
-        // 4. 统计出所有厂商的id
-        List<Long> providerIds = modelInstances.stream().map(ModelInstance::getModelDefId).distinct().toList();
-        // 5. 根据厂商id查询到对应厂商信息
+        List<Long> providerIds = modelInstances.stream()
+                .map(ModelInstance::getModelDefId)
+                .filter(Objects::nonNull)
+                .distinct()
+                .toList();
         List<ModelDefinition> modelDefinitions = listByIds(providerIds);
-        // 6. 整理数据  -> Map<Long,ModelDefinition>
-        Map<Long, ModelDefinition> modelDefinitionMap = modelDefinitions.stream().collect(Collectors.toMap(ModelDefinition::getId, modelDefinition -> modelDefinition));
-        // 7. 填充ModelInstance中的对应信息，并标记默认实例
+        Map<Long, ModelDefinition> modelDefinitionMap = modelDefinitions.stream()
+                .collect(Collectors.toMap(ModelDefinition::getId, item -> item));
         modelInstances.forEach(modelInstance -> {
             ModelDefinition modelDefinition = modelDefinitionMap.get(modelInstance.getModelDefId());
+            if (modelDefinition == null && modelInstance.getModelDefId() != null) {
+                modelDefinition = getById(modelInstance.getModelDefId());
+            }
             if (modelDefinition != null) {
-                // 统一使用小写
-                modelInstance.setProviderCode(modelDefinition.getProviderCode() != null ? 
-                    modelDefinition.getProviderCode().toLowerCase() : null);
+                modelInstance.setProviderCode(modelDefinition.getProviderCode() != null
+                        ? modelDefinition.getProviderCode().toLowerCase()
+                        : null);
                 modelInstance.setBaseUrl(modelDefinition.getBaseUrl());
             } else {
                 modelInstance.setProviderCode(null);
@@ -86,88 +82,82 @@ public class ModelManageServiceImpl extends ServiceImpl<ModelDefinitionMapper, M
             }
         });
 
-
         return modelInstances;
     }
 
     @Override
-    public ModelInstance getDefaultModelInstanceByType(ModelType modelType) {
-        // 查询该类型的默认模型实例
-        LambdaQueryWrapper<ModelInstanceDefault> defaultQueryWrapper = new LambdaQueryWrapper<ModelInstanceDefault>()
-                .eq(ModelInstanceDefault::getModelType, modelType)
-                .eq(ModelInstanceDefault::getStatus, (byte) 1)
-                .last("LIMIT 1");
-        ModelInstanceDefault defaultInstance = modelInstanceDefaultService.getOne(defaultQueryWrapper);
-        
-        if (defaultInstance == null) {
-            return null;
-        }
-        
-        // 查询对应的模型实例
-        ModelInstance modelInstance = modelInstanceMapper.selectById(defaultInstance.getModelInstanceId());
+    public ModelInstance getDefaultModelInstanceByType(ModelType modelType, SceneCode sceneCode) {
+        ModelInstanceDefault defaultInstance = modelInstanceDefaultService.getDefault(modelType, sceneCode);
+        ModelInstance modelInstance = attachProviderInfo(
+                defaultInstance == null ? null : modelInstanceMapper.selectById(defaultInstance.getModelInstanceId())
+        );
         if (modelInstance != null) {
-            // 填充额外信息
-            ModelDefinition modelDefinition = getById(modelInstance.getModelDefId());
-            if (modelDefinition != null) {
-                modelInstance.setProviderCode(modelDefinition.getProviderCode() != null ? 
-                    modelDefinition.getProviderCode().toLowerCase() : null);
-                modelInstance.setBaseUrl(modelDefinition.getBaseUrl());
-            }
-//            modelInstance.setIsDefault(true);
+            return modelInstance;
         }
-        
-        return modelInstance;
+
+        if (sceneCode != null) {
+            ModelInstance sceneMatched = attachProviderInfo(getFirstEnabledModelInstance(modelType, sceneCode));
+            if (sceneMatched != null) {
+                return sceneMatched;
+            }
+        }
+
+        ModelInstanceDefault fallbackDefault = sceneCode == null ? null : modelInstanceDefaultService.getDefault(modelType, null);
+        modelInstance = attachProviderInfo(
+                fallbackDefault == null ? null : modelInstanceMapper.selectById(fallbackDefault.getModelInstanceId())
+        );
+        if (modelInstance != null) {
+            return modelInstance;
+        }
+
+        return attachProviderInfo(getFirstEnabledModelInstance(modelType, null));
     }
 
     @Override
     public void updateModelDefinition(ModelDefinition modelDefinition) {
         if (modelDefinition.getId() == null) {
-            throw new RuntimeException("厂商ID不能为空");
+            throw new RuntimeException("鍘傚晢ID涓嶈兘涓虹┖");
         }
         updateById(modelDefinition);
     }
 
     @Override
     public ModelInstance getModelInstanceById(Long id) {
-        ModelInstance modelInstance = modelInstanceMapper.selectById(id);
-        return modelInstance;
+        return modelInstanceMapper.selectById(id);
     }
 
     @Override
     public String getBaseUrlById(Long id) {
-        return getBaseMapper().getBaseUrlById( id);
+        return getBaseMapper().getBaseUrlById(id);
     }
 
     @Override
     public List<ModelDefinition> getModelDefinition(Page<ModelDefinition> modelDefinitionPage) {
         page(modelDefinitionPage);
-
         return modelDefinitionPage.getRecords();
     }
 
     @Override
     public void testModelInstanceConnectivity(Long id) {
-
     }
 
     @Override
     public void deleteModelInstance(Long id) {
-        // 默认模型实例不可删除
         boolean isDefault = modelInstanceDefaultService.checkIsDefault(id);
         if (isDefault) {
-            throw new RuntimeException("默认模型不可删除");
+            throw new RuntimeException("榛樿妯″瀷涓嶅彲鍒犻櫎");
         }
         modelInstanceMapper.deleteById(id);
-
     }
 
     @Override
     public void deleteModelDefinition(Long id) {
-        // 如果该厂商下有模型实例，则不允许删除
-        Long count = modelInstanceMapper.selectCount(new LambdaQueryWrapper<ModelInstance>().eq(ModelInstance::getModelDefId, id));
+        Long count = modelInstanceMapper.selectCount(
+                new LambdaQueryWrapper<ModelInstance>().eq(ModelInstance::getModelDefId, id)
+        );
 
         if (count > 0) {
-            throw new RuntimeException("该厂商下有模型实例，请先删除模型实例");
+            throw new RuntimeException("璇ュ巶鍟嗕笅鏈夋ā鍨嬪疄渚嬶紝璇峰厛鍒犻櫎妯″瀷瀹炰緥");
         }
         removeById(id);
     }
@@ -177,22 +167,51 @@ public class ModelManageServiceImpl extends ServiceImpl<ModelDefinitionMapper, M
         modelInstanceMapper.updateById(modelInstance);
     }
 
-    private static void checkModelInstance(ModelInstance modelInstance) {
+    private void checkModelInstance(ModelInstance modelInstance) {
         if (ObjectUtils.isEmpty(modelInstance.getModelType())) {
-            throw new RuntimeException("模型类型不能为空");
+            throw new RuntimeException("妯″瀷绫诲瀷涓嶈兘涓虹┖");
         }
         if (ObjectUtils.isEmpty(modelInstance.getModelCode())) {
-            throw new RuntimeException("模型编码不能为空");
+            throw new RuntimeException("妯″瀷缂栫爜涓嶈兘涓虹┖");
         }
         if (ObjectUtils.isEmpty(modelInstance.getModelDefId())) {
-            throw new RuntimeException("厂商定义ID不能为空");
+            throw new RuntimeException("鍘傚晢瀹氫箟ID涓嶈兘涓虹┖");
         }
-        if (ObjectUtils.isEmpty(modelInstance.getApiKey())) {
-            throw new RuntimeException("apiKey不能为空");
+        ModelDefinition modelDefinition = getById(modelInstance.getModelDefId());
+        boolean requiresApiKey = modelDefinition == null
+                || !"comfyui".equalsIgnoreCase(modelDefinition.getProviderCode());
+        if (requiresApiKey && ObjectUtils.isEmpty(modelInstance.getApiKey())) {
+            throw new RuntimeException("apiKey涓嶈兘涓虹┖");
         }
 
         if (ObjectUtils.isEmpty(modelInstance.getInstanceName())) {
             modelInstance.setInstanceName(modelInstance.getModelCode());
         }
+    }
+
+    private ModelInstance getFirstEnabledModelInstance(ModelType modelType, SceneCode sceneCode) {
+        LambdaQueryWrapper<ModelInstance> queryWrapper = new LambdaQueryWrapper<ModelInstance>()
+                .eq(ModelInstance::getModelType, modelType)
+                .eq(ModelInstance::getStatus, (byte) 1)
+                .orderByDesc(ModelInstance::getUpdateTime)
+                .last("LIMIT 1");
+        if (sceneCode != null) {
+            queryWrapper.eq(ModelInstance::getSceneCode, sceneCode);
+        }
+        return modelInstanceMapper.selectOne(queryWrapper);
+    }
+
+    private ModelInstance attachProviderInfo(ModelInstance modelInstance) {
+        if (modelInstance == null) {
+            return null;
+        }
+        ModelDefinition modelDefinition = getById(modelInstance.getModelDefId());
+        if (modelDefinition != null) {
+            modelInstance.setProviderCode(modelDefinition.getProviderCode() != null
+                    ? modelDefinition.getProviderCode().toLowerCase()
+                    : null);
+            modelInstance.setBaseUrl(modelDefinition.getBaseUrl());
+        }
+        return modelInstance;
     }
 }

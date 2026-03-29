@@ -366,7 +366,7 @@ onMounted(async () => {
   max-height: 200px;
   object-fit: contain;
   border-radius: var(--radius-sm);
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--bg-tertiary);
 }
 
 .task-error {

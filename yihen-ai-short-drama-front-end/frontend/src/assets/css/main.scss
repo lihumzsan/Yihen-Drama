@@ -1,26 +1,27 @@
 // 黑金高级主题配色 - 鎏金烫金奢华版
 :root {
   // 主色调 - 黑金/鎏金/烫金系
-  --primary: #D4AF37;
-  --accent: #F4E4BA;
-  --gold-primary: #D4AF37;
-  --gold-light: #F4E4BA;
-  --gold-dark: #B8860B;
-  --gold-shine: #FFD700;
-  --gold-muted: #C9A962;
+  --primary: #C4912D;
+  --primary-light: #E8CD7E;
+  --accent: #2F938D;
+  --gold-primary: #C4912D;
+  --gold-light: #B7842B;
+  --gold-dark: #8F6220;
+  --gold-shine: #F1D180;
+  --gold-muted: #B5925C;
   
   // 金色渐变
-  --gold-gradient: linear-gradient(135deg, #F4E4BA 0%, #D4AF37 50%, #B8860B 100%);
-  --gold-gradient-shine: linear-gradient(135deg, #FFD700 0%, #D4AF37 50%, #B8860B 100%);
-  --gold-glow: rgba(212, 175, 55, 0.4);
+  --gold-gradient: linear-gradient(135deg, #F1D180 0%, #D2A641 55%, #A87522 100%);
+  --gold-gradient-shine: linear-gradient(135deg, #F7E1A3 0%, #D7AA49 50%, #B57C22 100%);
+  --gold-glow: rgba(196, 145, 45, 0.22);
   
   // 辅助色 - 玫瑰金
-  --rose-gold: #E8C49A;
-  --rose-gold-light: #F5DFC5;
+  --rose-gold: #D7B088;
+  --rose-gold-light: #EED9C6;
   
   // 古铜色
-  --bronze: #CD7F32;
-  --bronze-dark: #8B4513;
+  --bronze: #B67A3A;
+  --bronze-dark: #7F5123;
   
   // 状态色
   --success: #10B981;
@@ -29,32 +30,43 @@
   --info: #06B6D4;
   
   // 背景色 - 深邃奢华鎏金氛围
-  --bg-primary: #0D0B08;
-  --bg-secondary: #14120F;
-  --bg-tertiary: #1C1814;
-  --bg-card: rgba(28, 24, 20, 0.85);
-  --bg-glass: rgba(212, 175, 55, 0.03);
-  --bg-deep: #080704;
-  --bg-gold-mesh: rgba(212, 175, 55, 0.02);
+  --bg-primary: #F7F2E8;
+  --bg-secondary: #FFFCF7;
+  --bg-tertiary: #F2EADB;
+  --bg-card: rgba(255, 252, 247, 0.92);
+  --bg-glass: rgba(196, 145, 45, 0.08);
+  --bg-hover: #EDE2D2;
+  --bg-deep: #E8DDCB;
+  --bg-gold-mesh: rgba(196, 145, 45, 0.05);
+  --panel-solid: #FBF7EF;
+  --panel-gradient: linear-gradient(145deg, #FFFDF9 0%, #F2EBDD 100%);
+  --surface-subtle: rgba(62, 46, 20, 0.04);
+  --surface-soft: rgba(62, 46, 20, 0.06);
+  --surface-muted: rgba(62, 46, 20, 0.08);
+  --surface-hover: rgba(62, 46, 20, 0.12);
+  --overlay-soft: rgba(45, 34, 18, 0.16);
+  --overlay-medium: rgba(45, 34, 18, 0.28);
+  --overlay-strong: rgba(45, 34, 18, 0.42);
   
   // 文字色
-  --text-primary: #FFFFFF;
-  --text-secondary: rgba(255, 255, 255, 0.85);
-  --text-tertiary: rgba(255, 255, 255, 0.55);
-  --text-muted: rgba(255, 255, 255, 0.3);
-  --text-gold: #F4E4BA;
+  --text-primary: #2D2416;
+  --text-secondary: rgba(45, 36, 22, 0.82);
+  --text-tertiary: rgba(45, 36, 22, 0.62);
+  --text-muted: rgba(45, 36, 22, 0.4);
+  --text-gold: #8F6220;
+  --text-on-accent: #2A2113;
   
   // 边框色 - 金属质感
-  --border-color: rgba(212, 175, 55, 0.12);
-  --border-hover: rgba(212, 175, 55, 0.25);
-  --border-gold: rgba(212, 175, 55, 0.3);
+  --border-color: rgba(143, 98, 32, 0.15);
+  --border-hover: rgba(143, 98, 32, 0.28);
+  --border-gold: rgba(196, 145, 45, 0.34);
   
   // 阴影
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.6);
-  --shadow-gold: 0 0 30px rgba(212, 175, 55, 0.15);
-  --shadow-gold-lg: 0 0 50px rgba(212, 175, 55, 0.25);
+  --shadow-sm: 0 10px 24px rgba(113, 84, 37, 0.08);
+  --shadow-md: 0 16px 36px rgba(113, 84, 37, 0.12);
+  --shadow-lg: 0 22px 60px rgba(113, 84, 37, 0.16);
+  --shadow-gold: 0 14px 34px rgba(196, 145, 45, 0.14);
+  --shadow-gold-lg: 0 20px 48px rgba(196, 145, 45, 0.2);
   
   // 圆角
   --radius-sm: 4px;
@@ -85,7 +97,9 @@ html {
 
 body {
   font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(180deg, #0D0B08 0%, #14120F 100%);
+  background:
+    radial-gradient(circle at top, rgba(241, 209, 128, 0.24) 0%, rgba(241, 209, 128, 0) 34%),
+    linear-gradient(180deg, #FCF8F1 0%, #F4EBDD 100%);
   color: var(--text-primary);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -106,7 +120,9 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(ellipse at 50% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 70%);
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(196, 145, 45, 0.1) 0%, transparent 48%),
+    radial-gradient(ellipse at 80% 10%, rgba(47, 147, 141, 0.08) 0%, transparent 42%);
   pointer-events: none;
   z-index: -1;
 }
@@ -118,17 +134,17 @@ body::before {
 }
 
 ::-webkit-scrollbar-track {
-  background: #1a1815;
+  background: var(--bg-tertiary);
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #8B7355;
+  background: rgba(143, 98, 32, 0.34);
   border-radius: 5px;
-  border: 2px solid #1a1815;
+  border: 2px solid var(--bg-tertiary);
   
   &:hover {
-    background: #D4AF37;
+    background: var(--gold-primary);
   }
 }
 
@@ -171,6 +187,7 @@ body::before {
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-sm);
   transition: all var(--transition-base);
   
   &:hover {
@@ -208,7 +225,7 @@ body::before {
   
   &-primary {
     background: var(--gold-gradient);
-    color: #1C1814;
+    color: var(--text-on-accent);
     font-weight: 600;
     box-shadow: 0 4px 20px var(--gold-glow);
     
@@ -219,24 +236,26 @@ body::before {
   }
   
   &-secondary {
-    background: var(--bg-tertiary);
-    color: var(--gold-light);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
     border: 1px solid var(--border-color);
     
     &:hover:not(:disabled) {
-      background: var(--bg-glass);
+      background: var(--surface-soft);
       border-color: var(--border-gold);
       box-shadow: var(--shadow-gold);
+      color: var(--text-primary);
     }
   }
   
   &-ghost {
     background: transparent;
-    color: var(--gold-light);
+    color: var(--text-secondary);
     
     &:hover:not(:disabled) {
-      background: var(--bg-glass);
+      background: var(--surface-soft);
       border-color: var(--border-gold);
+      color: var(--text-primary);
     }
   }
 }
@@ -247,7 +266,7 @@ body::before {
   padding: 14px 18px;
   font-size: 14px;
   color: var(--text-primary);
-  background: var(--bg-tertiary);
+  background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   outline: none;
@@ -259,7 +278,7 @@ body::before {
   
   &:focus {
     border-color: var(--gold-primary);
-    box-shadow: 0 0 0 3px var(--gold-glow);
+    box-shadow: 0 0 0 3px rgba(196, 145, 45, 0.16);
   }
 }
 
@@ -286,7 +305,7 @@ body::before {
   &-h3 {
     font-size: 18px;
     line-height: 1.4;
-    color: var(--gold-light);
+    color: var(--text-gold);
   }
 }
 
@@ -315,11 +334,11 @@ body::before {
   font-weight: 500;
   border-radius: var(--radius-full);
   background: var(--bg-glass);
-  color: var(--gold-light);
+  color: var(--text-gold);
   
   &-primary {
     background: rgba(212, 175, 55, 0.2);
-    color: var(--gold-light);
+    color: var(--text-gold);
     border: 1px solid rgba(212, 175, 55, 0.3);
   }
   
@@ -339,7 +358,7 @@ body::before {
   background: linear-gradient(
     90deg,
     var(--bg-tertiary) 25%,
-    rgba(212, 175, 55, 0.1) 50%,
+    rgba(196, 145, 45, 0.1) 50%,
     var(--bg-tertiary) 75%
   );
   background-size: 200% 100%;
@@ -427,7 +446,7 @@ body::before {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(212, 175, 55, 0.2) 50%,
+    rgba(196, 145, 45, 0.18) 50%,
     transparent 100%
   );
   background-size: 200% 100%;
