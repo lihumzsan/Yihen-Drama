@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayInputStream;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -180,6 +181,7 @@ public class EpisodePersistFacade {
 
         String thumbnail = minioProperties.getEndPoint() + "/" + MinioConstant.BUCKET_NAME + "/" + objectName;
         scene.setThumbnail(thumbnail);
+        scene.setUpdateTime(new Date());
 
         return scene;
     }
@@ -200,6 +202,7 @@ public class EpisodePersistFacade {
 
         String avatar = minioProperties.getEndPoint() + "/" + MinioConstant.BUCKET_NAME + "/" + objectName;
         characters.setAvatar(avatar);
+        characters.setUpdateTime(new Date());
 
         return characters;
     }

@@ -5,14 +5,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.yihen.controller.vo.ExtractionResultVO;
 import com.yihen.controller.vo.TextModelRequestVO;
-import com.yihen.core.model.InfoExtractTextModelService;
 import com.yihen.core.model.ShotGenerateTextModelService;
 import com.yihen.entity.Characters;
 import com.yihen.entity.PromptTemplate;
 import com.yihen.entity.Scene;
 import com.yihen.entity.Storyboard;
 import com.yihen.mapper.ProjectMapper;
-import com.yihen.service.ProjectService;
 import com.yihen.service.PromptTemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,10 +65,10 @@ public class ShotGenerateTextModelServiceImpl extends TextModelServiceImpl imple
         }
 
         // 4) 替换模板变量
-        String message = promptTemplate.getPromptContent()
-                .replace("{{input}}", textModelRequestVO.getText())
-                .replace("{{existing_characters}}", JSON.toJSONString(property.getCharacters()))
-                .replace("{{existing_scenes}}", JSON.toJSONString(property.getScenes()));
+        String message = applyProjectPromptContext(promptTemplate.getPromptContent(), textModelRequestVO.getProjectId())
+                .replace("{{input}}", safePromptText(textModelRequestVO.getText()))
+                .replace("{{existing_characters}}", JSON.toJSONString(property == null || property.getCharacters() == null ? List.of() : property.getCharacters()))
+                .replace("{{existing_scenes}}", JSON.toJSONString(property == null || property.getScenes() == null ? List.of() : property.getScenes()));
 
         textModelRequestVO.setText(message);
 

@@ -187,23 +187,27 @@
                         </svg>
                         人物角色 ({{ extractedInfo.characters.length }})
                       </h4>
-                      <span class="section-hint">双击条目查看并编辑</span>
+                      <span class="section-hint">点击条目或按钮即可查看并编辑</span>
                     </div>
                     <div class="extract-characters-list" v-if="extractedInfo.characters.length > 0">
                       <div 
                         v-for="char in extractedInfo.characters" 
                         :key="char.id"
                         class="extract-character-item"
-                        title="双击查看并编辑角色"
+                        title="点击查看并编辑角色"
+                        @click="openExtractedResultEditor('character', char)"
                         @dblclick="openExtractedResultEditor('character', char)"
                       >
                         <div class="extract-avatar">
-                          <img :src="char.avatar" :alt="char.name" />
+                          <img :src="getCharacterAvatar(char)" :alt="char.name" />
                         </div>
                         <div class="extract-info">
                           <span class="extract-name">{{ char.name }}</span>
                           <span class="extract-desc">{{ char.description }}</span>
                         </div>
+                        <button class="extract-item-action" @click.stop="openExtractedResultEditor('character', char)">
+                          查看/编辑
+                        </button>
                       </div>
                     </div>
                     <div class="empty-section" v-else>
@@ -221,14 +225,15 @@
                         </svg>
                         场景列表 ({{ extractedInfo.scenes.length }})
                       </h4>
-                      <span class="section-hint">双击条目查看并编辑</span>
+                      <span class="section-hint">点击条目或按钮即可查看并编辑</span>
                     </div>
                     <div class="scenes-list" v-if="extractedInfo.scenes.length > 0">
                       <div 
                         v-for="scene in extractedInfo.scenes" 
                         :key="scene.id"
                         class="scene-item"
-                        title="双击查看并编辑场景"
+                        title="点击查看并编辑场景"
+                        @click="openExtractedResultEditor('scene', scene)"
                         @dblclick="openExtractedResultEditor('scene', scene)"
                       >
                         <div class="scene-icon">
@@ -240,6 +245,9 @@
                           <span class="scene-item-name">{{ scene.name }}</span>
                           <span class="scene-item-desc">{{ scene.description || '双击查看并补充场景描述' }}</span>
                         </div>
+                        <button class="extract-item-action" @click.stop="openExtractedResultEditor('scene', scene)">
+                          查看/编辑
+                        </button>
                       </div>
                     </div>
                     <div class="empty-section" v-else>
@@ -376,16 +384,16 @@
                             />
                           </div>
                           <img
-                            :src="character.avatar"
+                            :src="getCharacterAvatar(character)"
                             :alt="character.name"
                             class="character-image"
-                            @click.stop="openImagePreview(character.avatar, character.name)"
+                            @click.stop="openImagePreview(getCharacterAvatar(character), character.name)"
                           />
                           <div class="scene-drag-hint" v-if="draggingCharacters.has(character.id)">
                             拖拽图片上传
                           </div>
                           <div class="avatar-actions">
-                            <button class="avatar-action-btn" @click.stop="downloadImage(character.avatar, character.name)" title="下载图片">
+                            <button class="avatar-action-btn" @click.stop="downloadImage(getCharacterAvatar(character), character.name)" title="下载图片">
                               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                                 <polyline points="7 10 12 15 17 10"/>
@@ -510,7 +518,7 @@
                         <div 
                           class="character-avatar" 
                           v-if="character.avatar"
-                          @click="openImagePreview(character.avatar, character.name)"
+                          @click="openImagePreview(getCharacterAvatar(character), character.name)"
                         >
                           <div class="avatar-actions-left">
                             <button 
@@ -531,12 +539,12 @@
                             </button>
                           </div>
                           <img
-                            :src="character.avatar"
+                            :src="getCharacterAvatar(character)"
                             :alt="character.name"
                             class="character-image"
                           />
                           <div class="avatar-actions">
-                            <button class="avatar-action-btn" @click.stop="downloadImage(character.avatar, character.name)" title="下载图片">
+                            <button class="avatar-action-btn" @click.stop="downloadImage(getCharacterAvatar(character), character.name)" title="下载图片">
                               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                                 <polyline points="7 10 12 15 17 10"/>
@@ -858,65 +866,6 @@
                 </div>
               </div>
 
-              <div class="modal-overlay" v-if="extractedResultEditor.visible" @click.self="closeExtractedResultEditor">
-                <div class="modal extracted-editor-modal">
-                  <div class="modal-header">
-                    <h4>{{ extractedResultEntityLabel }}详情</h4>
-                    <button class="modal-close" @click="closeExtractedResultEditor" aria-label="关闭">×</button>
-                  </div>
-                  <div class="modal-body extracted-editor-body">
-                    <div class="extracted-editor-preview">
-                      <img
-                        v-if="extractedResultEditor.cover"
-                        :src="extractedResultEditor.cover"
-                        :alt="extractedResultEditor.form.name || extractedResultEntityLabel"
-                      />
-                      <div v-else class="extracted-editor-placeholder">
-                        <svg v-if="extractedResultEditor.type === 'character'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                          <circle cx="12" cy="7" r="4"/>
-                        </svg>
-                        <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                          <rect x="3" y="3" width="18" height="18" rx="2"/>
-                          <circle cx="8.5" cy="8.5" r="1.5"/>
-                          <polyline points="21 15 16 10 5 21"/>
-                        </svg>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label">{{ extractedResultEntityLabel }}名称 <span class="required">*</span></label>
-                      <input
-                        v-model="extractedResultEditor.form.name"
-                        class="form-input"
-                        :placeholder="`请输入${extractedResultEntityLabel}名称`"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label">{{ extractedResultEntityLabel }}描述</label>
-                      <textarea
-                        v-model="extractedResultEditor.form.description"
-                        class="form-textarea"
-                        :placeholder="`请输入${extractedResultEntityLabel}描述`"
-                        rows="6"
-                      ></textarea>
-                    </div>
-                    <p class="modal-tip extracted-editor-tip">双击提取结果里的条目，可再次打开查看或修改。</p>
-                    <p class="form-error" v-if="extractedResultEditor.error">{{ extractedResultEditor.error }}</p>
-                  </div>
-                  <div class="modal-footer">
-                    <button class="btn btn-secondary" @click="closeExtractedResultEditor" :disabled="extractedResultEditor.saving">取消</button>
-                    <button class="btn btn-primary" @click="saveExtractedResultEditor" :disabled="!canSaveExtractedResult">
-                      <svg v-if="extractedResultEditor.saving" class="spinner" viewBox="0 0 24 24" width="16" height="16">
-                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="31.416" stroke-dashoffset="31.416">
-                          <animate attributeName="stroke-dashoffset" values="31.416;0" dur="1s" repeatCount="indefinite"/>
-                        </circle>
-                      </svg>
-                      保存修改
-                    </button>
-                  </div>
-                </div>
-              </div>
-
               <!-- 删除角色确认弹窗 -->
               <div class="modal-overlay" v-if="deleteConfirm.visible">
                 <div class="modal">
@@ -997,13 +946,13 @@
                           </button>
                         </div>
                         <img
-                          :src="character.avatar"
+                          :src="getCharacterAvatar(character)"
                           :alt="character.name"
                           class="character-image"
-                          @click.stop="openImagePreview(character.avatar, character.name)"
+                          @click.stop="openImagePreview(getCharacterAvatar(character), character.name)"
                         />
                         <div class="avatar-actions">
-                          <button class="avatar-action-btn" @click.stop="downloadImage(character.avatar, character.name)" title="下载图片">
+                          <button class="avatar-action-btn" @click.stop="downloadImage(getCharacterAvatar(character), character.name)" title="下载图片">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                               <polyline points="7 10 12 15 17 10"/>
@@ -1104,10 +1053,10 @@
                           </button>
                         </div>
                         <img
-                          :src="character.avatar"
+                          :src="getCharacterAvatar(character)"
                           :alt="character.name"
                           class="character-image"
-                          @click.stop="openImagePreview(character.avatar, character.name)"
+                          @click.stop="openImagePreview(getCharacterAvatar(character), character.name)"
                         />
                       </div>
                       <div v-else class="character-avatar">
@@ -1384,7 +1333,7 @@
                       <span v-if="!selectedStoryboard?.characters?.length" class="tag muted">未关联</span>
                       <div v-for="c in (selectedStoryboard?.characters || [])" :key="c.id" class="config-character-item">
                         <div class="config-character-avatar">
-                          <img v-if="c.avatar" :src="c.avatar" :alt="c.name" @click="openImagePreview(c.avatar, c.name)" />
+                          <img v-if="c.avatar" :src="getCharacterAvatar(c)" :alt="c.name" @click="openImagePreview(getCharacterAvatar(c), c.name)" />
                           <span v-else>{{ (c.name || '?').charAt(0) }}</span>
                         </div>
                         <div class="config-character-name">{{ c.name }}</div>
@@ -1647,7 +1596,7 @@
                 class="asset-item"
               >
                 <div class="asset-avatar">
-                  <img :src="char.avatar || defaultAvatar" :alt="char.name" />
+                  <img :src="getCharacterAvatar(char) || defaultAvatar" :alt="char.name" />
                 </div>
                 <div class="asset-info">
                   <span class="asset-name">{{ char.name }}</span>
@@ -1868,6 +1817,70 @@
       </transition>
     </Teleport>
 
+    <!-- 提取结果查看/编辑弹窗 -->
+    <Teleport to="body">
+      <transition name="modal">
+        <div v-if="extractedResultEditor.visible" class="modal-overlay" @click.self="closeExtractedResultEditor">
+          <div class="modal extracted-editor-modal">
+            <div class="modal-header">
+              <h4>{{ extractedResultEntityLabel }}详情</h4>
+              <button class="modal-close" @click="closeExtractedResultEditor" aria-label="关闭">×</button>
+            </div>
+            <div class="modal-body extracted-editor-body">
+              <div class="extracted-editor-preview">
+                <img
+                  v-if="extractedResultEditor.cover"
+                  :src="extractedResultEditor.cover"
+                  :alt="extractedResultEditor.form.name || extractedResultEntityLabel"
+                />
+                <div v-else class="extracted-editor-placeholder">
+                  <svg v-if="extractedResultEditor.type === 'character'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                  </svg>
+                  <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21 15 16 10 5 21"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">{{ extractedResultEntityLabel }}名称 <span class="required">*</span></label>
+                <input
+                  v-model="extractedResultEditor.form.name"
+                  class="form-input"
+                  :placeholder="`请输入${extractedResultEntityLabel}名称`"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">{{ extractedResultEntityLabel }}描述</label>
+                <textarea
+                  v-model="extractedResultEditor.form.description"
+                  class="form-textarea"
+                  :placeholder="`请输入${extractedResultEntityLabel}描述`"
+                  rows="6"
+                ></textarea>
+              </div>
+              <p class="modal-tip extracted-editor-tip">双击提取结果里的条目，或点击“查看/编辑”按钮，可再次打开查看或修改。</p>
+              <p class="form-error" v-if="extractedResultEditor.error">{{ extractedResultEditor.error }}</p>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" @click="closeExtractedResultEditor" :disabled="extractedResultEditor.saving">取消</button>
+              <button class="btn btn-primary" @click="saveExtractedResultEditor" :disabled="!canSaveExtractedResult">
+                <svg v-if="extractedResultEditor.saving" class="spinner" viewBox="0 0 24 24" width="16" height="16">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="31.416" stroke-dashoffset="31.416">
+                    <animate attributeName="stroke-dashoffset" values="31.416;0" dur="1s" repeatCount="indefinite"/>
+                  </circle>
+                </svg>
+                保存修改
+              </button>
+            </div>
+          </div>
+        </div>
+      </transition>
+    </Teleport>
+
     <!-- 删除章节确认弹窗 -->
     <div class="modal-overlay" v-if="deleteEpisodeConfirm.visible">
       <div class="modal">
@@ -1960,7 +1973,7 @@
               >
                 <img
                   v-if="item.avatar"
-                  :src="item.avatar"
+                  :src="getCharacterAvatar(item)"
                   :alt="item.name || '角色'"
                   class="character-picker-suggest-avatar"
                 />
@@ -1979,7 +1992,7 @@
               @click="toggleStoryboardCharacter(ch)"
             >
               <div class="card-avatar">
-                <img v-if="ch.avatar" :src="ch.avatar" :alt="ch.name" />
+                <img v-if="ch.avatar" :src="getCharacterAvatar(ch)" :alt="ch.name" />
                 <div v-else class="card-avatar-placeholder">{{ (ch.name || '?').charAt(0) }}</div>
               </div>
               <div class="card-info">
@@ -2162,6 +2175,8 @@ const updateEpisodeForm = ref({
 })
 const projectCharacters = ref([])
 const projectScenes = ref([])
+const characterImageVersionMap = ref({})
+const sceneImageVersionMap = ref({})
 const imageTabs = ['人物', '场景']
 const generatingCharacter = ref(new Set())
 const selectedCharacterIds = ref(new Set())
@@ -2299,8 +2314,48 @@ const videoModelDropdownOpen = ref(false)
 const firstFramePrompt = ref('')
 const savingFirstFramePrompt = ref(false)
 
+const withImageVersion = (url, version) => {
+  if (!url) return ''
+  const raw = String(url)
+  if (raw.startsWith('data:image/svg+xml')) return raw
+  const [withoutHash, hash = ''] = raw.split('#')
+  const normalized = withoutHash
+    .replace(/([?&])_ts=[^&]*/g, '$1')
+    .replace(/[?&]$/, '')
+    .replace(/\?&/, '?')
+  const separator = normalized.includes('?') ? '&' : '?'
+  const suffix = version ? `${separator}_ts=${encodeURIComponent(String(version))}` : ''
+  return `${normalized}${suffix}${hash ? `#${hash}` : ''}`
+}
+
+const markCharacterImageChanged = (characterId) => {
+  if (!characterId) return
+  characterImageVersionMap.value = {
+    ...characterImageVersionMap.value,
+    [String(characterId)]: Date.now()
+  }
+}
+
+const markSceneImageChanged = (sceneId) => {
+  if (!sceneId) return
+  sceneImageVersionMap.value = {
+    ...sceneImageVersionMap.value,
+    [String(sceneId)]: Date.now()
+  }
+}
+
+const getCharacterAvatar = (character) => {
+  const avatar = character?.avatar
+  if (!avatar) return ''
+  const version = characterImageVersionMap.value[String(character.id)] || character?.updateTime || ''
+  return withImageVersion(avatar, version)
+}
+
 const getSceneThumbnail = (scene) => {
-  if (scene?.thumbnail) return scene.thumbnail
+  if (scene?.thumbnail) {
+    const version = sceneImageVersionMap.value[String(scene.id)] || scene?.updateTime || ''
+    return withImageVersion(scene.thumbnail, version)
+  }
   const txt = (scene?.name || '场景').charAt(0)
   return 'data:image/svg+xml,' + encodeURIComponent(
     `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="225" viewBox="0 0 400 225">
@@ -2752,20 +2807,12 @@ const generateCharacterImage = async (character, actionType) => {
     console.log('生成角色图片响应:', response)
 
     if (response.code === 200 && response.data) {
-      // 更新角色头像
-      character.avatar = response.data.avatar
-
-      // 如果是本章人物，更新extractedInfo
-      const chapterChar = extractedInfo.value.characters.find(c => c.id === character.id)
-      if (chapterChar) {
-        chapterChar.avatar = response.data.avatar
-      }
-
-      // 如果是项目人物，更新projectCharacters
-      const projectChar = projectCharacters.value.find(c => c.id === character.id)
-      if (projectChar) {
-        projectChar.avatar = response.data.avatar
-      }
+      const avatar = response.data.avatar || character.avatar
+      patchCharacterAcrossWorkspace(character.id, {
+        avatar,
+        updateTime: response.data.updateTime || new Date().toISOString()
+      })
+      markCharacterImageChanged(character.id)
 
       toast.success(actionType === 'regenerate' ? '角色图片已重新生成' : '角色图片已生成')
     } else {
@@ -3278,7 +3325,7 @@ const openExtractedResultEditor = (type, item) => {
     visible: true,
     type,
     itemId: item.id,
-    cover: type === 'scene' ? getSceneThumbnail(item) : (item.avatar || ''),
+    cover: type === 'scene' ? getSceneThumbnail(item) : getCharacterAvatar(item),
     saving: false,
     error: '',
     form: {
@@ -3485,13 +3532,13 @@ const generateSceneImage = async (scene, actionType) => {
     const response = await episodeApi.generateSceneImage(requestData)
     if (response.code === 200 && response.data) {
       const thumb = response.data.thumbnail || response.data.cover || response.data.imageUrl
-      scene.thumbnail = thumb
-      scene.description = response.data.description || scene.description
-      scene.name = response.data.name || scene.name
-      const chapterScene = extractedInfo.value.scenes.find(s => s.id === scene.id)
-      if (chapterScene) chapterScene.thumbnail = thumb
-      const projScene = projectScenes.value.find(s => s.id === scene.id)
-      if (projScene) projScene.thumbnail = thumb
+      patchSceneAcrossWorkspace(scene.id, {
+        thumbnail: thumb,
+        description: response.data.description || scene.description,
+        name: response.data.name || scene.name,
+        updateTime: response.data.updateTime || new Date().toISOString()
+      })
+      markSceneImageChanged(scene.id)
       toast.success(actionType === 'regenerate' ? '场景图片已重新生成' : '场景图片已生成')
     } else {
       toast.error(response.message || '生成失败')
@@ -3613,11 +3660,11 @@ const uploadCharacterFile = async (character, file) => {
     const res = await characterApi.upload(id, file)
     if (res.code === 200 && res.data) {
       const avatar = res.data.avatar || res.data.imageUrl
-      character.avatar = avatar || character.avatar
-      const chapterChar = extractedInfo.value.characters.find(c => c.id === id)
-      if (chapterChar) chapterChar.avatar = character.avatar
-      const projectChar = projectCharacters.value.find(c => c.id === id)
-      if (projectChar) projectChar.avatar = character.avatar
+      patchCharacterAcrossWorkspace(id, {
+        avatar: avatar || character.avatar,
+        updateTime: res.data.updateTime || new Date().toISOString()
+      })
+      markCharacterImageChanged(id)
       toast.success('上传成功')
     } else {
       toast.error(res.message || '上传失败')
@@ -4205,6 +4252,7 @@ const uploadSceneFile = async (scene, file) => {
     if (!applySceneUploadResult(scene, res)) {
       toast.error(res.message || '上传失败')
     } else {
+      markSceneImageChanged(id)
       toast.success('上传成功')
     }
   } catch (err) {
@@ -5787,6 +5835,24 @@ onUnmounted(() => {
   min-width: 0;
 }
 
+.extract-item-action {
+  border: 1px solid var(--border-color);
+  background: var(--surface-subtle);
+  color: var(--text-secondary);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.extract-item-action:hover {
+  border-color: var(--border-hover);
+  background: var(--surface-hover);
+  color: var(--text-primary);
+}
+
 .extract-name {
   font-size: 14px;
   font-weight: 500;
@@ -6459,6 +6525,7 @@ onUnmounted(() => {
 }
 
 .scene-item-content {
+  flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;

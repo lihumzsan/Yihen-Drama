@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -137,6 +138,7 @@ public class CharacterServiceImpl extends ServiceImpl<CharacterMapper, Character
         }
 
         characters.setAvatar(avatar);
+        characters.setUpdateTime(new Date());
         updateById(characters);
 
 

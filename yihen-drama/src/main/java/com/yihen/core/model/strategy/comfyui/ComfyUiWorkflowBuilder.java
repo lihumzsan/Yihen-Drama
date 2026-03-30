@@ -15,6 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 @RequiredArgsConstructor
@@ -302,6 +303,7 @@ public class ComfyUiWorkflowBuilder {
             replaceAllInputs(promptRoot, "prompt", prompt);
         }
 
+        applySeedHeuristics(promptRoot, runtimeInputs, explicitlyMappedKeys);
         replaceIfPresent(promptRoot, "width", runtimeInputs.get("width"));
         replaceIfPresent(promptRoot, "height", runtimeInputs.get("height"));
         replaceIfPresent(promptRoot, "duration", runtimeInputs.get("duration"));
@@ -339,6 +341,20 @@ public class ComfyUiWorkflowBuilder {
         if (value != null) {
             replaceAllInputs(promptRoot, inputName, value);
         }
+    }
+
+    private void applySeedHeuristics(
+            ObjectNode promptRoot,
+            Map<String, Object> runtimeInputs,
+            Set<String> explicitlyMappedKeys
+    ) {
+        boolean seedExplicitlyMapped = hasAnyMappedKey(explicitlyMappedKeys, "seed", "noise_seed");
+        Object seed = firstNonNull(runtimeInputs.get("seed"), runtimeInputs.get("noise_seed"));
+        if (!seedExplicitlyMapped && seed == null) {
+            seed = ThreadLocalRandom.current().nextLong(1, Long.MAX_VALUE);
+        }
+        replaceIfPresent(promptRoot, "seed", seed);
+        replaceIfPresent(promptRoot, "noise_seed", seed);
     }
 
     private void replaceAllInputs(ObjectNode promptRoot, String inputName, Object value) {
