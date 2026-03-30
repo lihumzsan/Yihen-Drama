@@ -57,3 +57,9 @@ DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be
 
 More info: https://sass-lang.com/d/legacy-js-api
 
+[2m14:07:36[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/WorkspaceView.vue[22m
+[2m14:07:36[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/WorkspaceView.vue[22m
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+

@@ -3614,3 +3614,2235 @@ JDBC Connection [HikariProxyConnection@300016271 wrapping com.mysql.cj.jdbc.Conn
 <==      Total: 1
 Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7b2b2e9e]
 2026-03-30T13:48:13.598+08:00  INFO 15864 --- [nio-8080-exec-5] com.yihen.aop.LogAspect                  : Get default model instance by type <- 方法返回: ModelManageController.getDefaultModelInstanceByType()，返回值: Result(code=200, message=操作成功, data=ModelInstance(modelDefId=17, modelCode=comfyui-ltx23-i2v, modelType=VIDEO, instanceName=ComfyUI LTX2.3 I2V, sceneCode=VIDEO_GEN, apiKey=, params={fps=24, duration=10, inputMapping={image={type=image, field=image, nodeId=191, subfolder=comfy-input, filenamePrefix=video-start}, prompt={field=text, nodeId=69}}, workflowMode=auto, workflowPath=D:\comfui\workflows\basevideo\01_图生视频\P0_LTX23主线图生视频_优化版蒸馏Dev可切换\图生视频-LTX2.3图生视频优化版蒸馏Dev可切换-无ReservedVRAM本地可跑版.json, outputMapping={nodeIds=[375, 336]}, pollIntervalMs=5000, historyTimeoutMs=600000}, status=1, path=/prompt, providerCode=comfyui, baseUrl=http://127.0.0.1:18188, isDefault=null))，耗时: 8 ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1c7c6642] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1592446845 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1c7c6642]
+2026-03-30T13:48:56.039+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=21，下次轮询间隔=120000ms
+2026-03-30T13:50:08.620+08:00  INFO 15864 --- [io-8080-exec-10] com.yihen.aop.LogAspect                  : 更新章节内容 -> 进入方法: EpisodeController.update()，参数: [EpisodeUpdateRequestVO(id=33, projectId=26, chapterNumber=1, name=青山一, content= 第1章 归零
+
+    洛城，秋。
+
+    空洞的办公室里，惨白的白炽灯下，中年医生推了推鼻梁上的眼镜。
+
+    「陈迹你好，我现在需要问你一些问题。你回答后，我会根据我的判断，按照『无』、『很轻』、『中等』、『严重』、『非常严重』这五个程度来做出评分，可以吗？」
+
+    「可以。」
+
+    「伱想结束生命吗？」
+
+    「……结束谁的生命？」
+
+    「你自己的。」
+
+    「那没有。」
+
+    中年医生迟疑片刻：「你是否记仇，是否很难原谅那些伤害过你的人？」
+
+    「我不记仇。」
+
+    「你是否会常常忘记事情，你还有哪些关于十二岁的记忆？」
+
+    医生对面，十八岁的陈迹视线飘忽到窗外的黑夜里：「十二岁？那年夏天，我同桌马凯偷偷拿走我一块橡皮擦，那块橡皮我挺喜欢的，因为上面有宇智波鼬的图案。」
+
+    医生的视线回到上一个记仇问题，划去「1分，无」，重新写下「5分，非常严重」。
+
+    他认真打量著对面的少年，十八岁的陈迹长相还算清秀，似乎因长期不出门的缘故，皮肤干净，目光清澈而真诚。
+
+    「下一个问题，你是否可以忍受孤独？」
+
+    这一次，陈迹终于停下来认真思考问题，许久之后，他回答：「可以。」
+
+    ……
+
+    ……
+
+    询问持续了半个小时，当墙上石英钟指针跳到夜里十点时，医生道：「最后一个问题，你是否觉得有人想要害你？」
+
+    陈迹：「没有，我家人对我都挺好的。」
+
+    医生的眼皮轻微跳动了一下，他在本子上快速记录：168分阳性症状，阳性项目67项，因子分3.8，患者在父母车祸去世后，患上重度『创伤后应激障碍』，有暴力倾向。
+
+    「陈迹同学，诊断结果显示你是重度创伤后应激障碍，需要留院观察，护士等会儿带你去六楼病房。你的手机需要交给我，外界信息会对你造成干扰，影响治疗效果。」
+
+    「哦，」陈迹似乎并不意外。
+
+    「你在这里稍坐一会儿，我得把这个结果告知你的家人，」医生拿著诊断书起身。
+
+    「等等！」陈迹喊住他。
+
+    「怎么了？」医生回身问道。
+
+    「我还没把手机给你呢，」陈迹从兜里掏出一只手机递给医生。
+
+    「手机我只是暂时替你保管，」医生将手机放进自己兜里，转身出门，出门前还反手把门关严实。
+
+    门外空旷幽暗的走廊里只有一对中年夫妻，两人神情忐忑。
+
+    男人迎上去：「老刘，顺利不？他……有发现什么吗？」
+
+    「没有，他还觉得你们挺好呢，」医生老刘点点头：「这是诊断书，你们可以去法院申请将他定为『无民事行为能力人』了。」
+
+    中年女人尴尬的笑了笑：「谢了啊老刘，回头请你吃饭。」
+
+    医生老刘皮笑肉不笑：「吃饭就免了吧。我不知道你们为啥想给他定成精神病人，也不想问。但法院来审核的时候，我也可以推翻我的诊断书。」
+
+    陈迹的二叔陈硕，赶忙从自己的黑皮包里拿出一个鼓囊囊的档案袋：「你数数。」
+
+    医生老刘打开档案袋瞟了一眼：「行，你们回去吧，我这就安排他住院。我看他也没有反抗的意思，但保险起见，我喊两个男护士过来。」
+
+    「行，那我走了，」陈硕带著老婆王慧玲往电梯走去。
+
+    昏暗的走廊里，王慧玲一边走，一边压低声音问丈夫：「你给他塞了多少钱？」
+
+    「五万。」
+
+    「给这么多？他就坐那问了几个问题，凭什么拿这么多？」胖胖的王慧玲瞪大了她的牛眼。
+
+    陈硕不耐烦：「你真以为请人家吃顿饭就完事了？五万块钱而已，跟陈迹那栋房子比算什么！明天赶紧去法院提交申请，等他成无民事行为能力人，先把房子转到咱俩名下，免得夜长梦多。」
+
+    王慧玲小声道：「老刘靠谱吗，可别让陈迹从医院里跑出去了。」
+
+    「放心吧，我听说青山医院六楼跟监狱一样，跑不出去的。别在这个鬼地方聊事情了，我老觉得这里阴森森的。」
+
+    走出青山精神疾病医院时，陈硕鬼使神差的回头看去。
+
+    夜色中，扭曲茂密的爬墙虎在楼体蜿蜒，几乎连窗户都遮挡住了。目光扫过时，爬墙虎的缝隙中有影影绰绰在晃动，似乎有许多『人』在那里注视著他。
+
+    ……
+
+    ……
+
+    陈迹被两名男护士一左一右架著，走在六楼幽暗的走廊里，唯有墙边的安全通道指示牌提供了一些微弱的光亮。
+
+    这一层没有护士站，走廊尽头只有一扇需要输入密码才能打开的铁门。一个男护士捂住陈迹的眼睛，另一个输入密码。
+
+    咔哒一声，门开了。
+
+    门里是一个空旷的大厅，每隔一米五摆放著一张单人床。昏暗中，一张张单人床就像是一张张棺材，足有上百张。
+
+    下一刻，那一张张床上坐起一个个黑色人影，转过头来，无声凝视著陈迹的方向。
+
+    男护士低声道：「别管他们，赶紧办完事出去。」
+
+    他们两个把陈迹按在床上平躺，用束缚带固定住他的手脚。
+
+    「等等！」陈迹说道。
+
+    「怎么了？」男护士不耐烦。
+
+    陈迹：「不用换病号服吗？」
+
+    「……有病吧」男护士低声骂了一句，转头对同事说道：「赶紧走。」
+
+    哐当一声，铁门关闭，屋里重新陷入寂静。
+
+    陈迹扭动脑袋环顾四周，病房的窗户上都焊死了不锈钢防盗窗。
+
+    沙沙沙。
+
+    病房里响起衣物与被褥摩擦的声音，紧接著是细碎的脚步声。
+
+    陈迹听见那些声音向他靠近过来，声音越来越多，也越来越近。
+
+    「不是……」陈迹无奈睁开眼睛盯著天花板：「就绑我一个人吗？多冒昧啊。」
+
+    借著窗外淡薄的月光，他看见五六个脑袋犹如乌龟似的探出来，挤占了他视野里的天花板。一个个黑乎乎的脸颊上，还带著诡异的笑容。
+
+    陈迹：「真特么让人害怕，给我精神病都治好了……」
+
+    有人小声问道：「你们说，他平时拉屎是饭前拉，还是饭后拉？」
+
+    「等我打电话问问联合国，」说著，一个中年人掏出计算器，快速按下一串数字，清脆的女性报数声在病房里格外突兀。
+
+    还没等他按完，一个老人按住计算器。
+
+    「归零。」
+
+    所有声音都消失了，病人们为老人让开一条道路。
+
+    老人来到床边，弯下身子俯瞰著陈迹：「你真的来了。」
+
+    陈迹：「什么意思？」
+
+    老人拿出一张纸：「有人曾经说过，你今天会来这里。」
+
+    那张纸上，赫然用铅笔画著他的样貌，栩栩如生。
+
+    陈迹肃然起敬：「非常合理。」
+
+    ……
+
+    ……
+
+    能进精神病院的人，要么太笨，要么太聪明。
+
+    他们只是在偏执的世界里与自我周旋，无穷无尽，无法解脱。
+
+    陈迹对精神病院是有些许敬意的。
+
+    所以当他看到那张素描的时候，顿时感觉世界开始变得神秘起来：「头好痒，好像要长脑子了！老人家，这是您画的吗？」
+
+    「不是我画的，但我可以带你见画画的人，」老人为陈迹解开束缚带，所有病人都为他们让开了一条通道。
+
+    通道尽头，一个年轻人痴傻的坐在床边，呆呆望著窗外。
+
+    「他是什么病症？」陈迹问道。
+
+    「重度妄想症，他总说自己生活在另一个世界，这个世界是他的梦。后来出现解离症状，彻底痴傻了，」老人回答。
+
+    「他什么时候进来的？」
+
+    「一年前进来的。他说你会在今天出现，证明他没说谎。」
+
+    陈迹诧异看向老人：「您是什么病？思路格外清晰。」
+
+    「我没病，」老人说道。
+
+    「有点精神病人的意思了……」
+
+    老人没好气：「我真没病，我是之前犯了点事躲进来的，不信你拿偏执思维量表问我。」
+
+    陈迹：「喜欢爸爸喜欢妈妈？」
+
+    老人：「喜欢妈妈。」
+
+    陈迹：「……」
+
+    他来到那个妄想症年轻人面前：「你好？」
+
+    可年轻人只是在黑暗中定定的看著窗外，并未说话。
+
+    老人：「他已经半年没有说过话了。」
+
+    「他叫什么名字？」
+
+    「李青鸟。」
+
+    陈迹有些遗憾，他仔细打量著呆呆的李青鸟，低声问道：「老爷子，他有没有提到过，他生活的那个世界是什么样子？」
+
+    「没有，」老爷子摇摇头。
+
+    陈迹又问：「老爷子，他进医院后有接受过治疗吗，有没有什么手段能让他恢复意识？」
+
+    「治疗个什么劲，住进六楼都是放弃治疗的，活著就行。」
+
+    「啊？不再抢救一下？万一治好了呢。」
+
+    「倒也有治好的，」老爷子摸摸下巴。
+
+    「怎么治好的？」
+
+    「先前有个重度抑郁症的小女孩，进来一个多月瘦了三十多斤。后来她爸买彩票中了两千多万接她出院，她病就好了。」
+
+    啊？
+
+    陈迹缓缓转头看向李青鸟：「我也给你两千万。」
+
+    沉默半年的李青鸟，竟突然说道：「你也要去那个世界了。」
+
+    啊？
+
+    老爷子瞪大双眼。
+
+    陈迹赶忙继续问道：「怎么去那个世界？」
+
+    李青鸟又不吭声了。
+
+    陈迹：「我再给你两千万！」
+
+    李青鸟：「北俱芦洲的人会负责偷渡的事情。」
+
+    陈迹：「再给你两千万……那个世界是什么样的？」
+
+    李青鸟停顿两秒：「你卡里总共就四千多万。」
+
+    陈迹：「？？？」
+
+    大哥，你是不是在装病啊？
+
+    他伸手去捏李青鸟的腮帮子，可不管他怎么做，李青鸟都不再开口。
+
+    老人佝偻著背，负著双手问道：「小伙子，你是因为什么进来的？」
+
+    陈迹回应：「我父母去世了，这半年有些自闭，所以二叔二婶就送我过来了。」
+
+    老人微微眯起眼睛：「小伙子，你父母给你留了多少遗产？」
+
+    陈迹：「一栋两千多万的别墅，几千万存款。」
+
+    老人若有所思：「那你可得小心你二叔二婶，万一他们申请法院判定你为『无民事行为能力』，你这财产可守不住。」
+
+    陈迹的神情淹没在病房的幽暗中：「怎么会呢，他们可是我的亲人啊。」
+
+    窗外起风了，将爬墙虎吹拂得摇摇晃晃。月光透进来的树叶影子，犹如黑色火焰般在地面不停摇曳、跳动。
+
+    (本章完)
+, visualSetting=现代风格)]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5cf74a78] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@315939292 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: UPDATE episode SET project_id=?,chapter_number=?,name=?,content=?,visual_setting=? WHERE is_deleted=0 AND (id = ?)
+==> Parameters: 26(Long), 1(Integer), 青山一(String),  第1章 归零
+
+    洛城，秋。
+
+    空洞的办公室里，惨白的白炽灯下，中年医生推了推鼻梁上的眼镜。
+
+    「陈迹你好，我现在需要问你一些问题。你回答后，我会根据我的判断，按照『无』、『很轻』、『中等』、『严重』、『非常严重』这五个程度来做出评分，可以吗？」
+
+    「可以。」
+
+    「伱想结束生命吗？」
+
+    「……结束谁的生命？」
+
+    「你自己的。」
+
+    「那没有。」
+
+    中年医生迟疑片刻：「你是否记仇，是否很难原谅那些伤害过你的人？」
+
+    「我不记仇。」
+
+    「你是否会常常忘记事情，你还有哪些关于十二岁的记忆？」
+
+    医生对面，十八岁的陈迹视线飘忽到窗外的黑夜里：「十二岁？那年夏天，我同桌马凯偷偷拿走我一块橡皮擦，那块橡皮我挺喜欢的，因为上面有宇智波鼬的图案。」
+
+    医生的视线回到上一个记仇问题，划去「1分，无」，重新写下「5分，非常严重」。
+
+    他认真打量著对面的少年，十八岁的陈迹长相还算清秀，似乎因长期不出门的缘故，皮肤干净，目光清澈而真诚。
+
+    「下一个问题，你是否可以忍受孤独？」
+
+    这一次，陈迹终于停下来认真思考问题，许久之后，他回答：「可以。」
+
+    ……
+
+    ……
+
+    询问持续了半个小时，当墙上石英钟指针跳到夜里十点时，医生道：「最后一个问题，你是否觉得有人想要害你？」
+
+    陈迹：「没有，我家人对我都挺好的。」
+
+    医生的眼皮轻微跳动了一下，他在本子上快速记录：168分阳性症状，阳性项目67项，因子分3.8，患者在父母车祸去世后，患上重度『创伤后应激障碍』，有暴力倾向。
+
+    「陈迹同学，诊断结果显示你是重度创伤后应激障碍，需要留院观察，护士等会儿带你去六楼病房。你的手机需要交给我，外界信息会对你造成干扰，影响治疗效果。」
+
+    「哦，」陈迹似乎并不意外。
+
+    「你在这里稍坐一会儿，我得把这个结果告知你的家人，」医生拿著诊断书起身。
+
+    「等等！」陈迹喊住他。
+
+    「怎么了？」医生回身问道。
+
+    「我还没把手机给你呢，」陈迹从兜里掏出一只手机递给医生。
+
+    「手机我只是暂时替你保管，」医生将手机放进自己兜里，转身出门，出门前还反手把门关严实。
+
+    门外空旷幽暗的走廊里只有一对中年夫妻，两人神情忐忑。
+
+    男人迎上去：「老刘，顺利不？他……有发现什么吗？」
+
+    「没有，他还觉得你们挺好呢，」医生老刘点点头：「这是诊断书，你们可以去法院申请将他定为『无民事行为能力人』了。」
+
+    中年女人尴尬的笑了笑：「谢了啊老刘，回头请你吃饭。」
+
+    医生老刘皮笑肉不笑：「吃饭就免了吧。我不知道你们为啥想给他定成精神病人，也不想问。但法院来审核的时候，我也可以推翻我的诊断书。」
+
+    陈迹的二叔陈硕，赶忙从自己的黑皮包里拿出一个鼓囊囊的档案袋：「你数数。」
+
+    医生老刘打开档案袋瞟了一眼：「行，你们回去吧，我这就安排他住院。我看他也没有反抗的意思，但保险起见，我喊两个男护士过来。」
+
+    「行，那我走了，」陈硕带著老婆王慧玲往电梯走去。
+
+    昏暗的走廊里，王慧玲一边走，一边压低声音问丈夫：「你给他塞了多少钱？」
+
+    「五万。」
+
+    「给这么多？他就坐那问了几个问题，凭什么拿这么多？」胖胖的王慧玲瞪大了她的牛眼。
+
+    陈硕不耐烦：「你真以为请人家吃顿饭就完事了？五万块钱而已，跟陈迹那栋房子比算什么！明天赶紧去法院提交申请，等他成无民事行为能力人，先把房子转到咱俩名下，免得夜长梦多。」
+
+    王慧玲小声道：「老刘靠谱吗，可别让陈迹从医院里跑出去了。」
+
+    「放心吧，我听说青山医院六楼跟监狱一样，跑不出去的。别在这个鬼地方聊事情了，我老觉得这里阴森森的。」
+
+    走出青山精神疾病医院时，陈硕鬼使神差的回头看去。
+
+    夜色中，扭曲茂密的爬墙虎在楼体蜿蜒，几乎连窗户都遮挡住了。目光扫过时，爬墙虎的缝隙中有影影绰绰在晃动，似乎有许多『人』在那里注视著他。
+
+    ……
+
+    ……
+
+    陈迹被两名男护士一左一右架著，走在六楼幽暗的走廊里，唯有墙边的安全通道指示牌提供了一些微弱的光亮。
+
+    这一层没有护士站，走廊尽头只有一扇需要输入密码才能打开的铁门。一个男护士捂住陈迹的眼睛，另一个输入密码。
+
+    咔哒一声，门开了。
+
+    门里是一个空旷的大厅，每隔一米五摆放著一张单人床。昏暗中，一张张单人床就像是一张张棺材，足有上百张。
+
+    下一刻，那一张张床上坐起一个个黑色人影，转过头来，无声凝视著陈迹的方向。
+
+    男护士低声道：「别管他们，赶紧办完事出去。」
+
+    他们两个把陈迹按在床上平躺，用束缚带固定住他的手脚。
+
+    「等等！」陈迹说道。
+
+    「怎么了？」男护士不耐烦。
+
+    陈迹：「不用换病号服吗？」
+
+    「……有病吧」男护士低声骂了一句，转头对同事说道：「赶紧走。」
+
+    哐当一声，铁门关闭，屋里重新陷入寂静。
+
+    陈迹扭动脑袋环顾四周，病房的窗户上都焊死了不锈钢防盗窗。
+
+    沙沙沙。
+
+    病房里响起衣物与被褥摩擦的声音，紧接著是细碎的脚步声。
+
+    陈迹听见那些声音向他靠近过来，声音越来越多，也越来越近。
+
+    「不是……」陈迹无奈睁开眼睛盯著天花板：「就绑我一个人吗？多冒昧啊。」
+
+    借著窗外淡薄的月光，他看见五六个脑袋犹如乌龟似的探出来，挤占了他视野里的天花板。一个个黑乎乎的脸颊上，还带著诡异的笑容。
+
+    陈迹：「真特么让人害怕，给我精神病都治好了……」
+
+    有人小声问道：「你们说，他平时拉屎是饭前拉，还是饭后拉？」
+
+    「等我打电话问问联合国，」说著，一个中年人掏出计算器，快速按下一串数字，清脆的女性报数声在病房里格外突兀。
+
+    还没等他按完，一个老人按住计算器。
+
+    「归零。」
+
+    所有声音都消失了，病人们为老人让开一条道路。
+
+    老人来到床边，弯下身子俯瞰著陈迹：「你真的来了。」
+
+    陈迹：「什么意思？」
+
+    老人拿出一张纸：「有人曾经说过，你今天会来这里。」
+
+    那张纸上，赫然用铅笔画著他的样貌，栩栩如生。
+
+    陈迹肃然起敬：「非常合理。」
+
+    ……
+
+    ……
+
+    能进精神病院的人，要么太笨，要么太聪明。
+
+    他们只是在偏执的世界里与自我周旋，无穷无尽，无法解脱。
+
+    陈迹对精神病院是有些许敬意的。
+
+    所以当他看到那张素描的时候，顿时感觉世界开始变得神秘起来：「头好痒，好像要长脑子了！老人家，这是您画的吗？」
+
+    「不是我画的，但我可以带你见画画的人，」老人为陈迹解开束缚带，所有病人都为他们让开了一条通道。
+
+    通道尽头，一个年轻人痴傻的坐在床边，呆呆望著窗外。
+
+    「他是什么病症？」陈迹问道。
+
+    「重度妄想症，他总说自己生活在另一个世界，这个世界是他的梦。后来出现解离症状，彻底痴傻了，」老人回答。
+
+    「他什么时候进来的？」
+
+    「一年前进来的。他说你会在今天出现，证明他没说谎。」
+
+    陈迹诧异看向老人：「您是什么病？思路格外清晰。」
+
+    「我没病，」老人说道。
+
+    「有点精神病人的意思了……」
+
+    老人没好气：「我真没病，我是之前犯了点事躲进来的，不信你拿偏执思维量表问我。」
+
+    陈迹：「喜欢爸爸喜欢妈妈？」
+
+    老人：「喜欢妈妈。」
+
+    陈迹：「……」
+
+    他来到那个妄想症年轻人面前：「你好？」
+
+    可年轻人只是在黑暗中定定的看著窗外，并未说话。
+
+    老人：「他已经半年没有说过话了。」
+
+    「他叫什么名字？」
+
+    「李青鸟。」
+
+    陈迹有些遗憾，他仔细打量著呆呆的李青鸟，低声问道：「老爷子，他有没有提到过，他生活的那个世界是什么样子？」
+
+    「没有，」老爷子摇摇头。
+
+    陈迹又问：「老爷子，他进医院后有接受过治疗吗，有没有什么手段能让他恢复意识？」
+
+    「治疗个什么劲，住进六楼都是放弃治疗的，活著就行。」
+
+    「啊？不再抢救一下？万一治好了呢。」
+
+    「倒也有治好的，」老爷子摸摸下巴。
+
+    「怎么治好的？」
+
+    「先前有个重度抑郁症的小女孩，进来一个多月瘦了三十多斤。后来她爸买彩票中了两千多万接她出院，她病就好了。」
+
+    啊？
+
+    陈迹缓缓转头看向李青鸟：「我也给你两千万。」
+
+    沉默半年的李青鸟，竟突然说道：「你也要去那个世界了。」
+
+    啊？
+
+    老爷子瞪大双眼。
+
+    陈迹赶忙继续问道：「怎么去那个世界？」
+
+    李青鸟又不吭声了。
+
+    陈迹：「我再给你两千万！」
+
+    李青鸟：「北俱芦洲的人会负责偷渡的事情。」
+
+    陈迹：「再给你两千万……那个世界是什么样的？」
+
+    李青鸟停顿两秒：「你卡里总共就四千多万。」
+
+    陈迹：「？？？」
+
+    大哥，你是不是在装病啊？
+
+    他伸手去捏李青鸟的腮帮子，可不管他怎么做，李青鸟都不再开口。
+
+    老人佝偻著背，负著双手问道：「小伙子，你是因为什么进来的？」
+
+    陈迹回应：「我父母去世了，这半年有些自闭，所以二叔二婶就送我过来了。」
+
+    老人微微眯起眼睛：「小伙子，你父母给你留了多少遗产？」
+
+    陈迹：「一栋两千多万的别墅，几千万存款。」
+
+    老人若有所思：「那你可得小心你二叔二婶，万一他们申请法院判定你为『无民事行为能力』，你这财产可守不住。」
+
+    陈迹的神情淹没在病房的幽暗中：「怎么会呢，他们可是我的亲人啊。」
+
+    窗外起风了，将爬墙虎吹拂得摇摇晃晃。月光透进来的树叶影子，犹如黑色火焰般在地面不停摇曳、跳动。
+
+    (本章完)
+(String), 现代风格(String), 33(Long)
+<==    Updates: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5cf74a78]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@6e4222e2] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@577026169 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,chapter_number,name,content,abstraction,visual_setting,status,progress,current_step,create_time,update_time,is_deleted FROM episode WHERE id=? AND is_deleted=0
+==> Parameters: 33(Long)
+<==    Columns: id, project_id, chapter_number, name, content, abstraction, visual_setting, status, progress, current_step, create_time, update_time, is_deleted
+<==        Row: 33, 26, 1, 青山一, <<BLOB>>, <<BLOB>>, <<BLOB>>, 0, 0, 2, 2026-03-29 18:09:09, 2026-03-30 13:50:08, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@6e4222e2]
+2026-03-30T13:50:08.785+08:00  INFO 15864 --- [io-8080-exec-10] com.yihen.aop.LogAspect                  : 更新章节内容 <- 方法返回: EpisodeController.update()，返回值: Result(code=200, message=null, data=null)，耗时: 187 ms
+2026-03-30T13:50:23.091+08:00  INFO 15864 --- [nio-8080-exec-9] com.yihen.aop.LogAspect                  : Get default model instance by type -> 进入方法: ModelManageController.getDefaultModelInstanceByType()，参数: [IMAGE, CHARACTER_GEN]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5f7109c] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1166572304 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,model_type,model_instance_id,status,remark,create_time,update_time,is_deleted FROM model_instance_default WHERE is_deleted=0 AND (model_type = ? AND status = ? AND remark = ?) LIMIT 1
+==> Parameters: 2(Integer), 1(Byte), CHARACTER_GEN(String)
+<==    Columns: id, model_type, model_instance_id, status, remark, create_time, update_time, is_deleted
+<==        Row: 6, 2, 25, 1, CHARACTER_GEN, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5f7109c]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1c4e7f41] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@553713572 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,model_def_id,model_code,model_type,instance_name,scene_code,api_key,params,status,path,create_time,update_time,is_deleted FROM model_instance WHERE id=? AND is_deleted=0
+==> Parameters: 25(Long)
+<==    Columns: id, model_def_id, model_code, model_type, instance_name, scene_code, api_key, params, status, path, create_time, update_time, is_deleted
+<==        Row: 25, 17, comfyui-zimage-character, 2, ComfyUI ZImage Character, 3, , <<BLOB>>, 1, /prompt, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1c4e7f41]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@81b6bb0] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1740679557 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,provider_code,base_url,status,create_time,update_time,is_deleted FROM model_definition WHERE id=? AND is_deleted=0
+==> Parameters: 17(Long)
+<==    Columns: id, provider_code, base_url, status, create_time, update_time, is_deleted
+<==        Row: 17, comfyui, http://127.0.0.1:18188, 1, 2026-03-29 18:00:53, 2026-03-29 18:07:16, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@81b6bb0]
+2026-03-30T13:50:23.099+08:00  INFO 15864 --- [nio-8080-exec-9] com.yihen.aop.LogAspect                  : Get default model instance by type <- 方法返回: ModelManageController.getDefaultModelInstanceByType()，返回值: Result(code=200, message=操作成功, data=ModelInstance(modelDefId=17, modelCode=comfyui-zimage-character, modelType=IMAGE, instanceName=ComfyUI ZImage Character, sceneCode=CHARACTER_GEN, apiKey=, params={quality=standard, resolution=1024x1024, workflowMode=auto, workflowPath=D:\comfui\workflows\baseimage\01_scene_txt2img\P0_ZImage光速高清文生图_ZImageTurbo\场景文生图-ZImage光速高清文生图-RunningHub原始工作流.json, outputMapping={nodeId=9}, pollIntervalMs=3000, historyTimeoutMs=180000}, status=1, path=/prompt, providerCode=comfyui, baseUrl=http://127.0.0.1:18188, isDefault=null))，耗时: 8 ms
+2026-03-30T13:50:23.423+08:00  INFO 15864 --- [nio-8080-exec-6] com.yihen.aop.LogAspect                  : 生成角色图片 -> 进入方法: EpisodeController.generateCharacterImage()，参数: [CharactersRequestVO(modelInstanceId=25, characterId=124, ProjectId=26, description=中国中年女性，体型丰满肥胖，圆脸，眼睛大而突出，头发盘起，穿着日常居家服饰。, actionType=regenerate)]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@3cf37c3e] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@638786670 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,episode_id,project_id,name,description,avatar,video_url,features,create_time,update_time,is_deleted FROM characters WHERE id=? AND is_deleted=0
+==> Parameters: 124(Long)
+<==    Columns: id, episode_id, project_id, name, description, avatar, video_url, features, create_time, update_time, is_deleted
+<==        Row: 124, 33, 26, 王慧玲, 中国中年女性，体型丰满肥胖，圆脸，眼睛大而突出，头发盘起，穿着日常居家服饰。, http://127.0.0.1:9000/yihen-drama/project/26/characters/124-王慧玲.png, null, <<BLOB>>, 2026-03-29 18:41:19, 2026-03-30 10:08:14, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@3cf37c3e]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@57d98062] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1894515755 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,name,description,cover,style_id,global_style_prompt,status,consistency,chapter_count,progress,create_time,update_time,is_deleted FROM project WHERE id=? AND is_deleted=0
+==> Parameters: 26(Long)
+<==    Columns: id, name, description, cover, style_id, global_style_prompt, status, consistency, chapter_count, progress, create_time, update_time, is_deleted
+<==        Row: 26, 青山, <<BLOB>>, null, 1, <<BLOB>>, 0, 0, 1, 0, 2026-03-29 18:08:40, 2026-03-30 13:12:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@57d98062]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@43e427a6] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@422382280 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,chapter_number,name,content,abstraction,visual_setting,status,progress,current_step,create_time,update_time,is_deleted FROM episode WHERE id=? AND is_deleted=0
+==> Parameters: 33(Long)
+<==    Columns: id, project_id, chapter_number, name, content, abstraction, visual_setting, status, progress, current_step, create_time, update_time, is_deleted
+<==        Row: 33, 26, 1, 青山一, <<BLOB>>, <<BLOB>>, <<BLOB>>, 0, 0, 2, 2026-03-29 18:09:09, 2026-03-30 13:50:08, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@43e427a6]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@8e26e7f] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1792647634 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,name,description,preview,parameters,is_default,create_time,update_time,is_deleted FROM style_template WHERE id=? AND is_deleted=0
+==> Parameters: 1(Long)
+<==    Columns: id, name, description, preview, parameters, is_default, create_time, update_time, is_deleted
+<==        Row: 1, 写实风格, 现代写实风格, null, <<BLOB>>, 0, 2026-02-20 21:25:09, 2026-02-20 21:25:09, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@8e26e7f]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@804fec4] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@880680127 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT prompt_template_id FROM prompt_template_default WHERE scene_code = ?
+==> Parameters: 3(Integer)
+<==    Columns: prompt_template_id
+<==        Row: 2
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@804fec4]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1c1f5e8c] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@2016707250 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,prompt_code,prompt_name,scene_code,prompt_content,create_time,update_time,is_deleted FROM prompt_template WHERE id=? AND is_deleted=0
+==> Parameters: 2(Long)
+<==    Columns: id, prompt_code, prompt_name, scene_code, prompt_content, create_time, update_time, is_deleted
+<==        Row: 2, IMAGE_GEN_v1, 角色生成, 3, <<BLOB>>, 2026-01-22 23:40:13, 2026-02-03 12:23:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1c1f5e8c]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1c2e8488] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@2049131199 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,model_def_id,model_code,model_type,instance_name,scene_code,api_key,params,status,path,create_time,update_time,is_deleted FROM model_instance WHERE id=? AND is_deleted=0
+==> Parameters: 25(Long)
+<==    Columns: id, model_def_id, model_code, model_type, instance_name, scene_code, api_key, params, status, path, create_time, update_time, is_deleted
+<==        Row: 25, 17, comfyui-zimage-character, 2, ComfyUI ZImage Character, 3, , <<BLOB>>, 1, /prompt, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1c2e8488]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@45c11ce5] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@757324305 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,model_def_id,model_code,model_type,instance_name,scene_code,api_key,params,status,path,create_time,update_time,is_deleted FROM model_instance WHERE id=? AND is_deleted=0
+==> Parameters: 25(Long)
+<==    Columns: id, model_def_id, model_code, model_type, instance_name, scene_code, api_key, params, status, path, create_time, update_time, is_deleted
+<==        Row: 25, 17, comfyui-zimage-character, 2, ComfyUI ZImage Character, 3, , <<BLOB>>, 1, /prompt, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@45c11ce5]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@180cd0e3] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1432867123 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,provider_code,base_url,status,create_time,update_time,is_deleted FROM model_definition WHERE id=? AND is_deleted=0
+==> Parameters: 17(Long)
+<==    Columns: id, provider_code, base_url, status, create_time, update_time, is_deleted
+<==        Row: 17, comfyui, http://127.0.0.1:18188, 1, 2026-03-29 18:00:53, 2026-03-29 18:07:16, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@180cd0e3]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@128cd6b] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@2136837733 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,model_def_id,model_code,model_type,instance_name,scene_code,api_key,params,status,path,create_time,update_time,is_deleted FROM model_instance WHERE id=? AND is_deleted=0
+==> Parameters: 25(Long)
+<==    Columns: id, model_def_id, model_code, model_type, instance_name, scene_code, api_key, params, status, path, create_time, update_time, is_deleted
+<==        Row: 25, 17, comfyui-zimage-character, 2, ComfyUI ZImage Character, 3, , <<BLOB>>, 1, /prompt, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@128cd6b]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1691b667] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@657660889 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: select base_url from model_definition where id = ?
+==> Parameters: 17(Long)
+<==    Columns: base_url
+<==        Row: http://127.0.0.1:18188
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1691b667]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@491fb32b] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@917410364 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@491fb32b]
+2026-03-30T13:50:56.049+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=22，下次轮询间隔=120000ms
+2026-03-30T13:52:42.393+08:00  INFO 15864 --- [nio-8080-exec-3] c.y.w.TaskStatusWebSocketHandler         : 项目:26下线!
+2026-03-30T13:52:42.711+08:00  INFO 15864 --- [nio-8080-exec-4] com.yihen.aop.LogAspect                  : 获取项目详情 -> 进入方法: ProjectController.get()，参数: [26]
+2026-03-30T13:52:42.719+08:00  INFO 15864 --- [nio-8080-exec-4] com.yihen.aop.LogAspect                  : 获取项目详情 <- 方法返回: ProjectController.get()，返回值: Result(code=200, message=操作成功, data=Project(name=青山, description=null, cover=null, styleId=1, globalStylePrompt=null, status=DRAFT, consistency=0, chapterCount=1, progress=0))，耗时: 8 ms
+2026-03-30T13:52:42.881+08:00  INFO 15864 --- [nio-8080-exec-2] com.yihen.aop.LogAspect                  : 获取项目的章节列表 -> 进入方法: EpisodeController.listByProject()，参数: [26]
+2026-03-30T13:52:42.881+08:00  INFO 15864 --- [nio-8080-exec-8] com.yihen.aop.LogAspect                  : 获取项目中出现人物、场景信息 -> 进入方法: ProjectController.getProperty()，参数: [26]
+2026-03-30T13:52:42.881+08:00  INFO 15864 --- [nio-8080-exec-7] com.yihen.aop.LogAspect                  : List model instances by type -> 进入方法: ModelManageController.getModelInstanceByType()，参数: [1, 100, TEXT]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@26efd826] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@946711725 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT ? AS project_id
+==> Parameters: 26(Long)
+<==    Columns: project_id
+<==        Row: 26
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@6c6d089c] was not registered for synchronization because synchronization is not active
+====>  Preparing: SELECT * FROM characters WHERE project_id = ? AND is_deleted = 0
+====> Parameters: 26(Long)
+JDBC Connection [HikariProxyConnection@1375526908 wrapping com.mysql.cj.jdbc.ConnectionImpl@6edc09c5] will not be managed by Spring
+==>  Preparing: SELECT id, project_id, chapter_number, name, visual_setting, status, progress, current_step, create_time, update_time FROM episode WHERE project_id = ? AND is_deleted = 0 ORDER BY chapter_number ASC
+==> Parameters: 26(Long)
+2026-03-30T13:52:42.888+08:00  INFO 15864 --- [nio-8080-exec-7] com.yihen.aop.LogAspect                  : List model instances by type <- 方法返回: ModelManageController.getModelInstanceByType()，返回值: Result(code=200, message=操作成功, data=com.baomidou.mybatisplus.extension.plugins.pagination.Page@67012e08)，耗时: 7 ms
+<====    Columns: id, episode_id, project_id, name, description, avatar, video_url, features, is_deleted, create_time, update_time
+<====        Row: 121, 33, 26, 陈迹, 十八岁男性，清秀脸型，线条柔和，皮肤干净白皙，眼神清澈真诚，黑色短发，身材匀称偏瘦，穿着现代休闲服装。, http://127.0.0.1:9000/yihen-drama/project/26/characters/121-陈迹.png, null, <<BLOB>>, 0, 2026-03-29 18:41:19, 2026-03-29 18:41:19
+<====        Row: 122, 33, 26, 老刘, 中年中国男性，面部轮廓清晰，佩戴金属框眼镜，眼神审视，头发梳理整齐，身材中等，穿着白色医生工作服。真人风格, http://127.0.0.1:9000/yihen-drama/project/26/characters/122-老刘.png, null, <<BLOB>>, 0, 2026-03-29 18:41:19, 2026-03-29 21:11:35
+<====        Row: 123, 33, 26, 陈硕, 中年男性，脸型方正，黑色短发，身材中等，穿着深色商务休闲装，随身携带黑色皮质公文包，面部线条紧绷。, http://127.0.0.1:9000/yihen-drama/project/26/characters/123-陈硕.png, null, <<BLOB>>, 0, 2026-03-29 18:41:19, 2026-03-29 18:41:19
+<====        Row: 124, 33, 26, 王慧玲, 中国中年女性，体型丰满肥胖，圆脸，眼睛大而突出，头发盘起，穿着日常居家服饰。, http://127.0.0.1:9000/yihen-drama/project/26/characters/124-王慧玲.png, null, <<BLOB>>, 0, 2026-03-29 18:41:19, 2026-03-30 10:08:14
+<====        Row: 125, 33, 26, 老人, 老年男性，背部佝偻，双手负后，面部有皱纹，眼神深邃清晰，头发花白稀疏，穿着宽松病号服，身形瘦削。, http://127.0.0.1:9000/yihen-drama/project/26/characters/125-老人.png, null, <<BLOB>>, 0, 2026-03-29 18:41:19, 2026-03-29 18:41:19
+<====        Row: 126, 33, 26, 李青鸟, 青年男性，面容呆滞，视线朝向窗外，眼神空洞，黑色短发略显凌乱，身材消瘦，穿着宽松病号服。, http://127.0.0.1:9000/yihen-drama/project/26/characters/126-李青鸟.png, null, <<BLOB>>, 0, 2026-03-29 18:41:19, 2026-03-29 18:41:19
+<====        Row: 127, 33, 26, 男护士, 成年男性，体格结实，表情冷漠，短发，穿着浅蓝色护士制服，身形高大。, http://127.0.0.1:9000/yihen-drama/project/26/characters/127-男护士.png, null, <<BLOB>>, 0, 2026-03-29 18:41:19, 2026-03-29 18:41:19
+<====      Total: 7
+====>  Preparing: SELECT * FROM scene WHERE project_id = ? AND is_deleted = 0
+====> Parameters: 26(Long)
+<==    Columns: id, project_id, chapter_number, name, visual_setting, status, progress, current_step, create_time, update_time
+<====    Columns: id, episode_id, project_id, name, description, thumbnail, is_deleted, create_time, update_time
+<==        Row: 33, 26, 1, 青山一, <<BLOB>>, 0, 0, 2, 2026-03-29 18:09:09, 2026-03-30 13:50:08
+2026-03-30T13:52:42.894+08:00  INFO 15864 --- [nio-8080-exec-1] com.yihen.aop.LogAspect                  : Get default model instance by type -> 进入方法: ModelManageController.getDefaultModelInstanceByType()，参数: [TEXT, null]
+<====        Row: 72, 33, 26, 青山精神疾病医院医生办公室, <<BLOB>>, http://127.0.0.1:9000/yihen-drama/project/26/scenes/72-青山精神疾病医院医生办公室.png, 0, 2026-03-29 18:41:19, 2026-03-29 18:41:19
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@6c6d089c]
+<====        Row: 73, 33, 26, 青山精神疾病医院走廊, <<BLOB>>, null, 0, 2026-03-29 18:41:19, 2026-03-29 18:41:19
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@35815863] was not registered for synchronization because synchronization is not active
+<====        Row: 74, 33, 26, 青山精神疾病医院六楼病房, <<BLOB>>, null, 0, 2026-03-29 18:41:19, 2026-03-29 18:41:19
+<====        Row: 75, 33, 26, 青山精神疾病医院外部, <<BLOB>>, null, 0, 2026-03-29 18:41:19, 2026-03-29 18:41:19
+<====      Total: 4
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@26efd826]
+2026-03-30T13:52:42.895+08:00  INFO 15864 --- [nio-8080-exec-8] com.yihen.aop.LogAspect                  : 获取项目中出现人物、场景信息 <- 方法返回: ProjectController.getProperty()，返回值: Result(code=200, message=操作成功, data=ExtractionResultVO(characters=[Characters(episodeId=33, projectId=26, name=陈迹, description=十八岁男性，清秀脸型，线条柔和，皮肤干净白皙，眼神清澈真诚，黑色短发，身材匀称偏瘦，穿着现代休闲服装。, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/121-陈迹.png, videoUrl=null, features=null, isNew=false), Characters(episodeId=33, projectId=26, name=老刘, description=中年中国男性，面部轮廓清晰，佩戴金属框眼镜，眼神审视，头发梳理整齐，身材中等，穿着白色医生工作服。真人风格, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/122-老刘.png, videoUrl=null, features=null, isNew=false), Characters(episodeId=33, projectId=26, name=陈硕, description=中年男性，脸型方正，黑色短发，身材中等，穿着深色商务休闲装，随身携带黑色皮质公文包，面部线条紧绷。, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/123-陈硕.png, videoUrl=null, features=null, isNew=false), Characters(episodeId=33, projectId=26, name=王慧玲, description=中国中年女性，体型丰满肥胖，圆脸，眼睛大而突出，头发盘起，穿着日常居家服饰。, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/124-王慧玲.png, videoUrl=null, features=null, isNew=false), Characters(episodeId=33, projectId=26, name=老人, description=老年男性，背部佝偻，双手负后，面部有皱纹，眼神深邃清晰，头发花白稀疏，穿着宽松病号服，身形瘦削。, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/125-老人.png, videoUrl=null, features=null, isNew=false), Characters(episodeId=33, projectId=26, name=李青鸟, description=青年男性，面容呆滞，视线朝向窗外，眼神空洞，黑色短发略显凌乱，身材消瘦，穿着宽松病号服。, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/126-李青鸟.png, videoUrl=null, features=null, isNew=false), Characters(episodeId=33, projectId=26, name=男护士, description=成年男性，体格结实，表情冷漠，短发，穿着浅蓝色护士制服，身形高大。, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/127-男护士.png, videoUrl=null, features=null, isNew=false)], scenes=[Scene(episodeId=33, projectId=26, name=青山精神疾病医院医生办公室, description=室内空间，惨白白炽灯照明，光线冷硬，办公桌，窗户朝向黑夜，墙面空旷，氛围压抑。, thumbnail=http://127.0.0.1:9000/yihen-drama/project/26/scenes/72-青山精神疾病医院医生办公室.png, isNew=false), Scene(episodeId=33, projectId=26, name=青山精神疾病医院走廊, description=幽暗走廊，墙壁斑驳，安全通道指示牌提供微弱绿光，尽头有密码铁门，空间狭长，氛围阴森。, thumbnail=null, isNew=false), Scene(episodeId=33, projectId=26, name=青山精神疾病医院六楼病房, description=空旷大厅，排列整齐的单人大床，间距一米五，窗户焊死不锈钢防盗窗，月光透入，阴影摇曳，氛围寂静诡异。, thumbnail=null, isNew=false), Scene(episodeId=33, projectId=26, name=青山精神疾病医院外部, description=夜间楼体，墙面覆盖扭曲茂密的爬墙虎，遮挡窗户，缝隙中有阴影晃动，夜色深沉。, thumbnail=null, isNew=false)], abstraction=null))，耗时: 14 ms
+JDBC Connection [HikariProxyConnection@1425780661 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,model_type,model_instance_id,status,remark,create_time,update_time,is_deleted FROM model_instance_default WHERE is_deleted=0 AND (model_type = ? AND status = ? AND (remark IS NULL OR remark = ?)) LIMIT 1
+==> Parameters: 1(Integer), 1(Byte), (String)
+<==    Columns: id, model_type, model_instance_id, status, remark, create_time, update_time, is_deleted
+<==        Row: 2, 1, 22, 1, null, 2026-01-22 10:55:32, 2026-03-29 14:42:26, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@35815863]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@73c50ac7] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1287128732 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,model_def_id,model_code,model_type,instance_name,scene_code,api_key,params,status,path,create_time,update_time,is_deleted FROM model_instance WHERE id=? AND is_deleted=0
+==> Parameters: 22(Long)
+<==    Columns: id, model_def_id, model_code, model_type, instance_name, scene_code, api_key, params, status, path, create_time, update_time, is_deleted
+<==        Row: 22, 2, qwen3.5-plus, 1, qwen3.5-plus, 1, sk-sp-a4b43d249a3841ae93b86cfdb6b1ea62, <<BLOB>>, 1, /chat/completions, 2026-03-29 14:42:19, 2026-03-29 18:38:23, 0
+2026-03-30T13:52:42.900+08:00  INFO 15864 --- [nio-8080-exec-2] com.yihen.aop.LogAspect                  : 获取项目的章节列表 <- 方法返回: EpisodeController.listByProject()，返回值: Result(code=200, message=操作成功, data=[Episode(projectId=26, chapterNumber=1, name=青山一, content=null, abstraction=null, visualSetting=现代风格, status=PENDING, progress=0, currentStep=GENERATE_IMAGES)])，耗时: 19 ms
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@73c50ac7]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2fce76da] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1946604246 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,provider_code,base_url,status,create_time,update_time,is_deleted FROM model_definition WHERE id=? AND is_deleted=0
+==> Parameters: 2(Long)
+<==    Columns: id, provider_code, base_url, status, create_time, update_time, is_deleted
+<==        Row: 2, 阿里百炼平台, https://coding.dashscope.aliyuncs.com/v1, 1, 2026-01-20 21:48:20, 2026-03-29 18:38:23, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2fce76da]
+2026-03-30T13:52:42.903+08:00  INFO 15864 --- [nio-8080-exec-1] com.yihen.aop.LogAspect                  : Get default model instance by type <- 方法返回: ModelManageController.getDefaultModelInstanceByType()，返回值: Result(code=200, message=操作成功, data=ModelInstance(modelDefId=2, modelCode=qwen3.5-plus, modelType=TEXT, instanceName=qwen3.5-plus, sceneCode=SCENE_GEN, apiKey=sk-sp-a4b43d249a3841ae93b86cfdb6b1ea62, params={max_tokens=4000, temperature=0.7}, status=1, path=/chat/completions, providerCode=阿里百炼平台, baseUrl=https://coding.dashscope.aliyuncs.com/v1, isDefault=null))，耗时: 9 ms
+2026-03-30T13:52:42.910+08:00  INFO 15864 --- [nio-8080-exec-5] com.yihen.aop.LogAspect                  : List model instances by type -> 进入方法: ModelManageController.getModelInstanceByType()，参数: [1, 100, TEXT]
+2026-03-30T13:52:42.912+08:00  INFO 15864 --- [nio-8080-exec-5] com.yihen.aop.LogAspect                  : List model instances by type <- 方法返回: ModelManageController.getModelInstanceByType()，返回值: Result(code=200, message=操作成功, data=com.baomidou.mybatisplus.extension.plugins.pagination.Page@6dd9bde5)，耗时: 2 ms
+2026-03-30T13:52:43.022+08:00  INFO 15864 --- [io-8080-exec-10] c.y.w.TaskStatusWebSocketHandler         : 项目:26连接成功
+2026-03-30T13:52:43.219+08:00  INFO 15864 --- [nio-8080-exec-3] com.yihen.aop.LogAspect                  : Get default model instance by type -> 进入方法: ModelManageController.getDefaultModelInstanceByType()，参数: [TEXT, null]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@591e59f4] was not registered for synchronization because synchronization is not active
+2026-03-30T13:52:43.220+08:00  INFO 15864 --- [nio-8080-exec-9] com.yihen.aop.LogAspect                  : List model instances by type -> 进入方法: ModelManageController.getModelInstanceByType()，参数: [1, 100, IMAGE]
+JDBC Connection [HikariProxyConnection@1024732010 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,model_type,model_instance_id,status,remark,create_time,update_time,is_deleted FROM model_instance_default WHERE is_deleted=0 AND (model_type = ? AND status = ? AND (remark IS NULL OR remark = ?)) LIMIT 1
+==> Parameters: 1(Integer), 1(Byte), (String)
+<==    Columns: id, model_type, model_instance_id, status, remark, create_time, update_time, is_deleted
+<==        Row: 2, 1, 22, 1, null, 2026-01-22 10:55:32, 2026-03-29 14:42:26, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@591e59f4]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@77ea25c1] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1552945969 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,model_def_id,model_code,model_type,instance_name,scene_code,api_key,params,status,path,create_time,update_time,is_deleted FROM model_instance WHERE id=? AND is_deleted=0
+==> Parameters: 22(Long)
+2026-03-30T13:52:43.223+08:00  INFO 15864 --- [nio-8080-exec-9] com.yihen.aop.LogAspect                  : List model instances by type <- 方法返回: ModelManageController.getModelInstanceByType()，返回值: Result(code=200, message=操作成功, data=com.baomidou.mybatisplus.extension.plugins.pagination.Page@545b7262)，耗时: 3 ms
+<==    Columns: id, model_def_id, model_code, model_type, instance_name, scene_code, api_key, params, status, path, create_time, update_time, is_deleted
+<==        Row: 22, 2, qwen3.5-plus, 1, qwen3.5-plus, 1, sk-sp-a4b43d249a3841ae93b86cfdb6b1ea62, <<BLOB>>, 1, /chat/completions, 2026-03-29 14:42:19, 2026-03-29 18:38:23, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@77ea25c1]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@378f94be] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@300776355 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,provider_code,base_url,status,create_time,update_time,is_deleted FROM model_definition WHERE id=? AND is_deleted=0
+==> Parameters: 2(Long)
+<==    Columns: id, provider_code, base_url, status, create_time, update_time, is_deleted
+<==        Row: 2, 阿里百炼平台, https://coding.dashscope.aliyuncs.com/v1, 1, 2026-01-20 21:48:20, 2026-03-29 18:38:23, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@378f94be]
+2026-03-30T13:52:43.226+08:00  INFO 15864 --- [nio-8080-exec-3] com.yihen.aop.LogAspect                  : Get default model instance by type <- 方法返回: ModelManageController.getDefaultModelInstanceByType()，返回值: Result(code=200, message=操作成功, data=ModelInstance(modelDefId=2, modelCode=qwen3.5-plus, modelType=TEXT, instanceName=qwen3.5-plus, sceneCode=SCENE_GEN, apiKey=sk-sp-a4b43d249a3841ae93b86cfdb6b1ea62, params={max_tokens=4000, temperature=0.7}, status=1, path=/chat/completions, providerCode=阿里百炼平台, baseUrl=https://coding.dashscope.aliyuncs.com/v1, isDefault=null))，耗时: 7 ms
+2026-03-30T13:52:43.483+08:00  INFO 15864 --- [nio-8080-exec-4] com.yihen.aop.LogAspect                  : Get default model instance by type -> 进入方法: ModelManageController.getDefaultModelInstanceByType()，参数: [IMAGE, CHARACTER_GEN]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@39e7187c] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1600384362 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,model_type,model_instance_id,status,remark,create_time,update_time,is_deleted FROM model_instance_default WHERE is_deleted=0 AND (model_type = ? AND status = ? AND remark = ?) LIMIT 1
+==> Parameters: 2(Integer), 1(Byte), CHARACTER_GEN(String)
+<==    Columns: id, model_type, model_instance_id, status, remark, create_time, update_time, is_deleted
+<==        Row: 6, 2, 25, 1, CHARACTER_GEN, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@39e7187c]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@3a3e08dc] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1000067871 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,model_def_id,model_code,model_type,instance_name,scene_code,api_key,params,status,path,create_time,update_time,is_deleted FROM model_instance WHERE id=? AND is_deleted=0
+==> Parameters: 25(Long)
+<==    Columns: id, model_def_id, model_code, model_type, instance_name, scene_code, api_key, params, status, path, create_time, update_time, is_deleted
+<==        Row: 25, 17, comfyui-zimage-character, 2, ComfyUI ZImage Character, 3, , <<BLOB>>, 1, /prompt, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@3a3e08dc]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@3dce7312] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@2004677791 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,provider_code,base_url,status,create_time,update_time,is_deleted FROM model_definition WHERE id=? AND is_deleted=0
+==> Parameters: 17(Long)
+<==    Columns: id, provider_code, base_url, status, create_time, update_time, is_deleted
+<==        Row: 17, comfyui, http://127.0.0.1:18188, 1, 2026-03-29 18:00:53, 2026-03-29 18:07:16, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@3dce7312]
+2026-03-30T13:52:43.489+08:00  INFO 15864 --- [nio-8080-exec-4] com.yihen.aop.LogAspect                  : Get default model instance by type <- 方法返回: ModelManageController.getDefaultModelInstanceByType()，返回值: Result(code=200, message=操作成功, data=ModelInstance(modelDefId=17, modelCode=comfyui-zimage-character, modelType=IMAGE, instanceName=ComfyUI ZImage Character, sceneCode=CHARACTER_GEN, apiKey=, params={quality=standard, resolution=1024x1024, workflowMode=auto, workflowPath=D:\comfui\workflows\baseimage\01_scene_txt2img\P0_ZImage光速高清文生图_ZImageTurbo\场景文生图-ZImage光速高清文生图-RunningHub原始工作流.json, outputMapping={nodeId=9}, pollIntervalMs=3000, historyTimeoutMs=180000}, status=1, path=/prompt, providerCode=comfyui, baseUrl=http://127.0.0.1:18188, isDefault=null))，耗时: 6 ms
+2026-03-30T13:52:43.545+08:00  INFO 15864 --- [nio-8080-exec-7] com.yihen.aop.LogAspect                  : 获取章节详情 -> 进入方法: EpisodeController.get()，参数: [33]
+2026-03-30T13:52:43.545+08:00  INFO 15864 --- [nio-8080-exec-8] com.yihen.aop.LogAspect                  : List model instances by type -> 进入方法: ModelManageController.getModelInstanceByType()，参数: [1, 100, VIDEO]
+2026-03-30T13:52:43.549+08:00  INFO 15864 --- [nio-8080-exec-8] com.yihen.aop.LogAspect                  : List model instances by type <- 方法返回: ModelManageController.getModelInstanceByType()，返回值: Result(code=200, message=操作成功, data=com.baomidou.mybatisplus.extension.plugins.pagination.Page@5b47361f)，耗时: 4 ms
+2026-03-30T13:52:43.549+08:00  INFO 15864 --- [nio-8080-exec-7] com.yihen.aop.LogAspect                  : 获取章节详情 <- 方法返回: EpisodeController.get()，返回值: Result(code=200, message=操作成功, data=Episode(projectId=26, chapterNumber=1, name=青山一, content= 第1章 归零
+
+    洛城，秋。
+
+    空洞的办公室里，惨白的白炽灯下，中年医生推了推鼻梁上的眼镜。
+
+    「陈迹你好，我现在需要问你一些问题。你回答后，我会根据我的判断，按照『无』、『很轻』、『中等』、『严重』、『非常严重』这五个程度来做出评分，可以吗？」
+
+    「可以。」
+
+    「伱想结束生命吗？」
+
+    「……结束谁的生命？」
+
+    「你自己的。」
+
+    「那没有。」
+
+    中年医生迟疑片刻：「你是否记仇，是否很难原谅那些伤害过你的人？」
+
+    「我不记仇。」
+
+    「你是否会常常忘记事情，你还有哪些关于十二岁的记忆？」
+
+    医生对面，十八岁的陈迹视线飘忽到窗外的黑夜里：「十二岁？那年夏天，我同桌马凯偷偷拿走我一块橡皮擦，那块橡皮我挺喜欢的，因为上面有宇智波鼬的图案。」
+
+    医生的视线回到上一个记仇问题，划去「1分，无」，重新写下「5分，非常严重」。
+
+    他认真打量著对面的少年，十八岁的陈迹长相还算清秀，似乎因长期不出门的缘故，皮肤干净，目光清澈而真诚。
+
+    「下一个问题，你是否可以忍受孤独？」
+
+    这一次，陈迹终于停下来认真思考问题，许久之后，他回答：「可以。」
+
+    ……
+
+    ……
+
+    询问持续了半个小时，当墙上石英钟指针跳到夜里十点时，医生道：「最后一个问题，你是否觉得有人想要害你？」
+
+    陈迹：「没有，我家人对我都挺好的。」
+
+    医生的眼皮轻微跳动了一下，他在本子上快速记录：168分阳性症状，阳性项目67项，因子分3.8，患者在父母车祸去世后，患上重度『创伤后应激障碍』，有暴力倾向。
+
+    「陈迹同学，诊断结果显示你是重度创伤后应激障碍，需要留院观察，护士等会儿带你去六楼病房。你的手机需要交给我，外界信息会对你造成干扰，影响治疗效果。」
+
+    「哦，」陈迹似乎并不意外。
+
+    「你在这里稍坐一会儿，我得把这个结果告知你的家人，」医生拿著诊断书起身。
+
+    「等等！」陈迹喊住他。
+
+    「怎么了？」医生回身问道。
+
+    「我还没把手机给你呢，」陈迹从兜里掏出一只手机递给医生。
+
+    「手机我只是暂时替你保管，」医生将手机放进自己兜里，转身出门，出门前还反手把门关严实。
+
+    门外空旷幽暗的走廊里只有一对中年夫妻，两人神情忐忑。
+
+    男人迎上去：「老刘，顺利不？他……有发现什么吗？」
+
+    「没有，他还觉得你们挺好呢，」医生老刘点点头：「这是诊断书，你们可以去法院申请将他定为『无民事行为能力人』了。」
+
+    中年女人尴尬的笑了笑：「谢了啊老刘，回头请你吃饭。」
+
+    医生老刘皮笑肉不笑：「吃饭就免了吧。我不知道你们为啥想给他定成精神病人，也不想问。但法院来审核的时候，我也可以推翻我的诊断书。」
+
+    陈迹的二叔陈硕，赶忙从自己的黑皮包里拿出一个鼓囊囊的档案袋：「你数数。」
+
+    医生老刘打开档案袋瞟了一眼：「行，你们回去吧，我这就安排他住院。我看他也没有反抗的意思，但保险起见，我喊两个男护士过来。」
+
+    「行，那我走了，」陈硕带著老婆王慧玲往电梯走去。
+
+    昏暗的走廊里，王慧玲一边走，一边压低声音问丈夫：「你给他塞了多少钱？」
+
+    「五万。」
+
+    「给这么多？他就坐那问了几个问题，凭什么拿这么多？」胖胖的王慧玲瞪大了她的牛眼。
+
+    陈硕不耐烦：「你真以为请人家吃顿饭就完事了？五万块钱而已，跟陈迹那栋房子比算什么！明天赶紧去法院提交申请，等他成无民事行为能力人，先把房子转到咱俩名下，免得夜长梦多。」
+
+    王慧玲小声道：「老刘靠谱吗，可别让陈迹从医院里跑出去了。」
+
+    「放心吧，我听说青山医院六楼跟监狱一样，跑不出去的。别在这个鬼地方聊事情了，我老觉得这里阴森森的。」
+
+    走出青山精神疾病医院时，陈硕鬼使神差的回头看去。
+
+    夜色中，扭曲茂密的爬墙虎在楼体蜿蜒，几乎连窗户都遮挡住了。目光扫过时，爬墙虎的缝隙中有影影绰绰在晃动，似乎有许多『人』在那里注视著他。
+
+    ……
+
+    ……
+
+    陈迹被两名男护士一左一右架著，走在六楼幽暗的走廊里，唯有墙边的安全通道指示牌提供了一些微弱的光亮。
+
+    这一层没有护士站，走廊尽头只有一扇需要输入密码才能打开的铁门。一个男护士捂住陈迹的眼睛，另一个输入密码。
+
+    咔哒一声，门开了。
+
+    门里是一个空旷的大厅，每隔一米五摆放著一张单人床。昏暗中，一张张单人床就像是一张张棺材，足有上百张。
+
+    下一刻，那一张张床上坐起一个个黑色人影，转过头来，无声凝视著陈迹的方向。
+
+    男护士低声道：「别管他们，赶紧办完事出去。」
+
+    他们两个把陈迹按在床上平躺，用束缚带固定住他的手脚。
+
+    「等等！」陈迹说道。
+
+    「怎么了？」男护士不耐烦。
+
+    陈迹：「不用换病号服吗？」
+
+    「……有病吧」男护士低声骂了一句，转头对同事说道：「赶紧走。」
+
+    哐当一声，铁门关闭，屋里重新陷入寂静。
+
+    陈迹扭动脑袋环顾四周，病房的窗户上都焊死了不锈钢防盗窗。
+
+    沙沙沙。
+
+    病房里响起衣物与被褥摩擦的声音，紧接著是细碎的脚步声。
+
+    陈迹听见那些声音向他靠近过来，声音越来越多，也越来越近。
+
+    「不是……」陈迹无奈睁开眼睛盯著天花板：「就绑我一个人吗？多冒昧啊。」
+
+    借著窗外淡薄的月光，他看见五六个脑袋犹如乌龟似的探出来，挤占了他视野里的天花板。一个个黑乎乎的脸颊上，还带著诡异的笑容。
+
+    陈迹：「真特么让人害怕，给我精神病都治好了……」
+
+    有人小声问道：「你们说，他平时拉屎是饭前拉，还是饭后拉？」
+
+    「等我打电话问问联合国，」说著，一个中年人掏出计算器，快速按下一串数字，清脆的女性报数声在病房里格外突兀。
+
+    还没等他按完，一个老人按住计算器。
+
+    「归零。」
+
+    所有声音都消失了，病人们为老人让开一条道路。
+
+    老人来到床边，弯下身子俯瞰著陈迹：「你真的来了。」
+
+    陈迹：「什么意思？」
+
+    老人拿出一张纸：「有人曾经说过，你今天会来这里。」
+
+    那张纸上，赫然用铅笔画著他的样貌，栩栩如生。
+
+    陈迹肃然起敬：「非常合理。」
+
+    ……
+
+    ……
+
+    能进精神病院的人，要么太笨，要么太聪明。
+
+    他们只是在偏执的世界里与自我周旋，无穷无尽，无法解脱。
+
+    陈迹对精神病院是有些许敬意的。
+
+    所以当他看到那张素描的时候，顿时感觉世界开始变得神秘起来：「头好痒，好像要长脑子了！老人家，这是您画的吗？」
+
+    「不是我画的，但我可以带你见画画的人，」老人为陈迹解开束缚带，所有病人都为他们让开了一条通道。
+
+    通道尽头，一个年轻人痴傻的坐在床边，呆呆望著窗外。
+
+    「他是什么病症？」陈迹问道。
+
+    「重度妄想症，他总说自己生活在另一个世界，这个世界是他的梦。后来出现解离症状，彻底痴傻了，」老人回答。
+
+    「他什么时候进来的？」
+
+    「一年前进来的。他说你会在今天出现，证明他没说谎。」
+
+    陈迹诧异看向老人：「您是什么病？思路格外清晰。」
+
+    「我没病，」老人说道。
+
+    「有点精神病人的意思了……」
+
+    老人没好气：「我真没病，我是之前犯了点事躲进来的，不信你拿偏执思维量表问我。」
+
+    陈迹：「喜欢爸爸喜欢妈妈？」
+
+    老人：「喜欢妈妈。」
+
+    陈迹：「……」
+
+    他来到那个妄想症年轻人面前：「你好？」
+
+    可年轻人只是在黑暗中定定的看著窗外，并未说话。
+
+    老人：「他已经半年没有说过话了。」
+
+    「他叫什么名字？」
+
+    「李青鸟。」
+
+    陈迹有些遗憾，他仔细打量著呆呆的李青鸟，低声问道：「老爷子，他有没有提到过，他生活的那个世界是什么样子？」
+
+    「没有，」老爷子摇摇头。
+
+    陈迹又问：「老爷子，他进医院后有接受过治疗吗，有没有什么手段能让他恢复意识？」
+
+    「治疗个什么劲，住进六楼都是放弃治疗的，活著就行。」
+
+    「啊？不再抢救一下？万一治好了呢。」
+
+    「倒也有治好的，」老爷子摸摸下巴。
+
+    「怎么治好的？」
+
+    「先前有个重度抑郁症的小女孩，进来一个多月瘦了三十多斤。后来她爸买彩票中了两千多万接她出院，她病就好了。」
+
+    啊？
+
+    陈迹缓缓转头看向李青鸟：「我也给你两千万。」
+
+    沉默半年的李青鸟，竟突然说道：「你也要去那个世界了。」
+
+    啊？
+
+    老爷子瞪大双眼。
+
+    陈迹赶忙继续问道：「怎么去那个世界？」
+
+    李青鸟又不吭声了。
+
+    陈迹：「我再给你两千万！」
+
+    李青鸟：「北俱芦洲的人会负责偷渡的事情。」
+
+    陈迹：「再给你两千万……那个世界是什么样的？」
+
+    李青鸟停顿两秒：「你卡里总共就四千多万。」
+
+    陈迹：「？？？」
+
+    大哥，你是不是在装病啊？
+
+    他伸手去捏李青鸟的腮帮子，可不管他怎么做，李青鸟都不再开口。
+
+    老人佝偻著背，负著双手问道：「小伙子，你是因为什么进来的？」
+
+    陈迹回应：「我父母去世了，这半年有些自闭，所以二叔二婶就送我过来了。」
+
+    老人微微眯起眼睛：「小伙子，你父母给你留了多少遗产？」
+
+    陈迹：「一栋两千多万的别墅，几千万存款。」
+
+    老人若有所思：「那你可得小心你二叔二婶，万一他们申请法院判定你为『无民事行为能力』，你这财产可守不住。」
+
+    陈迹的神情淹没在病房的幽暗中：「怎么会呢，他们可是我的亲人啊。」
+
+    窗外起风了，将爬墙虎吹拂得摇摇晃晃。月光透进来的树叶影子，犹如黑色火焰般在地面不停摇曳、跳动。
+
+    (本章完)
+, abstraction=null, visualSetting=现代风格, status=PENDING, progress=0, currentStep=GENERATE_IMAGES))，耗时: 4 ms
+2026-03-30T13:52:43.808+08:00  INFO 15864 --- [nio-8080-exec-2] com.yihen.aop.LogAspect                  : 获取章节中出现人物、场景信息 -> 进入方法: EpisodeController.getProperty()，参数: [33]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7a089ada] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@992353980 wrapping com.mysql.cj.jdbc.ConnectionImpl@6edc09c5] will not be managed by Spring
+==>  Preparing: SELECT id,episode_id,project_id,name,description,avatar,video_url,features,create_time,update_time,is_deleted FROM characters WHERE is_deleted=0 AND (episode_id = ?)
+==> Parameters: 33(Long)
+<==    Columns: id, episode_id, project_id, name, description, avatar, video_url, features, create_time, update_time, is_deleted
+<==        Row: 121, 33, 26, 陈迹, 十八岁男性，清秀脸型，线条柔和，皮肤干净白皙，眼神清澈真诚，黑色短发，身材匀称偏瘦，穿着现代休闲服装。, http://127.0.0.1:9000/yihen-drama/project/26/characters/121-陈迹.png, null, <<BLOB>>, 2026-03-29 18:41:19, 2026-03-29 18:41:19, 0
+<==        Row: 122, 33, 26, 老刘, 中年中国男性，面部轮廓清晰，佩戴金属框眼镜，眼神审视，头发梳理整齐，身材中等，穿着白色医生工作服。真人风格, http://127.0.0.1:9000/yihen-drama/project/26/characters/122-老刘.png, null, <<BLOB>>, 2026-03-29 18:41:19, 2026-03-29 21:11:35, 0
+<==        Row: 123, 33, 26, 陈硕, 中年男性，脸型方正，黑色短发，身材中等，穿着深色商务休闲装，随身携带黑色皮质公文包，面部线条紧绷。, http://127.0.0.1:9000/yihen-drama/project/26/characters/123-陈硕.png, null, <<BLOB>>, 2026-03-29 18:41:19, 2026-03-29 18:41:19, 0
+<==        Row: 124, 33, 26, 王慧玲, 中国中年女性，体型丰满肥胖，圆脸，眼睛大而突出，头发盘起，穿着日常居家服饰。, http://127.0.0.1:9000/yihen-drama/project/26/characters/124-王慧玲.png, null, <<BLOB>>, 2026-03-29 18:41:19, 2026-03-30 10:08:14, 0
+<==        Row: 125, 33, 26, 老人, 老年男性，背部佝偻，双手负后，面部有皱纹，眼神深邃清晰，头发花白稀疏，穿着宽松病号服，身形瘦削。, http://127.0.0.1:9000/yihen-drama/project/26/characters/125-老人.png, null, <<BLOB>>, 2026-03-29 18:41:19, 2026-03-29 18:41:19, 0
+<==        Row: 126, 33, 26, 李青鸟, 青年男性，面容呆滞，视线朝向窗外，眼神空洞，黑色短发略显凌乱，身材消瘦，穿着宽松病号服。, http://127.0.0.1:9000/yihen-drama/project/26/characters/126-李青鸟.png, null, <<BLOB>>, 2026-03-29 18:41:19, 2026-03-29 18:41:19, 0
+<==        Row: 127, 33, 26, 男护士, 成年男性，体格结实，表情冷漠，短发，穿着浅蓝色护士制服，身形高大。, http://127.0.0.1:9000/yihen-drama/project/26/characters/127-男护士.png, null, <<BLOB>>, 2026-03-29 18:41:19, 2026-03-29 18:41:19, 0
+<==      Total: 7
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7a089ada]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@8460cdd] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@908495173 wrapping com.mysql.cj.jdbc.ConnectionImpl@6edc09c5] will not be managed by Spring
+==>  Preparing: SELECT id,episode_id,project_id,name,description,thumbnail,create_time,update_time,is_deleted FROM scene WHERE is_deleted=0 AND (episode_id = ?)
+==> Parameters: 33(Long)
+<==    Columns: id, episode_id, project_id, name, description, thumbnail, create_time, update_time, is_deleted
+<==        Row: 72, 33, 26, 青山精神疾病医院医生办公室, <<BLOB>>, http://127.0.0.1:9000/yihen-drama/project/26/scenes/72-青山精神疾病医院医生办公室.png, 2026-03-29 18:41:19, 2026-03-29 18:41:19, 0
+<==        Row: 73, 33, 26, 青山精神疾病医院走廊, <<BLOB>>, null, 2026-03-29 18:41:19, 2026-03-29 18:41:19, 0
+<==        Row: 74, 33, 26, 青山精神疾病医院六楼病房, <<BLOB>>, null, 2026-03-29 18:41:19, 2026-03-29 18:41:19, 0
+<==        Row: 75, 33, 26, 青山精神疾病医院外部, <<BLOB>>, null, 2026-03-29 18:41:19, 2026-03-29 18:41:19, 0
+<==      Total: 4
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@8460cdd]
+2026-03-30T13:52:43.820+08:00  INFO 15864 --- [nio-8080-exec-2] com.yihen.aop.LogAspect                  : 获取章节中出现人物、场景信息 <- 方法返回: EpisodeController.getProperty()，返回值: Result(code=200, message=操作成功, data=ExtractionResultVO(characters=[Characters(episodeId=33, projectId=26, name=陈迹, description=十八岁男性，清秀脸型，线条柔和，皮肤干净白皙，眼神清澈真诚，黑色短发，身材匀称偏瘦，穿着现代休闲服装。, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/121-陈迹.png, videoUrl=null, features=null, isNew=false), Characters(episodeId=33, projectId=26, name=老刘, description=中年中国男性，面部轮廓清晰，佩戴金属框眼镜，眼神审视，头发梳理整齐，身材中等，穿着白色医生工作服。真人风格, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/122-老刘.png, videoUrl=null, features=null, isNew=false), Characters(episodeId=33, projectId=26, name=陈硕, description=中年男性，脸型方正，黑色短发，身材中等，穿着深色商务休闲装，随身携带黑色皮质公文包，面部线条紧绷。, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/123-陈硕.png, videoUrl=null, features=null, isNew=false), Characters(episodeId=33, projectId=26, name=王慧玲, description=中国中年女性，体型丰满肥胖，圆脸，眼睛大而突出，头发盘起，穿着日常居家服饰。, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/124-王慧玲.png, videoUrl=null, features=null, isNew=false), Characters(episodeId=33, projectId=26, name=老人, description=老年男性，背部佝偻，双手负后，面部有皱纹，眼神深邃清晰，头发花白稀疏，穿着宽松病号服，身形瘦削。, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/125-老人.png, videoUrl=null, features=null, isNew=false), Characters(episodeId=33, projectId=26, name=李青鸟, description=青年男性，面容呆滞，视线朝向窗外，眼神空洞，黑色短发略显凌乱，身材消瘦，穿着宽松病号服。, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/126-李青鸟.png, videoUrl=null, features=null, isNew=false), Characters(episodeId=33, projectId=26, name=男护士, description=成年男性，体格结实，表情冷漠，短发，穿着浅蓝色护士制服，身形高大。, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/127-男护士.png, videoUrl=null, features=null, isNew=false)], scenes=[Scene(episodeId=33, projectId=26, name=青山精神疾病医院医生办公室, description=室内空间，惨白白炽灯照明，光线冷硬，办公桌，窗户朝向黑夜，墙面空旷，氛围压抑。, thumbnail=http://127.0.0.1:9000/yihen-drama/project/26/scenes/72-青山精神疾病医院医生办公室.png, isNew=false), Scene(episodeId=33, projectId=26, name=青山精神疾病医院走廊, description=幽暗走廊，墙壁斑驳，安全通道指示牌提供微弱绿光，尽头有密码铁门，空间狭长，氛围阴森。, thumbnail=null, isNew=false), Scene(episodeId=33, projectId=26, name=青山精神疾病医院六楼病房, description=空旷大厅，排列整齐的单人大床，间距一米五，窗户焊死不锈钢防盗窗，月光透入，阴影摇曳，氛围寂静诡异。, thumbnail=null, isNew=false), Scene(episodeId=33, projectId=26, name=青山精神疾病医院外部, description=夜间楼体，墙面覆盖扭曲茂密的爬墙虎，遮挡窗户，缝隙中有阴影晃动，夜色深沉。, thumbnail=null, isNew=false)], abstraction=null))，耗时: 12 ms
+2026-03-30T13:52:43.870+08:00  INFO 15864 --- [nio-8080-exec-1] com.yihen.aop.LogAspect                  : List model instances by type -> 进入方法: ModelManageController.getModelInstanceByType()，参数: [1, 100, IMAGE]
+2026-03-30T13:52:43.870+08:00  INFO 15864 --- [nio-8080-exec-5] com.yihen.aop.LogAspect                  : Get default model instance by type -> 进入方法: ModelManageController.getDefaultModelInstanceByType()，参数: [VIDEO, VIDEO_GEN]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@4fa4211e] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1364154367 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,model_type,model_instance_id,status,remark,create_time,update_time,is_deleted FROM model_instance_default WHERE is_deleted=0 AND (model_type = ? AND status = ? AND remark = ?) LIMIT 1
+==> Parameters: 3(Integer), 1(Byte), VIDEO_GEN(String)
+2026-03-30T13:52:43.873+08:00  INFO 15864 --- [nio-8080-exec-1] com.yihen.aop.LogAspect                  : List model instances by type <- 方法返回: ModelManageController.getModelInstanceByType()，返回值: Result(code=200, message=操作成功, data=com.baomidou.mybatisplus.extension.plugins.pagination.Page@1bd2dd3)，耗时: 3 ms
+<==    Columns: id, model_type, model_instance_id, status, remark, create_time, update_time, is_deleted
+<==        Row: 9, 3, 28, 1, VIDEO_GEN, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@4fa4211e]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1d7bb9ba] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1933166554 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,model_def_id,model_code,model_type,instance_name,scene_code,api_key,params,status,path,create_time,update_time,is_deleted FROM model_instance WHERE id=? AND is_deleted=0
+==> Parameters: 28(Long)
+<==    Columns: id, model_def_id, model_code, model_type, instance_name, scene_code, api_key, params, status, path, create_time, update_time, is_deleted
+<==        Row: 28, 17, comfyui-ltx23-i2v, 3, ComfyUI LTX2.3 I2V, 5, , <<BLOB>>, 1, /prompt, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1d7bb9ba]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@db12ea3] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1304948934 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,provider_code,base_url,status,create_time,update_time,is_deleted FROM model_definition WHERE id=? AND is_deleted=0
+==> Parameters: 17(Long)
+<==    Columns: id, provider_code, base_url, status, create_time, update_time, is_deleted
+<==        Row: 17, comfyui, http://127.0.0.1:18188, 1, 2026-03-29 18:00:53, 2026-03-29 18:07:16, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@db12ea3]
+2026-03-30T13:52:43.877+08:00  INFO 15864 --- [nio-8080-exec-5] com.yihen.aop.LogAspect                  : Get default model instance by type <- 方法返回: ModelManageController.getDefaultModelInstanceByType()，返回值: Result(code=200, message=操作成功, data=ModelInstance(modelDefId=17, modelCode=comfyui-ltx23-i2v, modelType=VIDEO, instanceName=ComfyUI LTX2.3 I2V, sceneCode=VIDEO_GEN, apiKey=, params={fps=24, duration=10, inputMapping={image={type=image, field=image, nodeId=191, subfolder=comfy-input, filenamePrefix=video-start}, prompt={field=text, nodeId=69}}, workflowMode=auto, workflowPath=D:\comfui\workflows\basevideo\01_图生视频\P0_LTX23主线图生视频_优化版蒸馏Dev可切换\图生视频-LTX2.3图生视频优化版蒸馏Dev可切换-无ReservedVRAM本地可跑版.json, outputMapping={nodeIds=[375, 336]}, pollIntervalMs=5000, historyTimeoutMs=600000}, status=1, path=/prompt, providerCode=comfyui, baseUrl=http://127.0.0.1:18188, isDefault=null))，耗时: 7 ms
+2026-03-30T13:52:43.879+08:00  INFO 15864 --- [io-8080-exec-10] com.yihen.aop.LogAspect                  : Get default model instance by type -> 进入方法: ModelManageController.getDefaultModelInstanceByType()，参数: [IMAGE, CHARACTER_GEN]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1cd42ea3] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@520563731 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,model_type,model_instance_id,status,remark,create_time,update_time,is_deleted FROM model_instance_default WHERE is_deleted=0 AND (model_type = ? AND status = ? AND remark = ?) LIMIT 1
+==> Parameters: 2(Integer), 1(Byte), CHARACTER_GEN(String)
+<==    Columns: id, model_type, model_instance_id, status, remark, create_time, update_time, is_deleted
+<==        Row: 6, 2, 25, 1, CHARACTER_GEN, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1cd42ea3]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@8caf7e7] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@894857579 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,model_def_id,model_code,model_type,instance_name,scene_code,api_key,params,status,path,create_time,update_time,is_deleted FROM model_instance WHERE id=? AND is_deleted=0
+==> Parameters: 25(Long)
+<==    Columns: id, model_def_id, model_code, model_type, instance_name, scene_code, api_key, params, status, path, create_time, update_time, is_deleted
+<==        Row: 25, 17, comfyui-zimage-character, 2, ComfyUI ZImage Character, 3, , <<BLOB>>, 1, /prompt, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@8caf7e7]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2bc649f] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1561779936 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,provider_code,base_url,status,create_time,update_time,is_deleted FROM model_definition WHERE id=? AND is_deleted=0
+==> Parameters: 17(Long)
+<==    Columns: id, provider_code, base_url, status, create_time, update_time, is_deleted
+<==        Row: 17, comfyui, http://127.0.0.1:18188, 1, 2026-03-29 18:00:53, 2026-03-29 18:07:16, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2bc649f]
+2026-03-30T13:52:43.885+08:00  INFO 15864 --- [io-8080-exec-10] com.yihen.aop.LogAspect                  : Get default model instance by type <- 方法返回: ModelManageController.getDefaultModelInstanceByType()，返回值: Result(code=200, message=操作成功, data=ModelInstance(modelDefId=17, modelCode=comfyui-zimage-character, modelType=IMAGE, instanceName=ComfyUI ZImage Character, sceneCode=CHARACTER_GEN, apiKey=, params={quality=standard, resolution=1024x1024, workflowMode=auto, workflowPath=D:\comfui\workflows\baseimage\01_scene_txt2img\P0_ZImage光速高清文生图_ZImageTurbo\场景文生图-ZImage光速高清文生图-RunningHub原始工作流.json, outputMapping={nodeId=9}, pollIntervalMs=3000, historyTimeoutMs=180000}, status=1, path=/prompt, providerCode=comfyui, baseUrl=http://127.0.0.1:18188, isDefault=null))，耗时: 6 ms
+2026-03-30T13:52:48.156+08:00  INFO 15864 --- [nio-8080-exec-9] com.yihen.aop.LogAspect                  : Get default model instance by type -> 进入方法: ModelManageController.getDefaultModelInstanceByType()，参数: [IMAGE, CHARACTER_GEN]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7cec5b2] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1696647247 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,model_type,model_instance_id,status,remark,create_time,update_time,is_deleted FROM model_instance_default WHERE is_deleted=0 AND (model_type = ? AND status = ? AND remark = ?) LIMIT 1
+==> Parameters: 2(Integer), 1(Byte), CHARACTER_GEN(String)
+<==    Columns: id, model_type, model_instance_id, status, remark, create_time, update_time, is_deleted
+<==        Row: 6, 2, 25, 1, CHARACTER_GEN, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7cec5b2]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7759e549] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@113986885 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,model_def_id,model_code,model_type,instance_name,scene_code,api_key,params,status,path,create_time,update_time,is_deleted FROM model_instance WHERE id=? AND is_deleted=0
+==> Parameters: 25(Long)
+<==    Columns: id, model_def_id, model_code, model_type, instance_name, scene_code, api_key, params, status, path, create_time, update_time, is_deleted
+<==        Row: 25, 17, comfyui-zimage-character, 2, ComfyUI ZImage Character, 3, , <<BLOB>>, 1, /prompt, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7759e549]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@6fdc0f00] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1469565983 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,provider_code,base_url,status,create_time,update_time,is_deleted FROM model_definition WHERE id=? AND is_deleted=0
+==> Parameters: 17(Long)
+<==    Columns: id, provider_code, base_url, status, create_time, update_time, is_deleted
+<==        Row: 17, comfyui, http://127.0.0.1:18188, 1, 2026-03-29 18:00:53, 2026-03-29 18:07:16, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@6fdc0f00]
+2026-03-30T13:52:48.169+08:00  INFO 15864 --- [nio-8080-exec-9] com.yihen.aop.LogAspect                  : Get default model instance by type <- 方法返回: ModelManageController.getDefaultModelInstanceByType()，返回值: Result(code=200, message=操作成功, data=ModelInstance(modelDefId=17, modelCode=comfyui-zimage-character, modelType=IMAGE, instanceName=ComfyUI ZImage Character, sceneCode=CHARACTER_GEN, apiKey=, params={quality=standard, resolution=1024x1024, workflowMode=auto, workflowPath=D:\comfui\workflows\baseimage\01_scene_txt2img\P0_ZImage光速高清文生图_ZImageTurbo\场景文生图-ZImage光速高清文生图-RunningHub原始工作流.json, outputMapping={nodeId=9}, pollIntervalMs=3000, historyTimeoutMs=180000}, status=1, path=/prompt, providerCode=comfyui, baseUrl=http://127.0.0.1:18188, isDefault=null))，耗时: 13 ms
+2026-03-30T13:52:48.420+08:00  INFO 15864 --- [nio-8080-exec-3] com.yihen.aop.LogAspect                  : 生成角色图片 -> 进入方法: EpisodeController.generateCharacterImage()，参数: [CharactersRequestVO(modelInstanceId=25, characterId=124, ProjectId=26, description=中国中年女性，体型丰满肥胖，圆脸，眼睛大而突出，头发盘起，穿着日常居家服饰。, actionType=regenerate)]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@14c7689d] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1604728031 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,episode_id,project_id,name,description,avatar,video_url,features,create_time,update_time,is_deleted FROM characters WHERE id=? AND is_deleted=0
+==> Parameters: 124(Long)
+<==    Columns: id, episode_id, project_id, name, description, avatar, video_url, features, create_time, update_time, is_deleted
+<==        Row: 124, 33, 26, 王慧玲, 中国中年女性，体型丰满肥胖，圆脸，眼睛大而突出，头发盘起，穿着日常居家服饰。, http://127.0.0.1:9000/yihen-drama/project/26/characters/124-王慧玲.png, null, <<BLOB>>, 2026-03-29 18:41:19, 2026-03-30 10:08:14, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@14c7689d]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2f07c229] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@2872532 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,name,description,cover,style_id,global_style_prompt,status,consistency,chapter_count,progress,create_time,update_time,is_deleted FROM project WHERE id=? AND is_deleted=0
+==> Parameters: 26(Long)
+<==    Columns: id, name, description, cover, style_id, global_style_prompt, status, consistency, chapter_count, progress, create_time, update_time, is_deleted
+<==        Row: 26, 青山, <<BLOB>>, null, 1, <<BLOB>>, 0, 0, 1, 0, 2026-03-29 18:08:40, 2026-03-30 13:12:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2f07c229]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2808aad5] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@965682039 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,chapter_number,name,content,abstraction,visual_setting,status,progress,current_step,create_time,update_time,is_deleted FROM episode WHERE id=? AND is_deleted=0
+==> Parameters: 33(Long)
+<==    Columns: id, project_id, chapter_number, name, content, abstraction, visual_setting, status, progress, current_step, create_time, update_time, is_deleted
+<==        Row: 33, 26, 1, 青山一, <<BLOB>>, <<BLOB>>, <<BLOB>>, 0, 0, 2, 2026-03-29 18:09:09, 2026-03-30 13:50:08, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2808aad5]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2199dac7] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1277858339 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,name,description,preview,parameters,is_default,create_time,update_time,is_deleted FROM style_template WHERE id=? AND is_deleted=0
+==> Parameters: 1(Long)
+<==    Columns: id, name, description, preview, parameters, is_default, create_time, update_time, is_deleted
+<==        Row: 1, 写实风格, 现代写实风格, null, <<BLOB>>, 0, 2026-02-20 21:25:09, 2026-02-20 21:25:09, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2199dac7]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@dcccbde] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1659664194 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT prompt_template_id FROM prompt_template_default WHERE scene_code = ?
+==> Parameters: 3(Integer)
+<==    Columns: prompt_template_id
+<==        Row: 2
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@dcccbde]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2ebdd71] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1771205833 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,prompt_code,prompt_name,scene_code,prompt_content,create_time,update_time,is_deleted FROM prompt_template WHERE id=? AND is_deleted=0
+==> Parameters: 2(Long)
+<==    Columns: id, prompt_code, prompt_name, scene_code, prompt_content, create_time, update_time, is_deleted
+<==        Row: 2, IMAGE_GEN_v1, 角色生成, 3, <<BLOB>>, 2026-01-22 23:40:13, 2026-02-03 12:23:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2ebdd71]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@685f258a] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@872639909 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,model_def_id,model_code,model_type,instance_name,scene_code,api_key,params,status,path,create_time,update_time,is_deleted FROM model_instance WHERE id=? AND is_deleted=0
+==> Parameters: 25(Long)
+<==    Columns: id, model_def_id, model_code, model_type, instance_name, scene_code, api_key, params, status, path, create_time, update_time, is_deleted
+<==        Row: 25, 17, comfyui-zimage-character, 2, ComfyUI ZImage Character, 3, , <<BLOB>>, 1, /prompt, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@685f258a]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@c8c416f] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@502158849 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,model_def_id,model_code,model_type,instance_name,scene_code,api_key,params,status,path,create_time,update_time,is_deleted FROM model_instance WHERE id=? AND is_deleted=0
+==> Parameters: 25(Long)
+<==    Columns: id, model_def_id, model_code, model_type, instance_name, scene_code, api_key, params, status, path, create_time, update_time, is_deleted
+<==        Row: 25, 17, comfyui-zimage-character, 2, ComfyUI ZImage Character, 3, , <<BLOB>>, 1, /prompt, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@c8c416f]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1759483a] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@2033247367 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: select base_url from model_definition where id = ?
+==> Parameters: 17(Long)
+<==    Columns: base_url
+<==        Row: http://127.0.0.1:18188
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1759483a]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@477fd66] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@818249768 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@477fd66]
+2026-03-30T13:52:56.065+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=23，下次轮询间隔=120000ms
+2026-03-30T13:52:58.874+08:00  INFO 15864 --- [nio-8080-exec-6] com.yihen.aop.LogAspect                  : 生成角色图片 <- 方法返回: EpisodeController.generateCharacterImage()，返回值: Result(code=200, message=操作成功, data=Characters(episodeId=33, projectId=26, name=王慧玲, description=中国中年女性，体型丰满肥胖，圆脸，眼睛大而突出，头发盘起，穿着日常居家服饰。, avatar=http://127.0.0.1:18188/view?filename=ComfyUI_00099_.png&subfolder=&type=output, videoUrl=null, features=null, isNew=false))，耗时: 155456 ms
+Creating a new SqlSession
+Registering transaction synchronization for SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2e958408]
+JDBC Connection [HikariProxyConnection@1991863445 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will be managed by Spring
+==>  Preparing: UPDATE characters SET episode_id=?, project_id=?, name=?, description=?, avatar=?, create_time=?, update_time=? WHERE id=? AND is_deleted=0
+==> Parameters: 33(Long), 26(Long), 王慧玲(String), 中国中年女性，体型丰满肥胖，圆脸，眼睛大而突出，头发盘起，穿着日常居家服饰。(String), http://127.0.0.1:9000/yihen-drama/project/26/characters/124-王慧玲.png(String), 2026-03-29 18:41:19.0(Timestamp), 2026-03-30 13:52:59.447(Timestamp), 124(Long)
+<==    Updates: 1
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2e958408]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2e958408] from current transaction
+==>  Preparing: SELECT id,project_id,chapter_number,name,content,abstraction,visual_setting,status,progress,current_step,create_time,update_time,is_deleted FROM episode WHERE id=? AND is_deleted=0
+==> Parameters: 33(Long)
+<==    Columns: id, project_id, chapter_number, name, content, abstraction, visual_setting, status, progress, current_step, create_time, update_time, is_deleted
+<==        Row: 33, 26, 1, 青山一, <<BLOB>>, <<BLOB>>, <<BLOB>>, 0, 0, 2, 2026-03-29 18:09:09, 2026-03-30 13:50:08, 0
+<==      Total: 1
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2e958408]
+Transaction synchronization committing SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2e958408]
+Transaction synchronization deregistering SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2e958408]
+Transaction synchronization closing SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2e958408]
+2026-03-30T13:54:36.952+08:00  INFO 15864 --- [nio-8080-exec-3] com.yihen.aop.LogAspect                  : 生成角色图片 <- 方法返回: EpisodeController.generateCharacterImage()，返回值: Result(code=200, message=操作成功, data=Characters(episodeId=33, projectId=26, name=王慧玲, description=中国中年女性，体型丰满肥胖，圆脸，眼睛大而突出，头发盘起，穿着日常居家服饰。, avatar=http://127.0.0.1:18188/view?filename=ComfyUI_00103_.png&subfolder=&type=output, videoUrl=null, features=null, isNew=false))，耗时: 108532 ms
+Creating a new SqlSession
+Registering transaction synchronization for SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7752cbcc]
+JDBC Connection [HikariProxyConnection@913293815 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will be managed by Spring
+==>  Preparing: UPDATE characters SET episode_id=?, project_id=?, name=?, description=?, avatar=?, create_time=?, update_time=? WHERE id=? AND is_deleted=0
+==> Parameters: 33(Long), 26(Long), 王慧玲(String), 中国中年女性，体型丰满肥胖，圆脸，眼睛大而突出，头发盘起，穿着日常居家服饰。(String), http://127.0.0.1:9000/yihen-drama/project/26/characters/124-王慧玲.png(String), 2026-03-29 18:41:19.0(Timestamp), 2026-03-30 13:54:37.01(Timestamp), 124(Long)
+<==    Updates: 1
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7752cbcc]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7752cbcc] from current transaction
+==>  Preparing: SELECT id,project_id,chapter_number,name,content,abstraction,visual_setting,status,progress,current_step,create_time,update_time,is_deleted FROM episode WHERE id=? AND is_deleted=0
+==> Parameters: 33(Long)
+<==    Columns: id, project_id, chapter_number, name, content, abstraction, visual_setting, status, progress, current_step, create_time, update_time, is_deleted
+<==        Row: 33, 26, 1, 青山一, <<BLOB>>, <<BLOB>>, <<BLOB>>, 0, 0, 2, 2026-03-29 18:09:09, 2026-03-30 13:50:08, 0
+<==      Total: 1
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7752cbcc]
+Transaction synchronization committing SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7752cbcc]
+Transaction synchronization deregistering SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7752cbcc]
+Transaction synchronization closing SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7752cbcc]
+2026-03-30T13:54:55.137+08:00  INFO 15864 --- [nio-8080-exec-4] com.yihen.aop.LogAspect                  : Get default model instance by type -> 进入方法: ModelManageController.getDefaultModelInstanceByType()，参数: [IMAGE, CHARACTER_GEN]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7224a715] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1018956960 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,model_type,model_instance_id,status,remark,create_time,update_time,is_deleted FROM model_instance_default WHERE is_deleted=0 AND (model_type = ? AND status = ? AND remark = ?) LIMIT 1
+==> Parameters: 2(Integer), 1(Byte), CHARACTER_GEN(String)
+<==    Columns: id, model_type, model_instance_id, status, remark, create_time, update_time, is_deleted
+<==        Row: 6, 2, 25, 1, CHARACTER_GEN, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7224a715]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@68b8b08c] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1064545921 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,model_def_id,model_code,model_type,instance_name,scene_code,api_key,params,status,path,create_time,update_time,is_deleted FROM model_instance WHERE id=? AND is_deleted=0
+==> Parameters: 25(Long)
+<==    Columns: id, model_def_id, model_code, model_type, instance_name, scene_code, api_key, params, status, path, create_time, update_time, is_deleted
+<==        Row: 25, 17, comfyui-zimage-character, 2, ComfyUI ZImage Character, 3, , <<BLOB>>, 1, /prompt, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@68b8b08c]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@697596f6] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1155823492 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,provider_code,base_url,status,create_time,update_time,is_deleted FROM model_definition WHERE id=? AND is_deleted=0
+==> Parameters: 17(Long)
+<==    Columns: id, provider_code, base_url, status, create_time, update_time, is_deleted
+<==        Row: 17, comfyui, http://127.0.0.1:18188, 1, 2026-03-29 18:00:53, 2026-03-29 18:07:16, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@697596f6]
+2026-03-30T13:54:55.144+08:00  INFO 15864 --- [nio-8080-exec-4] com.yihen.aop.LogAspect                  : Get default model instance by type <- 方法返回: ModelManageController.getDefaultModelInstanceByType()，返回值: Result(code=200, message=操作成功, data=ModelInstance(modelDefId=17, modelCode=comfyui-zimage-character, modelType=IMAGE, instanceName=ComfyUI ZImage Character, sceneCode=CHARACTER_GEN, apiKey=, params={quality=standard, resolution=1024x1024, workflowMode=auto, workflowPath=D:\comfui\workflows\baseimage\01_scene_txt2img\P0_ZImage光速高清文生图_ZImageTurbo\场景文生图-ZImage光速高清文生图-RunningHub原始工作流.json, outputMapping={nodeId=9}, pollIntervalMs=3000, historyTimeoutMs=180000}, status=1, path=/prompt, providerCode=comfyui, baseUrl=http://127.0.0.1:18188, isDefault=null))，耗时: 7 ms
+2026-03-30T13:54:55.400+08:00  INFO 15864 --- [nio-8080-exec-8] com.yihen.aop.LogAspect                  : 生成角色图片 -> 进入方法: EpisodeController.generateCharacterImage()，参数: [CharactersRequestVO(modelInstanceId=25, characterId=125, ProjectId=26, description=老年男性，背部佝偻，双手负后，面部有皱纹，眼神深邃清晰，头发花白稀疏，穿着宽松病号服，身形瘦削。, actionType=regenerate)]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2f700a90] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@412535247 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,episode_id,project_id,name,description,avatar,video_url,features,create_time,update_time,is_deleted FROM characters WHERE id=? AND is_deleted=0
+==> Parameters: 125(Long)
+<==    Columns: id, episode_id, project_id, name, description, avatar, video_url, features, create_time, update_time, is_deleted
+<==        Row: 125, 33, 26, 老人, 老年男性，背部佝偻，双手负后，面部有皱纹，眼神深邃清晰，头发花白稀疏，穿着宽松病号服，身形瘦削。, http://127.0.0.1:9000/yihen-drama/project/26/characters/125-老人.png, null, <<BLOB>>, 2026-03-29 18:41:19, 2026-03-29 18:41:19, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2f700a90]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@239dffcb] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@202786210 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,name,description,cover,style_id,global_style_prompt,status,consistency,chapter_count,progress,create_time,update_time,is_deleted FROM project WHERE id=? AND is_deleted=0
+==> Parameters: 26(Long)
+<==    Columns: id, name, description, cover, style_id, global_style_prompt, status, consistency, chapter_count, progress, create_time, update_time, is_deleted
+<==        Row: 26, 青山, <<BLOB>>, null, 1, <<BLOB>>, 0, 0, 1, 0, 2026-03-29 18:08:40, 2026-03-30 13:12:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@239dffcb]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@3f539536] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1892512685 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,chapter_number,name,content,abstraction,visual_setting,status,progress,current_step,create_time,update_time,is_deleted FROM episode WHERE id=? AND is_deleted=0
+==> Parameters: 33(Long)
+<==    Columns: id, project_id, chapter_number, name, content, abstraction, visual_setting, status, progress, current_step, create_time, update_time, is_deleted
+<==        Row: 33, 26, 1, 青山一, <<BLOB>>, <<BLOB>>, <<BLOB>>, 0, 0, 2, 2026-03-29 18:09:09, 2026-03-30 13:50:08, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@3f539536]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@51fcdd90] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@613119425 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,name,description,preview,parameters,is_default,create_time,update_time,is_deleted FROM style_template WHERE id=? AND is_deleted=0
+==> Parameters: 1(Long)
+<==    Columns: id, name, description, preview, parameters, is_default, create_time, update_time, is_deleted
+<==        Row: 1, 写实风格, 现代写实风格, null, <<BLOB>>, 0, 2026-02-20 21:25:09, 2026-02-20 21:25:09, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@51fcdd90]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@24eb1e64] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@332154676 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT prompt_template_id FROM prompt_template_default WHERE scene_code = ?
+==> Parameters: 3(Integer)
+<==    Columns: prompt_template_id
+<==        Row: 2
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@24eb1e64]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@39159dec] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1173466260 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,prompt_code,prompt_name,scene_code,prompt_content,create_time,update_time,is_deleted FROM prompt_template WHERE id=? AND is_deleted=0
+==> Parameters: 2(Long)
+<==    Columns: id, prompt_code, prompt_name, scene_code, prompt_content, create_time, update_time, is_deleted
+<==        Row: 2, IMAGE_GEN_v1, 角色生成, 3, <<BLOB>>, 2026-01-22 23:40:13, 2026-02-03 12:23:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@39159dec]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@6850dc13] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@2109720072 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,model_def_id,model_code,model_type,instance_name,scene_code,api_key,params,status,path,create_time,update_time,is_deleted FROM model_instance WHERE id=? AND is_deleted=0
+==> Parameters: 25(Long)
+<==    Columns: id, model_def_id, model_code, model_type, instance_name, scene_code, api_key, params, status, path, create_time, update_time, is_deleted
+<==        Row: 25, 17, comfyui-zimage-character, 2, ComfyUI ZImage Character, 3, , <<BLOB>>, 1, /prompt, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@6850dc13]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2cb97a1c] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1114082268 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,model_def_id,model_code,model_type,instance_name,scene_code,api_key,params,status,path,create_time,update_time,is_deleted FROM model_instance WHERE id=? AND is_deleted=0
+==> Parameters: 25(Long)
+<==    Columns: id, model_def_id, model_code, model_type, instance_name, scene_code, api_key, params, status, path, create_time, update_time, is_deleted
+<==        Row: 25, 17, comfyui-zimage-character, 2, ComfyUI ZImage Character, 3, , <<BLOB>>, 1, /prompt, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2cb97a1c]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@662f197c] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@27387455 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: select base_url from model_definition where id = ?
+==> Parameters: 17(Long)
+<==    Columns: base_url
+<==        Row: http://127.0.0.1:18188
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@662f197c]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@751d5d20] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1320813096 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@751d5d20]
+2026-03-30T13:54:56.081+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=24，下次轮询间隔=120000ms
+2026-03-30T13:56:34.785+08:00  INFO 15864 --- [nio-8080-exec-8] com.yihen.aop.LogAspect                  : 生成角色图片 <- 方法返回: EpisodeController.generateCharacterImage()，返回值: Result(code=200, message=操作成功, data=Characters(episodeId=33, projectId=26, name=老人, description=老年男性，背部佝偻，双手负后，面部有皱纹，眼神深邃清晰，头发花白稀疏，穿着宽松病号服，身形瘦削。, avatar=http://127.0.0.1:18188/view?filename=ComfyUI_00107_.png&subfolder=&type=output, videoUrl=null, features=null, isNew=false))，耗时: 99385 ms
+Creating a new SqlSession
+Registering transaction synchronization for SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7b0a1324]
+JDBC Connection [HikariProxyConnection@976689439 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will be managed by Spring
+==>  Preparing: UPDATE characters SET episode_id=?, project_id=?, name=?, description=?, avatar=?, create_time=?, update_time=? WHERE id=? AND is_deleted=0
+==> Parameters: 33(Long), 26(Long), 老人(String), 老年男性，背部佝偻，双手负后，面部有皱纹，眼神深邃清晰，头发花白稀疏，穿着宽松病号服，身形瘦削。(String), http://127.0.0.1:9000/yihen-drama/project/26/characters/125-老人.png(String), 2026-03-29 18:41:19.0(Timestamp), 2026-03-30 13:56:34.837(Timestamp), 125(Long)
+<==    Updates: 1
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7b0a1324]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7b0a1324] from current transaction
+==>  Preparing: SELECT id,project_id,chapter_number,name,content,abstraction,visual_setting,status,progress,current_step,create_time,update_time,is_deleted FROM episode WHERE id=? AND is_deleted=0
+==> Parameters: 33(Long)
+<==    Columns: id, project_id, chapter_number, name, content, abstraction, visual_setting, status, progress, current_step, create_time, update_time, is_deleted
+<==        Row: 33, 26, 1, 青山一, <<BLOB>>, <<BLOB>>, <<BLOB>>, 0, 0, 2, 2026-03-29 18:09:09, 2026-03-30 13:50:08, 0
+<==      Total: 1
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7b0a1324]
+Transaction synchronization committing SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7b0a1324]
+Transaction synchronization deregistering SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7b0a1324]
+Transaction synchronization closing SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7b0a1324]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@66b55d1e] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@2044651701 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@66b55d1e]
+2026-03-30T13:56:56.098+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=25，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@25b33fb9] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1772276668 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@25b33fb9]
+2026-03-30T13:58:56.104+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=26，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5894b341] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1684406557 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5894b341]
+2026-03-30T14:00:56.111+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=27，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@44e573f2] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@957800084 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@44e573f2]
+2026-03-30T14:02:56.122+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=28，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@40af1408] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@792364300 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@40af1408]
+2026-03-30T14:04:56.129+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=29，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2f861807] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@397498027 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2f861807]
+2026-03-30T14:06:56.134+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=30，下次轮询间隔=120000ms
+2026-03-30T14:07:37.527+08:00  INFO 15864 --- [nio-8080-exec-7] c.y.w.TaskStatusWebSocketHandler         : 项目:26下线!
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@74779d2a] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1806628227 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@74779d2a]
+2026-03-30T14:08:56.248+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=31，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5fdbaa22] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@395174462 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5fdbaa22]
+2026-03-30T14:10:56.276+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=32，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@42ffc1ea] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1081600301 wrapping com.mysql.cj.jdbc.ConnectionImpl@1818457b] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@42ffc1ea]
+2026-03-30T14:12:56.286+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=33，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2bee01bb] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@388134333 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2bee01bb]
+2026-03-30T14:14:56.314+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=34，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@10138af6] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@337156820 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@10138af6]
+2026-03-30T14:16:56.326+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=35，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@74b8154b] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@2020635920 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@74b8154b]
+2026-03-30T14:18:56.346+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=36，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1872ebf3] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@743749627 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1872ebf3]
+2026-03-30T14:20:56.363+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=37，下次轮询间隔=120000ms
+2026-03-30T14:22:45.142+08:00  INFO 15864 --- [nio-8080-exec-5] c.y.w.TaskStatusWebSocketHandler         : 项目:26连接成功
+2026-03-30T14:22:45.168+08:00  INFO 15864 --- [nio-8080-exec-9] com.yihen.aop.LogAspect                  : List model instances by type -> 进入方法: ModelManageController.getModelInstanceByType()，参数: [1, 100, TEXT]
+2026-03-30T14:22:45.168+08:00  INFO 15864 --- [nio-8080-exec-2] com.yihen.aop.LogAspect                  : 获取项目的章节列表 -> 进入方法: EpisodeController.listByProject()，参数: [26]
+2026-03-30T14:22:45.168+08:00  INFO 15864 --- [nio-8080-exec-1] com.yihen.aop.LogAspect                  : 获取项目详情 -> 进入方法: ProjectController.get()，参数: [26]
+2026-03-30T14:22:45.168+08:00  INFO 15864 --- [io-8080-exec-10] com.yihen.aop.LogAspect                  : 获取项目中出现人物、场景信息 -> 进入方法: ProjectController.getProperty()，参数: [26]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7fa4bd89] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1297339980 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT ? AS project_id
+==> Parameters: 26(Long)
+<==    Columns: project_id
+<==        Row: 26
+====>  Preparing: SELECT * FROM characters WHERE project_id = ? AND is_deleted = 0
+====> Parameters: 26(Long)
+<====    Columns: id, episode_id, project_id, name, description, avatar, video_url, features, is_deleted, create_time, update_time
+<====        Row: 121, 33, 26, 陈迹, 十八岁男性，清秀脸型，线条柔和，皮肤干净白皙，眼神清澈真诚，黑色短发，身材匀称偏瘦，穿着现代休闲服装。, http://127.0.0.1:9000/yihen-drama/project/26/characters/121-陈迹.png, null, <<BLOB>>, 0, 2026-03-29 18:41:19, 2026-03-29 18:41:19
+2026-03-30T14:22:45.237+08:00  INFO 15864 --- [nio-8080-exec-2] com.yihen.aop.LogAspect                  : 获取项目的章节列表 <- 方法返回: EpisodeController.listByProject()，返回值: Result(code=200, message=操作成功, data=[Episode(projectId=26, chapterNumber=1, name=青山一, content=null, abstraction=null, visualSetting=现代风格, status=PENDING, progress=0, currentStep=GENERATE_IMAGES)])，耗时: 69 ms
+2026-03-30T14:22:45.239+08:00  INFO 15864 --- [nio-8080-exec-9] com.yihen.aop.LogAspect                  : List model instances by type <- 方法返回: ModelManageController.getModelInstanceByType()，返回值: Result(code=200, message=操作成功, data=com.baomidou.mybatisplus.extension.plugins.pagination.Page@3aea3544)，耗时: 71 ms
+<====        Row: 122, 33, 26, 老刘, 中年中国男性，面部轮廓清晰，佩戴金属框眼镜，眼神审视，头发梳理整齐，身材中等，穿着白色医生工作服。真人风格, http://127.0.0.1:9000/yihen-drama/project/26/characters/122-老刘.png, null, <<BLOB>>, 0, 2026-03-29 18:41:19, 2026-03-29 21:11:35
+<====        Row: 123, 33, 26, 陈硕, 中年男性，脸型方正，黑色短发，身材中等，穿着深色商务休闲装，随身携带黑色皮质公文包，面部线条紧绷。, http://127.0.0.1:9000/yihen-drama/project/26/characters/123-陈硕.png, null, <<BLOB>>, 0, 2026-03-29 18:41:19, 2026-03-29 18:41:19
+<====        Row: 124, 33, 26, 王慧玲, 中国中年女性，体型丰满肥胖，圆脸，眼睛大而突出，头发盘起，穿着日常居家服饰。, http://127.0.0.1:9000/yihen-drama/project/26/characters/124-王慧玲.png, null, <<BLOB>>, 0, 2026-03-29 18:41:19, 2026-03-30 13:54:37
+<====        Row: 125, 33, 26, 老人, 老年男性，背部佝偻，双手负后，面部有皱纹，眼神深邃清晰，头发花白稀疏，穿着宽松病号服，身形瘦削。, http://127.0.0.1:9000/yihen-drama/project/26/characters/125-老人.png, null, <<BLOB>>, 0, 2026-03-29 18:41:19, 2026-03-30 13:56:35
+<====        Row: 126, 33, 26, 李青鸟, 青年男性，面容呆滞，视线朝向窗外，眼神空洞，黑色短发略显凌乱，身材消瘦，穿着宽松病号服。, http://127.0.0.1:9000/yihen-drama/project/26/characters/126-李青鸟.png, null, <<BLOB>>, 0, 2026-03-29 18:41:19, 2026-03-29 18:41:19
+<====        Row: 127, 33, 26, 男护士, 成年男性，体格结实，表情冷漠，短发，穿着浅蓝色护士制服，身形高大。, http://127.0.0.1:9000/yihen-drama/project/26/characters/127-男护士.png, null, <<BLOB>>, 0, 2026-03-29 18:41:19, 2026-03-29 18:41:19
+<====      Total: 7
+====>  Preparing: SELECT * FROM scene WHERE project_id = ? AND is_deleted = 0
+====> Parameters: 26(Long)
+2026-03-30T14:22:45.243+08:00  INFO 15864 --- [nio-8080-exec-1] com.yihen.aop.LogAspect                  : 获取项目详情 <- 方法返回: ProjectController.get()，返回值: Result(code=200, message=操作成功, data=Project(name=青山, description=null, cover=null, styleId=1, globalStylePrompt=null, status=DRAFT, consistency=0, chapterCount=1, progress=0))，耗时: 76 ms
+<====    Columns: id, episode_id, project_id, name, description, thumbnail, is_deleted, create_time, update_time
+<====        Row: 72, 33, 26, 青山精神疾病医院医生办公室, <<BLOB>>, http://127.0.0.1:9000/yihen-drama/project/26/scenes/72-青山精神疾病医院医生办公室.png, 0, 2026-03-29 18:41:19, 2026-03-29 18:41:19
+<====        Row: 73, 33, 26, 青山精神疾病医院走廊, <<BLOB>>, null, 0, 2026-03-29 18:41:19, 2026-03-29 18:41:19
+<====        Row: 74, 33, 26, 青山精神疾病医院六楼病房, <<BLOB>>, null, 0, 2026-03-29 18:41:19, 2026-03-29 18:41:19
+<====        Row: 75, 33, 26, 青山精神疾病医院外部, <<BLOB>>, null, 0, 2026-03-29 18:41:19, 2026-03-29 18:41:19
+<====      Total: 4
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7fa4bd89]
+2026-03-30T14:22:45.248+08:00  INFO 15864 --- [io-8080-exec-10] com.yihen.aop.LogAspect                  : 获取项目中出现人物、场景信息 <- 方法返回: ProjectController.getProperty()，返回值: Result(code=200, message=操作成功, data=ExtractionResultVO(characters=[Characters(episodeId=33, projectId=26, name=陈迹, description=十八岁男性，清秀脸型，线条柔和，皮肤干净白皙，眼神清澈真诚，黑色短发，身材匀称偏瘦，穿着现代休闲服装。, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/121-陈迹.png, videoUrl=null, features=null, isNew=false), Characters(episodeId=33, projectId=26, name=老刘, description=中年中国男性，面部轮廓清晰，佩戴金属框眼镜，眼神审视，头发梳理整齐，身材中等，穿着白色医生工作服。真人风格, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/122-老刘.png, videoUrl=null, features=null, isNew=false), Characters(episodeId=33, projectId=26, name=陈硕, description=中年男性，脸型方正，黑色短发，身材中等，穿着深色商务休闲装，随身携带黑色皮质公文包，面部线条紧绷。, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/123-陈硕.png, videoUrl=null, features=null, isNew=false), Characters(episodeId=33, projectId=26, name=王慧玲, description=中国中年女性，体型丰满肥胖，圆脸，眼睛大而突出，头发盘起，穿着日常居家服饰。, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/124-王慧玲.png, videoUrl=null, features=null, isNew=false), Characters(episodeId=33, projectId=26, name=老人, description=老年男性，背部佝偻，双手负后，面部有皱纹，眼神深邃清晰，头发花白稀疏，穿着宽松病号服，身形瘦削。, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/125-老人.png, videoUrl=null, features=null, isNew=false), Characters(episodeId=33, projectId=26, name=李青鸟, description=青年男性，面容呆滞，视线朝向窗外，眼神空洞，黑色短发略显凌乱，身材消瘦，穿着宽松病号服。, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/126-李青鸟.png, videoUrl=null, features=null, isNew=false), Characters(episodeId=33, projectId=26, name=男护士, description=成年男性，体格结实，表情冷漠，短发，穿着浅蓝色护士制服，身形高大。, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/127-男护士.png, videoUrl=null, features=null, isNew=false)], scenes=[Scene(episodeId=33, projectId=26, name=青山精神疾病医院医生办公室, description=室内空间，惨白白炽灯照明，光线冷硬，办公桌，窗户朝向黑夜，墙面空旷，氛围压抑。, thumbnail=http://127.0.0.1:9000/yihen-drama/project/26/scenes/72-青山精神疾病医院医生办公室.png, isNew=false), Scene(episodeId=33, projectId=26, name=青山精神疾病医院走廊, description=幽暗走廊，墙壁斑驳，安全通道指示牌提供微弱绿光，尽头有密码铁门，空间狭长，氛围阴森。, thumbnail=null, isNew=false), Scene(episodeId=33, projectId=26, name=青山精神疾病医院六楼病房, description=空旷大厅，排列整齐的单人大床，间距一米五，窗户焊死不锈钢防盗窗，月光透入，阴影摇曳，氛围寂静诡异。, thumbnail=null, isNew=false), Scene(episodeId=33, projectId=26, name=青山精神疾病医院外部, description=夜间楼体，墙面覆盖扭曲茂密的爬墙虎，遮挡窗户，缝隙中有阴影晃动，夜色深沉。, thumbnail=null, isNew=false)], abstraction=null))，耗时: 80 ms
+2026-03-30T14:22:45.279+08:00  INFO 15864 --- [nio-8080-exec-6] com.yihen.aop.LogAspect                  : Get default model instance by type -> 进入方法: ModelManageController.getDefaultModelInstanceByType()，参数: [TEXT, null]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@12ae0d22] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1164607140 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,model_type,model_instance_id,status,remark,create_time,update_time,is_deleted FROM model_instance_default WHERE is_deleted=0 AND (model_type = ? AND status = ? AND (remark IS NULL OR remark = ?)) LIMIT 1
+==> Parameters: 1(Integer), 1(Byte), (String)
+<==    Columns: id, model_type, model_instance_id, status, remark, create_time, update_time, is_deleted
+<==        Row: 2, 1, 22, 1, null, 2026-01-22 10:55:32, 2026-03-29 14:42:26, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@12ae0d22]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@4b313bd1] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@689236104 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,model_def_id,model_code,model_type,instance_name,scene_code,api_key,params,status,path,create_time,update_time,is_deleted FROM model_instance WHERE id=? AND is_deleted=0
+==> Parameters: 22(Long)
+<==    Columns: id, model_def_id, model_code, model_type, instance_name, scene_code, api_key, params, status, path, create_time, update_time, is_deleted
+<==        Row: 22, 2, qwen3.5-plus, 1, qwen3.5-plus, 1, sk-sp-a4b43d249a3841ae93b86cfdb6b1ea62, <<BLOB>>, 1, /chat/completions, 2026-03-29 14:42:19, 2026-03-29 18:38:23, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@4b313bd1]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@58e8271d] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@449142882 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,provider_code,base_url,status,create_time,update_time,is_deleted FROM model_definition WHERE id=? AND is_deleted=0
+==> Parameters: 2(Long)
+<==    Columns: id, provider_code, base_url, status, create_time, update_time, is_deleted
+<==        Row: 2, 阿里百炼平台, https://coding.dashscope.aliyuncs.com/v1, 1, 2026-01-20 21:48:20, 2026-03-29 18:38:23, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@58e8271d]
+2026-03-30T14:22:45.324+08:00  INFO 15864 --- [nio-8080-exec-6] com.yihen.aop.LogAspect                  : Get default model instance by type <- 方法返回: ModelManageController.getDefaultModelInstanceByType()，返回值: Result(code=200, message=操作成功, data=ModelInstance(modelDefId=2, modelCode=qwen3.5-plus, modelType=TEXT, instanceName=qwen3.5-plus, sceneCode=SCENE_GEN, apiKey=sk-sp-a4b43d249a3841ae93b86cfdb6b1ea62, params={max_tokens=4000, temperature=0.7}, status=1, path=/chat/completions, providerCode=阿里百炼平台, baseUrl=https://coding.dashscope.aliyuncs.com/v1, isDefault=null))，耗时: 45 ms
+2026-03-30T14:22:45.593+08:00  INFO 15864 --- [nio-8080-exec-3] com.yihen.aop.LogAspect                  : List model instances by type -> 进入方法: ModelManageController.getModelInstanceByType()，参数: [1, 100, TEXT]
+2026-03-30T14:22:45.597+08:00  INFO 15864 --- [nio-8080-exec-3] com.yihen.aop.LogAspect                  : List model instances by type <- 方法返回: ModelManageController.getModelInstanceByType()，返回值: Result(code=200, message=操作成功, data=com.baomidou.mybatisplus.extension.plugins.pagination.Page@2b7cb3d0)，耗时: 4 ms
+2026-03-30T14:22:45.650+08:00  INFO 15864 --- [nio-8080-exec-4] com.yihen.aop.LogAspect                  : List model instances by type -> 进入方法: ModelManageController.getModelInstanceByType()，参数: [1, 100, IMAGE]
+2026-03-30T14:22:45.654+08:00  INFO 15864 --- [nio-8080-exec-4] com.yihen.aop.LogAspect                  : List model instances by type <- 方法返回: ModelManageController.getModelInstanceByType()，返回值: Result(code=200, message=操作成功, data=com.baomidou.mybatisplus.extension.plugins.pagination.Page@60cb36e)，耗时: 4 ms
+2026-03-30T14:22:45.915+08:00  INFO 15864 --- [nio-8080-exec-8] com.yihen.aop.LogAspect                  : Get default model instance by type -> 进入方法: ModelManageController.getDefaultModelInstanceByType()，参数: [TEXT, null]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@55862a4e] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@865527039 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,model_type,model_instance_id,status,remark,create_time,update_time,is_deleted FROM model_instance_default WHERE is_deleted=0 AND (model_type = ? AND status = ? AND (remark IS NULL OR remark = ?)) LIMIT 1
+==> Parameters: 1(Integer), 1(Byte), (String)
+<==    Columns: id, model_type, model_instance_id, status, remark, create_time, update_time, is_deleted
+<==        Row: 2, 1, 22, 1, null, 2026-01-22 10:55:32, 2026-03-29 14:42:26, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@55862a4e]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@9564254] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1835457898 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,model_def_id,model_code,model_type,instance_name,scene_code,api_key,params,status,path,create_time,update_time,is_deleted FROM model_instance WHERE id=? AND is_deleted=0
+==> Parameters: 22(Long)
+<==    Columns: id, model_def_id, model_code, model_type, instance_name, scene_code, api_key, params, status, path, create_time, update_time, is_deleted
+<==        Row: 22, 2, qwen3.5-plus, 1, qwen3.5-plus, 1, sk-sp-a4b43d249a3841ae93b86cfdb6b1ea62, <<BLOB>>, 1, /chat/completions, 2026-03-29 14:42:19, 2026-03-29 18:38:23, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@9564254]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@276ab17] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@956894703 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,provider_code,base_url,status,create_time,update_time,is_deleted FROM model_definition WHERE id=? AND is_deleted=0
+==> Parameters: 2(Long)
+<==    Columns: id, provider_code, base_url, status, create_time, update_time, is_deleted
+<==        Row: 2, 阿里百炼平台, https://coding.dashscope.aliyuncs.com/v1, 1, 2026-01-20 21:48:20, 2026-03-29 18:38:23, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@276ab17]
+2026-03-30T14:22:45.923+08:00  INFO 15864 --- [nio-8080-exec-8] com.yihen.aop.LogAspect                  : Get default model instance by type <- 方法返回: ModelManageController.getDefaultModelInstanceByType()，返回值: Result(code=200, message=操作成功, data=ModelInstance(modelDefId=2, modelCode=qwen3.5-plus, modelType=TEXT, instanceName=qwen3.5-plus, sceneCode=SCENE_GEN, apiKey=sk-sp-a4b43d249a3841ae93b86cfdb6b1ea62, params={max_tokens=4000, temperature=0.7}, status=1, path=/chat/completions, providerCode=阿里百炼平台, baseUrl=https://coding.dashscope.aliyuncs.com/v1, isDefault=null))，耗时: 8 ms
+2026-03-30T14:22:45.975+08:00  INFO 15864 --- [nio-8080-exec-7] com.yihen.aop.LogAspect                  : Get default model instance by type -> 进入方法: ModelManageController.getDefaultModelInstanceByType()，参数: [IMAGE, CHARACTER_GEN]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2facdc1b] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1102304904 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,model_type,model_instance_id,status,remark,create_time,update_time,is_deleted FROM model_instance_default WHERE is_deleted=0 AND (model_type = ? AND status = ? AND remark = ?) LIMIT 1
+==> Parameters: 2(Integer), 1(Byte), CHARACTER_GEN(String)
+<==    Columns: id, model_type, model_instance_id, status, remark, create_time, update_time, is_deleted
+<==        Row: 6, 2, 25, 1, CHARACTER_GEN, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2facdc1b]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@3254f2b7] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@2077342946 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,model_def_id,model_code,model_type,instance_name,scene_code,api_key,params,status,path,create_time,update_time,is_deleted FROM model_instance WHERE id=? AND is_deleted=0
+==> Parameters: 25(Long)
+<==    Columns: id, model_def_id, model_code, model_type, instance_name, scene_code, api_key, params, status, path, create_time, update_time, is_deleted
+<==        Row: 25, 17, comfyui-zimage-character, 2, ComfyUI ZImage Character, 3, , <<BLOB>>, 1, /prompt, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@3254f2b7]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@75949272] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1623201597 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,provider_code,base_url,status,create_time,update_time,is_deleted FROM model_definition WHERE id=? AND is_deleted=0
+==> Parameters: 17(Long)
+<==    Columns: id, provider_code, base_url, status, create_time, update_time, is_deleted
+<==        Row: 17, comfyui, http://127.0.0.1:18188, 1, 2026-03-29 18:00:53, 2026-03-29 18:07:16, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@75949272]
+2026-03-30T14:22:45.988+08:00  INFO 15864 --- [nio-8080-exec-7] com.yihen.aop.LogAspect                  : Get default model instance by type <- 方法返回: ModelManageController.getDefaultModelInstanceByType()，返回值: Result(code=200, message=操作成功, data=ModelInstance(modelDefId=17, modelCode=comfyui-zimage-character, modelType=IMAGE, instanceName=ComfyUI ZImage Character, sceneCode=CHARACTER_GEN, apiKey=, params={quality=standard, resolution=1024x1024, workflowMode=auto, workflowPath=D:\comfui\workflows\baseimage\01_scene_txt2img\P0_ZImage光速高清文生图_ZImageTurbo\场景文生图-ZImage光速高清文生图-RunningHub原始工作流.json, outputMapping={nodeId=9}, pollIntervalMs=3000, historyTimeoutMs=180000}, status=1, path=/prompt, providerCode=comfyui, baseUrl=http://127.0.0.1:18188, isDefault=null))，耗时: 13 ms
+2026-03-30T14:22:46.270+08:00  INFO 15864 --- [nio-8080-exec-5] com.yihen.aop.LogAspect                  : 获取章节详情 -> 进入方法: EpisodeController.get()，参数: [33]
+2026-03-30T14:22:46.278+08:00  INFO 15864 --- [nio-8080-exec-5] com.yihen.aop.LogAspect                  : 获取章节详情 <- 方法返回: EpisodeController.get()，返回值: Result(code=200, message=操作成功, data=Episode(projectId=26, chapterNumber=1, name=青山一, content= 第1章 归零
+
+    洛城，秋。
+
+    空洞的办公室里，惨白的白炽灯下，中年医生推了推鼻梁上的眼镜。
+
+    「陈迹你好，我现在需要问你一些问题。你回答后，我会根据我的判断，按照『无』、『很轻』、『中等』、『严重』、『非常严重』这五个程度来做出评分，可以吗？」
+
+    「可以。」
+
+    「伱想结束生命吗？」
+
+    「……结束谁的生命？」
+
+    「你自己的。」
+
+    「那没有。」
+
+    中年医生迟疑片刻：「你是否记仇，是否很难原谅那些伤害过你的人？」
+
+    「我不记仇。」
+
+    「你是否会常常忘记事情，你还有哪些关于十二岁的记忆？」
+
+    医生对面，十八岁的陈迹视线飘忽到窗外的黑夜里：「十二岁？那年夏天，我同桌马凯偷偷拿走我一块橡皮擦，那块橡皮我挺喜欢的，因为上面有宇智波鼬的图案。」
+
+    医生的视线回到上一个记仇问题，划去「1分，无」，重新写下「5分，非常严重」。
+
+    他认真打量著对面的少年，十八岁的陈迹长相还算清秀，似乎因长期不出门的缘故，皮肤干净，目光清澈而真诚。
+
+    「下一个问题，你是否可以忍受孤独？」
+
+    这一次，陈迹终于停下来认真思考问题，许久之后，他回答：「可以。」
+
+    ……
+
+    ……
+
+    询问持续了半个小时，当墙上石英钟指针跳到夜里十点时，医生道：「最后一个问题，你是否觉得有人想要害你？」
+
+    陈迹：「没有，我家人对我都挺好的。」
+
+    医生的眼皮轻微跳动了一下，他在本子上快速记录：168分阳性症状，阳性项目67项，因子分3.8，患者在父母车祸去世后，患上重度『创伤后应激障碍』，有暴力倾向。
+
+    「陈迹同学，诊断结果显示你是重度创伤后应激障碍，需要留院观察，护士等会儿带你去六楼病房。你的手机需要交给我，外界信息会对你造成干扰，影响治疗效果。」
+
+    「哦，」陈迹似乎并不意外。
+
+    「你在这里稍坐一会儿，我得把这个结果告知你的家人，」医生拿著诊断书起身。
+
+    「等等！」陈迹喊住他。
+
+    「怎么了？」医生回身问道。
+
+    「我还没把手机给你呢，」陈迹从兜里掏出一只手机递给医生。
+
+    「手机我只是暂时替你保管，」医生将手机放进自己兜里，转身出门，出门前还反手把门关严实。
+
+    门外空旷幽暗的走廊里只有一对中年夫妻，两人神情忐忑。
+
+    男人迎上去：「老刘，顺利不？他……有发现什么吗？」
+
+    「没有，他还觉得你们挺好呢，」医生老刘点点头：「这是诊断书，你们可以去法院申请将他定为『无民事行为能力人』了。」
+
+    中年女人尴尬的笑了笑：「谢了啊老刘，回头请你吃饭。」
+
+    医生老刘皮笑肉不笑：「吃饭就免了吧。我不知道你们为啥想给他定成精神病人，也不想问。但法院来审核的时候，我也可以推翻我的诊断书。」
+
+    陈迹的二叔陈硕，赶忙从自己的黑皮包里拿出一个鼓囊囊的档案袋：「你数数。」
+
+    医生老刘打开档案袋瞟了一眼：「行，你们回去吧，我这就安排他住院。我看他也没有反抗的意思，但保险起见，我喊两个男护士过来。」
+
+    「行，那我走了，」陈硕带著老婆王慧玲往电梯走去。
+
+    昏暗的走廊里，王慧玲一边走，一边压低声音问丈夫：「你给他塞了多少钱？」
+
+    「五万。」
+
+    「给这么多？他就坐那问了几个问题，凭什么拿这么多？」胖胖的王慧玲瞪大了她的牛眼。
+
+    陈硕不耐烦：「你真以为请人家吃顿饭就完事了？五万块钱而已，跟陈迹那栋房子比算什么！明天赶紧去法院提交申请，等他成无民事行为能力人，先把房子转到咱俩名下，免得夜长梦多。」
+
+    王慧玲小声道：「老刘靠谱吗，可别让陈迹从医院里跑出去了。」
+
+    「放心吧，我听说青山医院六楼跟监狱一样，跑不出去的。别在这个鬼地方聊事情了，我老觉得这里阴森森的。」
+
+    走出青山精神疾病医院时，陈硕鬼使神差的回头看去。
+
+    夜色中，扭曲茂密的爬墙虎在楼体蜿蜒，几乎连窗户都遮挡住了。目光扫过时，爬墙虎的缝隙中有影影绰绰在晃动，似乎有许多『人』在那里注视著他。
+
+    ……
+
+    ……
+
+    陈迹被两名男护士一左一右架著，走在六楼幽暗的走廊里，唯有墙边的安全通道指示牌提供了一些微弱的光亮。
+
+    这一层没有护士站，走廊尽头只有一扇需要输入密码才能打开的铁门。一个男护士捂住陈迹的眼睛，另一个输入密码。
+
+    咔哒一声，门开了。
+
+    门里是一个空旷的大厅，每隔一米五摆放著一张单人床。昏暗中，一张张单人床就像是一张张棺材，足有上百张。
+
+    下一刻，那一张张床上坐起一个个黑色人影，转过头来，无声凝视著陈迹的方向。
+
+    男护士低声道：「别管他们，赶紧办完事出去。」
+
+    他们两个把陈迹按在床上平躺，用束缚带固定住他的手脚。
+
+    「等等！」陈迹说道。
+
+    「怎么了？」男护士不耐烦。
+
+    陈迹：「不用换病号服吗？」
+
+    「……有病吧」男护士低声骂了一句，转头对同事说道：「赶紧走。」
+
+    哐当一声，铁门关闭，屋里重新陷入寂静。
+
+    陈迹扭动脑袋环顾四周，病房的窗户上都焊死了不锈钢防盗窗。
+
+    沙沙沙。
+
+    病房里响起衣物与被褥摩擦的声音，紧接著是细碎的脚步声。
+
+    陈迹听见那些声音向他靠近过来，声音越来越多，也越来越近。
+
+    「不是……」陈迹无奈睁开眼睛盯著天花板：「就绑我一个人吗？多冒昧啊。」
+
+    借著窗外淡薄的月光，他看见五六个脑袋犹如乌龟似的探出来，挤占了他视野里的天花板。一个个黑乎乎的脸颊上，还带著诡异的笑容。
+
+    陈迹：「真特么让人害怕，给我精神病都治好了……」
+
+    有人小声问道：「你们说，他平时拉屎是饭前拉，还是饭后拉？」
+
+    「等我打电话问问联合国，」说著，一个中年人掏出计算器，快速按下一串数字，清脆的女性报数声在病房里格外突兀。
+
+    还没等他按完，一个老人按住计算器。
+
+    「归零。」
+
+    所有声音都消失了，病人们为老人让开一条道路。
+
+    老人来到床边，弯下身子俯瞰著陈迹：「你真的来了。」
+
+    陈迹：「什么意思？」
+
+    老人拿出一张纸：「有人曾经说过，你今天会来这里。」
+
+    那张纸上，赫然用铅笔画著他的样貌，栩栩如生。
+
+    陈迹肃然起敬：「非常合理。」
+
+    ……
+
+    ……
+
+    能进精神病院的人，要么太笨，要么太聪明。
+
+    他们只是在偏执的世界里与自我周旋，无穷无尽，无法解脱。
+
+    陈迹对精神病院是有些许敬意的。
+
+    所以当他看到那张素描的时候，顿时感觉世界开始变得神秘起来：「头好痒，好像要长脑子了！老人家，这是您画的吗？」
+
+    「不是我画的，但我可以带你见画画的人，」老人为陈迹解开束缚带，所有病人都为他们让开了一条通道。
+
+    通道尽头，一个年轻人痴傻的坐在床边，呆呆望著窗外。
+
+    「他是什么病症？」陈迹问道。
+
+    「重度妄想症，他总说自己生活在另一个世界，这个世界是他的梦。后来出现解离症状，彻底痴傻了，」老人回答。
+
+    「他什么时候进来的？」
+
+    「一年前进来的。他说你会在今天出现，证明他没说谎。」
+
+    陈迹诧异看向老人：「您是什么病？思路格外清晰。」
+
+    「我没病，」老人说道。
+
+    「有点精神病人的意思了……」
+
+    老人没好气：「我真没病，我是之前犯了点事躲进来的，不信你拿偏执思维量表问我。」
+
+    陈迹：「喜欢爸爸喜欢妈妈？」
+
+    老人：「喜欢妈妈。」
+
+    陈迹：「……」
+
+    他来到那个妄想症年轻人面前：「你好？」
+
+    可年轻人只是在黑暗中定定的看著窗外，并未说话。
+
+    老人：「他已经半年没有说过话了。」
+
+    「他叫什么名字？」
+
+    「李青鸟。」
+
+    陈迹有些遗憾，他仔细打量著呆呆的李青鸟，低声问道：「老爷子，他有没有提到过，他生活的那个世界是什么样子？」
+
+    「没有，」老爷子摇摇头。
+
+    陈迹又问：「老爷子，他进医院后有接受过治疗吗，有没有什么手段能让他恢复意识？」
+
+    「治疗个什么劲，住进六楼都是放弃治疗的，活著就行。」
+
+    「啊？不再抢救一下？万一治好了呢。」
+
+    「倒也有治好的，」老爷子摸摸下巴。
+
+    「怎么治好的？」
+
+    「先前有个重度抑郁症的小女孩，进来一个多月瘦了三十多斤。后来她爸买彩票中了两千多万接她出院，她病就好了。」
+
+    啊？
+
+    陈迹缓缓转头看向李青鸟：「我也给你两千万。」
+
+    沉默半年的李青鸟，竟突然说道：「你也要去那个世界了。」
+
+    啊？
+
+    老爷子瞪大双眼。
+
+    陈迹赶忙继续问道：「怎么去那个世界？」
+
+    李青鸟又不吭声了。
+
+    陈迹：「我再给你两千万！」
+
+    李青鸟：「北俱芦洲的人会负责偷渡的事情。」
+
+    陈迹：「再给你两千万……那个世界是什么样的？」
+
+    李青鸟停顿两秒：「你卡里总共就四千多万。」
+
+    陈迹：「？？？」
+
+    大哥，你是不是在装病啊？
+
+    他伸手去捏李青鸟的腮帮子，可不管他怎么做，李青鸟都不再开口。
+
+    老人佝偻著背，负著双手问道：「小伙子，你是因为什么进来的？」
+
+    陈迹回应：「我父母去世了，这半年有些自闭，所以二叔二婶就送我过来了。」
+
+    老人微微眯起眼睛：「小伙子，你父母给你留了多少遗产？」
+
+    陈迹：「一栋两千多万的别墅，几千万存款。」
+
+    老人若有所思：「那你可得小心你二叔二婶，万一他们申请法院判定你为『无民事行为能力』，你这财产可守不住。」
+
+    陈迹的神情淹没在病房的幽暗中：「怎么会呢，他们可是我的亲人啊。」
+
+    窗外起风了，将爬墙虎吹拂得摇摇晃晃。月光透进来的树叶影子，犹如黑色火焰般在地面不停摇曳、跳动。
+
+    (本章完)
+, abstraction=null, visualSetting=现代风格, status=PENDING, progress=0, currentStep=GENERATE_IMAGES))，耗时: 8 ms
+2026-03-30T14:22:46.301+08:00  INFO 15864 --- [nio-8080-exec-9] com.yihen.aop.LogAspect                  : List model instances by type -> 进入方法: ModelManageController.getModelInstanceByType()，参数: [1, 100, VIDEO]
+2026-03-30T14:22:46.304+08:00  INFO 15864 --- [nio-8080-exec-9] com.yihen.aop.LogAspect                  : List model instances by type <- 方法返回: ModelManageController.getModelInstanceByType()，返回值: Result(code=200, message=操作成功, data=com.baomidou.mybatisplus.extension.plugins.pagination.Page@35418916)，耗时: 3 ms
+2026-03-30T14:22:46.603+08:00  INFO 15864 --- [nio-8080-exec-2] com.yihen.aop.LogAspect                  : 获取章节中出现人物、场景信息 -> 进入方法: EpisodeController.getProperty()，参数: [33]
+2026-03-30T14:22:46.603+08:00  INFO 15864 --- [io-8080-exec-10] com.yihen.aop.LogAspect                  : List model instances by type -> 进入方法: ModelManageController.getModelInstanceByType()，参数: [1, 100, IMAGE]
+2026-03-30T14:22:46.606+08:00  INFO 15864 --- [io-8080-exec-10] com.yihen.aop.LogAspect                  : List model instances by type <- 方法返回: ModelManageController.getModelInstanceByType()，返回值: Result(code=200, message=操作成功, data=com.baomidou.mybatisplus.extension.plugins.pagination.Page@6df6505a)，耗时: 3 ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@45c07818] was not registered for synchronization because synchronization is not active
+2026-03-30T14:22:46.611+08:00  INFO 15864 --- [nio-8080-exec-1] com.yihen.aop.LogAspect                  : Get default model instance by type -> 进入方法: ModelManageController.getDefaultModelInstanceByType()，参数: [VIDEO, VIDEO_GEN]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5d99e398] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1984779967 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,episode_id,project_id,name,description,avatar,video_url,features,create_time,update_time,is_deleted FROM characters WHERE is_deleted=0 AND (episode_id = ?)
+==> Parameters: 33(Long)
+JDBC Connection [HikariProxyConnection@525011615 wrapping com.mysql.cj.jdbc.ConnectionImpl@5231788c] will not be managed by Spring
+==>  Preparing: SELECT id,model_type,model_instance_id,status,remark,create_time,update_time,is_deleted FROM model_instance_default WHERE is_deleted=0 AND (model_type = ? AND status = ? AND remark = ?) LIMIT 1
+==> Parameters: 3(Integer), 1(Byte), VIDEO_GEN(String)
+<==    Columns: id, episode_id, project_id, name, description, avatar, video_url, features, create_time, update_time, is_deleted
+<==        Row: 121, 33, 26, 陈迹, 十八岁男性，清秀脸型，线条柔和，皮肤干净白皙，眼神清澈真诚，黑色短发，身材匀称偏瘦，穿着现代休闲服装。, http://127.0.0.1:9000/yihen-drama/project/26/characters/121-陈迹.png, null, <<BLOB>>, 2026-03-29 18:41:19, 2026-03-29 18:41:19, 0
+<==        Row: 122, 33, 26, 老刘, 中年中国男性，面部轮廓清晰，佩戴金属框眼镜，眼神审视，头发梳理整齐，身材中等，穿着白色医生工作服。真人风格, http://127.0.0.1:9000/yihen-drama/project/26/characters/122-老刘.png, null, <<BLOB>>, 2026-03-29 18:41:19, 2026-03-29 21:11:35, 0
+<==        Row: 123, 33, 26, 陈硕, 中年男性，脸型方正，黑色短发，身材中等，穿着深色商务休闲装，随身携带黑色皮质公文包，面部线条紧绷。, http://127.0.0.1:9000/yihen-drama/project/26/characters/123-陈硕.png, null, <<BLOB>>, 2026-03-29 18:41:19, 2026-03-29 18:41:19, 0
+<==        Row: 124, 33, 26, 王慧玲, 中国中年女性，体型丰满肥胖，圆脸，眼睛大而突出，头发盘起，穿着日常居家服饰。, http://127.0.0.1:9000/yihen-drama/project/26/characters/124-王慧玲.png, null, <<BLOB>>, 2026-03-29 18:41:19, 2026-03-30 13:54:37, 0
+<==        Row: 125, 33, 26, 老人, 老年男性，背部佝偻，双手负后，面部有皱纹，眼神深邃清晰，头发花白稀疏，穿着宽松病号服，身形瘦削。, http://127.0.0.1:9000/yihen-drama/project/26/characters/125-老人.png, null, <<BLOB>>, 2026-03-29 18:41:19, 2026-03-30 13:56:35, 0
+<==    Columns: id, model_type, model_instance_id, status, remark, create_time, update_time, is_deleted
+<==        Row: 9, 3, 28, 1, VIDEO_GEN, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==        Row: 126, 33, 26, 李青鸟, 青年男性，面容呆滞，视线朝向窗外，眼神空洞，黑色短发略显凌乱，身材消瘦，穿着宽松病号服。, http://127.0.0.1:9000/yihen-drama/project/26/characters/126-李青鸟.png, null, <<BLOB>>, 2026-03-29 18:41:19, 2026-03-29 18:41:19, 0
+<==        Row: 127, 33, 26, 男护士, 成年男性，体格结实，表情冷漠，短发，穿着浅蓝色护士制服，身形高大。, http://127.0.0.1:9000/yihen-drama/project/26/characters/127-男护士.png, null, <<BLOB>>, 2026-03-29 18:41:19, 2026-03-29 18:41:19, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5d99e398]
+<==      Total: 7
+Creating a new SqlSession
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@45c07818]
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@281db546] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1875205416 wrapping com.mysql.cj.jdbc.ConnectionImpl@5231788c] will not be managed by Spring
+==>  Preparing: SELECT id,model_def_id,model_code,model_type,instance_name,scene_code,api_key,params,status,path,create_time,update_time,is_deleted FROM model_instance WHERE id=? AND is_deleted=0
+==> Parameters: 28(Long)
+<==    Columns: id, model_def_id, model_code, model_type, instance_name, scene_code, api_key, params, status, path, create_time, update_time, is_deleted
+<==        Row: 28, 17, comfyui-ltx23-i2v, 3, ComfyUI LTX2.3 I2V, 5, , <<BLOB>>, 1, /prompt, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@281db546]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5cacf041] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@434030871 wrapping com.mysql.cj.jdbc.ConnectionImpl@5231788c] will not be managed by Spring
+==>  Preparing: SELECT id,provider_code,base_url,status,create_time,update_time,is_deleted FROM model_definition WHERE id=? AND is_deleted=0
+==> Parameters: 17(Long)
+<==    Columns: id, provider_code, base_url, status, create_time, update_time, is_deleted
+<==        Row: 17, comfyui, http://127.0.0.1:18188, 1, 2026-03-29 18:00:53, 2026-03-29 18:07:16, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5cacf041]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@66569980] was not registered for synchronization because synchronization is not active
+2026-03-30T14:22:46.622+08:00  INFO 15864 --- [nio-8080-exec-1] com.yihen.aop.LogAspect                  : Get default model instance by type <- 方法返回: ModelManageController.getDefaultModelInstanceByType()，返回值: Result(code=200, message=操作成功, data=ModelInstance(modelDefId=17, modelCode=comfyui-ltx23-i2v, modelType=VIDEO, instanceName=ComfyUI LTX2.3 I2V, sceneCode=VIDEO_GEN, apiKey=, params={fps=24, duration=10, inputMapping={image={type=image, field=image, nodeId=191, subfolder=comfy-input, filenamePrefix=video-start}, prompt={field=text, nodeId=69}}, workflowMode=auto, workflowPath=D:\comfui\workflows\basevideo\01_图生视频\P0_LTX23主线图生视频_优化版蒸馏Dev可切换\图生视频-LTX2.3图生视频优化版蒸馏Dev可切换-无ReservedVRAM本地可跑版.json, outputMapping={nodeIds=[375, 336]}, pollIntervalMs=5000, historyTimeoutMs=600000}, status=1, path=/prompt, providerCode=comfyui, baseUrl=http://127.0.0.1:18188, isDefault=null))，耗时: 11 ms
+JDBC Connection [HikariProxyConnection@1756346901 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,episode_id,project_id,name,description,thumbnail,create_time,update_time,is_deleted FROM scene WHERE is_deleted=0 AND (episode_id = ?)
+==> Parameters: 33(Long)
+<==    Columns: id, episode_id, project_id, name, description, thumbnail, create_time, update_time, is_deleted
+<==        Row: 72, 33, 26, 青山精神疾病医院医生办公室, <<BLOB>>, http://127.0.0.1:9000/yihen-drama/project/26/scenes/72-青山精神疾病医院医生办公室.png, 2026-03-29 18:41:19, 2026-03-29 18:41:19, 0
+<==        Row: 73, 33, 26, 青山精神疾病医院走廊, <<BLOB>>, null, 2026-03-29 18:41:19, 2026-03-29 18:41:19, 0
+<==        Row: 74, 33, 26, 青山精神疾病医院六楼病房, <<BLOB>>, null, 2026-03-29 18:41:19, 2026-03-29 18:41:19, 0
+<==        Row: 75, 33, 26, 青山精神疾病医院外部, <<BLOB>>, null, 2026-03-29 18:41:19, 2026-03-29 18:41:19, 0
+<==      Total: 4
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@66569980]
+2026-03-30T14:22:46.629+08:00  INFO 15864 --- [nio-8080-exec-2] com.yihen.aop.LogAspect                  : 获取章节中出现人物、场景信息 <- 方法返回: EpisodeController.getProperty()，返回值: Result(code=200, message=操作成功, data=ExtractionResultVO(characters=[Characters(episodeId=33, projectId=26, name=陈迹, description=十八岁男性，清秀脸型，线条柔和，皮肤干净白皙，眼神清澈真诚，黑色短发，身材匀称偏瘦，穿着现代休闲服装。, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/121-陈迹.png, videoUrl=null, features=null, isNew=false), Characters(episodeId=33, projectId=26, name=老刘, description=中年中国男性，面部轮廓清晰，佩戴金属框眼镜，眼神审视，头发梳理整齐，身材中等，穿着白色医生工作服。真人风格, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/122-老刘.png, videoUrl=null, features=null, isNew=false), Characters(episodeId=33, projectId=26, name=陈硕, description=中年男性，脸型方正，黑色短发，身材中等，穿着深色商务休闲装，随身携带黑色皮质公文包，面部线条紧绷。, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/123-陈硕.png, videoUrl=null, features=null, isNew=false), Characters(episodeId=33, projectId=26, name=王慧玲, description=中国中年女性，体型丰满肥胖，圆脸，眼睛大而突出，头发盘起，穿着日常居家服饰。, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/124-王慧玲.png, videoUrl=null, features=null, isNew=false), Characters(episodeId=33, projectId=26, name=老人, description=老年男性，背部佝偻，双手负后，面部有皱纹，眼神深邃清晰，头发花白稀疏，穿着宽松病号服，身形瘦削。, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/125-老人.png, videoUrl=null, features=null, isNew=false), Characters(episodeId=33, projectId=26, name=李青鸟, description=青年男性，面容呆滞，视线朝向窗外，眼神空洞，黑色短发略显凌乱，身材消瘦，穿着宽松病号服。, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/126-李青鸟.png, videoUrl=null, features=null, isNew=false), Characters(episodeId=33, projectId=26, name=男护士, description=成年男性，体格结实，表情冷漠，短发，穿着浅蓝色护士制服，身形高大。, avatar=http://127.0.0.1:9000/yihen-drama/project/26/characters/127-男护士.png, videoUrl=null, features=null, isNew=false)], scenes=[Scene(episodeId=33, projectId=26, name=青山精神疾病医院医生办公室, description=室内空间，惨白白炽灯照明，光线冷硬，办公桌，窗户朝向黑夜，墙面空旷，氛围压抑。, thumbnail=http://127.0.0.1:9000/yihen-drama/project/26/scenes/72-青山精神疾病医院医生办公室.png, isNew=false), Scene(episodeId=33, projectId=26, name=青山精神疾病医院走廊, description=幽暗走廊，墙壁斑驳，安全通道指示牌提供微弱绿光，尽头有密码铁门，空间狭长，氛围阴森。, thumbnail=null, isNew=false), Scene(episodeId=33, projectId=26, name=青山精神疾病医院六楼病房, description=空旷大厅，排列整齐的单人大床，间距一米五，窗户焊死不锈钢防盗窗，月光透入，阴影摇曳，氛围寂静诡异。, thumbnail=null, isNew=false), Scene(episodeId=33, projectId=26, name=青山精神疾病医院外部, description=夜间楼体，墙面覆盖扭曲茂密的爬墙虎，遮挡窗户，缝隙中有阴影晃动，夜色深沉。, thumbnail=null, isNew=false)], abstraction=null))，耗时: 26 ms
+2026-03-30T14:22:46.920+08:00  INFO 15864 --- [nio-8080-exec-6] com.yihen.aop.LogAspect                  : Get default model instance by type -> 进入方法: ModelManageController.getDefaultModelInstanceByType()，参数: [IMAGE, CHARACTER_GEN]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@42b25a65] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1543196129 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,model_type,model_instance_id,status,remark,create_time,update_time,is_deleted FROM model_instance_default WHERE is_deleted=0 AND (model_type = ? AND status = ? AND remark = ?) LIMIT 1
+==> Parameters: 2(Integer), 1(Byte), CHARACTER_GEN(String)
+<==    Columns: id, model_type, model_instance_id, status, remark, create_time, update_time, is_deleted
+<==        Row: 6, 2, 25, 1, CHARACTER_GEN, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@42b25a65]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2287f59c] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1916199643 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,model_def_id,model_code,model_type,instance_name,scene_code,api_key,params,status,path,create_time,update_time,is_deleted FROM model_instance WHERE id=? AND is_deleted=0
+==> Parameters: 25(Long)
+<==    Columns: id, model_def_id, model_code, model_type, instance_name, scene_code, api_key, params, status, path, create_time, update_time, is_deleted
+<==        Row: 25, 17, comfyui-zimage-character, 2, ComfyUI ZImage Character, 3, , <<BLOB>>, 1, /prompt, 2026-03-29 18:01:56, 2026-03-29 18:01:56, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2287f59c]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7e26bb41] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1662028300 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,provider_code,base_url,status,create_time,update_time,is_deleted FROM model_definition WHERE id=? AND is_deleted=0
+==> Parameters: 17(Long)
+<==    Columns: id, provider_code, base_url, status, create_time, update_time, is_deleted
+<==        Row: 17, comfyui, http://127.0.0.1:18188, 1, 2026-03-29 18:00:53, 2026-03-29 18:07:16, 0
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7e26bb41]
+2026-03-30T14:22:46.927+08:00  INFO 15864 --- [nio-8080-exec-6] com.yihen.aop.LogAspect                  : Get default model instance by type <- 方法返回: ModelManageController.getDefaultModelInstanceByType()，返回值: Result(code=200, message=操作成功, data=ModelInstance(modelDefId=17, modelCode=comfyui-zimage-character, modelType=IMAGE, instanceName=ComfyUI ZImage Character, sceneCode=CHARACTER_GEN, apiKey=, params={quality=standard, resolution=1024x1024, workflowMode=auto, workflowPath=D:\comfui\workflows\baseimage\01_scene_txt2img\P0_ZImage光速高清文生图_ZImageTurbo\场景文生图-ZImage光速高清文生图-RunningHub原始工作流.json, outputMapping={nodeId=9}, pollIntervalMs=3000, historyTimeoutMs=180000}, status=1, path=/prompt, providerCode=comfyui, baseUrl=http://127.0.0.1:18188, isDefault=null))，耗时: 7 ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@bb21284] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@68181362 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@bb21284]
+2026-03-30T14:22:56.382+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=38，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@66927c61] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@2108650501 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@66927c61]
+2026-03-30T14:24:56.394+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=39，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@607012e8] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@359930867 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@607012e8]
+2026-03-30T14:26:56.405+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=40，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7a2e4751] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@438959534 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7a2e4751]
+2026-03-30T14:28:56.422+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=41，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@56e30413] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1593824593 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@56e30413]
+2026-03-30T14:30:56.436+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=42，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1a7c9b55] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1425131413 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1a7c9b55]
+2026-03-30T14:32:56.442+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=43，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@ba877d5] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1978721222 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@ba877d5]
+2026-03-30T14:34:56.463+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=44，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7d198b84] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@893869357 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7d198b84]
+2026-03-30T14:36:56.476+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=45，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@52d53aa6] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1671548627 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@52d53aa6]
+2026-03-30T14:38:56.481+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=46，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@70f3dd49] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@193518075 wrapping com.mysql.cj.jdbc.ConnectionImpl@6863d8f5] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@70f3dd49]
+2026-03-30T14:40:56.499+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=47，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@81139d7] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1726391305 wrapping com.mysql.cj.jdbc.ConnectionImpl@5231788c] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@81139d7]
+2026-03-30T14:42:56.525+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=48，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5fe2b07c] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1581049302 wrapping com.mysql.cj.jdbc.ConnectionImpl@da9c4f4] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5fe2b07c]
+2026-03-30T14:44:56.545+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=49，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@b53f7fb] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@855159058 wrapping com.mysql.cj.jdbc.ConnectionImpl@da9c4f4] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@b53f7fb]
+2026-03-30T14:46:56.569+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=50，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@76bd520d] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1657118478 wrapping com.mysql.cj.jdbc.ConnectionImpl@da9c4f4] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@76bd520d]
+2026-03-30T14:48:56.580+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=51，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@4ec23ea5] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1383280714 wrapping com.mysql.cj.jdbc.ConnectionImpl@da9c4f4] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@4ec23ea5]
+2026-03-30T14:50:56.593+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=52，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1f5250ea] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1085960883 wrapping com.mysql.cj.jdbc.ConnectionImpl@da9c4f4] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1f5250ea]
+2026-03-30T14:52:56.621+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=53，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@10dcfddb] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@495204906 wrapping com.mysql.cj.jdbc.ConnectionImpl@da9c4f4] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@10dcfddb]
+2026-03-30T14:54:56.645+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=54，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2e82a11] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1974287794 wrapping com.mysql.cj.jdbc.ConnectionImpl@da9c4f4] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2e82a11]
+2026-03-30T14:56:56.666+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=55，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@53bf58] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1135130081 wrapping com.mysql.cj.jdbc.ConnectionImpl@da9c4f4] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@53bf58]
+2026-03-30T14:58:56.685+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=56，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@363bc906] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@730794470 wrapping com.mysql.cj.jdbc.ConnectionImpl@da9c4f4] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@363bc906]
+2026-03-30T15:00:56.702+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=57，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@50834bf9] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@949537558 wrapping com.mysql.cj.jdbc.ConnectionImpl@da9c4f4] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@50834bf9]
+2026-03-30T15:02:56.720+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=58，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@33ebee9e] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@2038278041 wrapping com.mysql.cj.jdbc.ConnectionImpl@da9c4f4] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@33ebee9e]
+2026-03-30T15:04:56.734+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=59，下次轮询间隔=120000ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@35d4c30c] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1504138294 wrapping com.mysql.cj.jdbc.ConnectionImpl@da9c4f4] will not be managed by Spring
+==>  Preparing: SELECT id,project_id,instance_id,target_id,task_id,task_type,status,progress,overall_progress,video_url,error_message,next_poll_at,poll_count,create_time,update_time,is_deleted FROM video_task WHERE is_deleted=0 AND (status IN (?,?))
+==> Parameters: QUEUED(String), RUNNING(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@35d4c30c]
+2026-03-30T15:06:56.751+08:00  INFO 15864 --- [ video-poller-1] c.y.c.m.schedule.VideoTaskDynamicPoller  : 本次无任务，emptyStreak=60，下次轮询间隔=120000ms

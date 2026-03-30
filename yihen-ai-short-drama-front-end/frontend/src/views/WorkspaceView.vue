@@ -2466,6 +2466,70 @@ const hasRealAvatar = (character) => {
   return !String(avatar).startsWith('data:image/svg+xml')
 }
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+const waitForGeneratedCharacterAsset = async (characterId, previousSnapshot = {}) => {
+  if (!activeEpisode.value || !characterId) return null
+  const previousAvatar = previousSnapshot?.avatar ? String(previousSnapshot.avatar) : ''
+  const previousUpdateTime = previousSnapshot?.updateTime ? String(previousSnapshot.updateTime) : ''
+  const retryDelays = [250, 450, 800, 1200, 1800]
+
+  for (const delay of retryDelays) {
+    await sleep(delay)
+    try {
+      const propertyResult = await episodeApi.getProperty(activeEpisode.value)
+      const latestCharacter = (propertyResult?.data?.characters || [])
+        .find((item) => String(item.id) === String(characterId))
+      if (!latestCharacter) continue
+
+      const avatar = latestCharacter.avatar || ''
+      const updateChanged = latestCharacter.updateTime && String(latestCharacter.updateTime) !== previousUpdateTime
+      const avatarChanged = avatar && avatar !== previousAvatar
+      const persistedAvatar = hasRealAvatar(latestCharacter) && !String(avatar).includes('/view?filename=')
+
+      if (persistedAvatar && (avatarChanged || updateChanged)) {
+        return latestCharacter
+      }
+    } catch (err) {
+      console.warn('同步角色正式图片失败:', err)
+    }
+  }
+
+  return null
+}
+
+const waitForGeneratedSceneAsset = async (sceneId, previousSnapshot = {}) => {
+  if (!activeEpisode.value || !sceneId) return null
+  const previousThumbnail = previousSnapshot?.thumbnail ? String(previousSnapshot.thumbnail) : ''
+  const previousUpdateTime = previousSnapshot?.updateTime ? String(previousSnapshot.updateTime) : ''
+  const retryDelays = [250, 450, 800, 1200, 1800]
+
+  for (const delay of retryDelays) {
+    await sleep(delay)
+    try {
+      const propertyResult = await episodeApi.getProperty(activeEpisode.value)
+      const latestScene = (propertyResult?.data?.scenes || [])
+        .find((item) => String(item.id) === String(sceneId))
+      if (!latestScene) continue
+
+      const thumbnail = latestScene.thumbnail || ''
+      const updateChanged = latestScene.updateTime && String(latestScene.updateTime) !== previousUpdateTime
+      const thumbnailChanged = thumbnail && thumbnail !== previousThumbnail
+      const persistedThumbnail = thumbnail
+        && !String(thumbnail).startsWith('data:image')
+        && !String(thumbnail).includes('/view?filename=')
+
+      if (persistedThumbnail && (thumbnailChanged || updateChanged)) {
+        return latestScene
+      }
+    } catch (err) {
+      console.warn('同步场景正式图片失败:', err)
+    }
+  }
+
+  return null
+}
+
 const isCharacterSelected = (characterId) => selectedCharacterIds.value.has(characterId)
 
 const toggleCharacterSelection = (characterId) => {
@@ -2500,15 +2564,12 @@ const clearSceneSelection = () => {
 
 const mapExtractedInfo = (data) => ({
   characters: (data?.characters || []).map(c => ({
-    id: c.id,
-    name: c.name,
-    description: c.description,
+    ...c,
     avatar: c.avatar || 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="#D4AF37" width="100" height="100"/><text fill="#2A2113" x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="40">${c.name?.charAt(0) || '?'}</text></svg>`),
     videoUrl: c.videoUrl || ''
   })),
   scenes: (data?.scenes || []).map(s => ({
-    id: s.id,
-    name: s.name,
+    ...s,
     description: s.description || '',
     thumbnail: s.thumbnail || ''
   }))
@@ -2894,20 +2955,7 @@ const loadExtractedInfo = async (episodeId) => {
   try {
     const propertyResult = await episodeApi.getProperty(episodeId)
     if (propertyResult.code === 200 && propertyResult.data) {
-      extractedInfo.value = {
-        characters: (propertyResult.data.characters || []).map(c => ({
-          id: c.id,
-          name: c.name,
-          description: c.description,
-          avatar: c.avatar || 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="#D4AF37" width="100" height="100"/><text fill="#2A2113" x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="40">${c.name?.charAt(0) || '?'}</text></svg>`)
-        })),
-        scenes: (propertyResult.data.scenes || []).map(s => ({
-          id: s.id,
-          name: s.name,
-          description: s.description || '',
-          thumbnail: s.thumbnail || ''
-        }))
-      }
+      extractedInfo.value = mapExtractedInfo(propertyResult.data)
       clearCharacterSelection()
       clearSceneSelection()
     }
@@ -2921,6 +2969,10 @@ const generateCharacterImage = async (character, actionType) => {
 
   if (generatingCharacter.value.has(character.id)) return
   generatingCharacter.value.add(character.id)
+  const previousSnapshot = {
+    avatar: character.avatar,
+    updateTime: character.updateTime
+  }
 
   try {
     const defaultModel = await getDefaultModelByScene('IMAGE', 'CHARACTER_GEN')
@@ -2948,6 +3000,17 @@ const generateCharacterImage = async (character, actionType) => {
         updateTime: response.data.updateTime || new Date().toISOString()
       })
       markCharacterImageChanged(character.id)
+
+       const syncedCharacter = await waitForGeneratedCharacterAsset(character.id, previousSnapshot)
+       if (syncedCharacter) {
+         patchCharacterAcrossWorkspace(character.id, {
+           name: syncedCharacter.name || character.name,
+           description: syncedCharacter.description || character.description,
+           avatar: syncedCharacter.avatar || avatar,
+           updateTime: syncedCharacter.updateTime || response.data.updateTime || new Date().toISOString()
+         })
+         markCharacterImageChanged(character.id)
+       }
 
       toast.success(actionType === 'regenerate' ? '角色图片已重新生成' : '角色图片已生成')
     } else {
@@ -3675,6 +3738,10 @@ const generateSceneImage = async (scene, actionType) => {
   const id = scene.id
   if (generatingScene.value.has(id)) return
   generatingScene.value.add(id)
+  const previousSnapshot = {
+    thumbnail: scene.thumbnail,
+    updateTime: scene.updateTime
+  }
   try {
     // 获取默认图像模型
     const defaultModel = await getDefaultModelByScene('IMAGE', 'SCENE_GEN')
@@ -3700,6 +3767,18 @@ const generateSceneImage = async (scene, actionType) => {
         updateTime: response.data.updateTime || new Date().toISOString()
       })
       markSceneImageChanged(scene.id)
+
+      const syncedScene = await waitForGeneratedSceneAsset(scene.id, previousSnapshot)
+      if (syncedScene) {
+        patchSceneAcrossWorkspace(scene.id, {
+          thumbnail: syncedScene.thumbnail || thumb,
+          description: syncedScene.description || response.data.description || scene.description,
+          name: syncedScene.name || response.data.name || scene.name,
+          updateTime: syncedScene.updateTime || response.data.updateTime || new Date().toISOString()
+        })
+        markSceneImageChanged(scene.id)
+      }
+
       toast.success(actionType === 'regenerate' ? '场景图片已重新生成' : '场景图片已生成')
     } else {
       toast.error(response.message || '生成失败')
@@ -4943,6 +5022,7 @@ const loadProjectAssets = async () => {
           scene.thumbnail = ps.thumbnail
           scene.description = ps.description || scene.description
           scene.name = ps.name || scene.name
+          scene.updateTime = ps.updateTime || scene.updateTime
         }
       })
     }
