@@ -107,6 +107,9 @@ public class EpisodeServiceDecorator extends ServiceImpl<EpisodeMapper, Episode>
     public void updateEpisode(Episode episode) {
         episodeService.updateEpisode(episode);
         // 更新缓存
-        redisUtils.updateHashPartial(EpisodeRedisConstant.EPISODE_INFO_KEY + episode.getId(),episode);
+        Episode latestEpisode = episodeService.getEpisodeById(episode.getId());
+        redisUtils.delete(EpisodeRedisConstant.EPISODE_INFO_KEY + episode.getId());
+        redisUtils.putHash(EpisodeRedisConstant.EPISODE_INFO_KEY + episode.getId(), latestEpisode, 1, TimeUnit.DAYS);
+        redisUtils.delete(ProjectRedisConstant.PROJECT_EPISODES_KEY + latestEpisode.getProjectId());
     }
 }

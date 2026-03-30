@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @Schema(description = "章节修改请求参数")
 public class EpisodeUpdateRequestVO {
+
     @Schema(description = "章节ID")
     private Long id;
 
@@ -21,4 +22,6 @@ public class EpisodeUpdateRequestVO {
     @Schema(description = "原始小说内容")
     private String content;
 
+    @Schema(description = "章节视觉设定")
+    private String visualSetting;
 }

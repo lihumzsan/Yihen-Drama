@@ -36,7 +36,11 @@ public class InfoExractTextModelServiceImpl extends TextModelServiceImpl impleme
         ExtractionResultVO property = projectMapper.getPropertyById(textModelRequestVO.getProjectId());
 
         // 替换对应提示词
-        String message = promptTemplate.getPromptContent()
+        String message = applyProjectPromptContext(
+                promptTemplate.getPromptContent(),
+                textModelRequestVO.getProjectId(),
+                textModelRequestVO.getEpisodeId()
+        )
                 .replace("{{input}}",textModelRequestVO.getText())
                 .replace("{{existing_characters}}", property.getCharacters().toString())
                 .replace("{{existing_scenes}}", property.getScenes().toString());

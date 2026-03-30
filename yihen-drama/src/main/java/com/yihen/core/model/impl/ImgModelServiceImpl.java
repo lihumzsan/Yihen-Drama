@@ -22,10 +22,17 @@ public class ImgModelServiceImpl extends ServiceImpl<ModelInstanceMapper, ModelI
         if (ObjectUtils.isEmpty(modelId)) {
             throw new IllegalArgumentException("modelId cannot be empty");
         }
-        ImageModelStrategy strategy = imageModelFactory.getStrategy(modelId);
         ImageModelRequestVO requestVO = new ImageModelRequestVO();
         requestVO.setModelInstanceId(modelId);
         requestVO.setDescription(text);
+        return generate(requestVO);
+    }
+
+    protected String generate(ImageModelRequestVO requestVO) throws Exception {
+        if (requestVO == null || ObjectUtils.isEmpty(requestVO.getModelInstanceId())) {
+            throw new IllegalArgumentException("modelId cannot be empty");
+        }
+        ImageModelStrategy strategy = imageModelFactory.getStrategy(requestVO.getModelInstanceId());
         return strategy.create(requestVO);
     }
 }

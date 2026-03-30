@@ -14,6 +14,9 @@
         </div>
       </div>
       <div class="header-right">
+        <button class="btn btn-secondary project-style-btn" @click="openProjectStyleModal">
+          风格设定
+        </button>
         <div class="consistency-badge" v-if="consistency > 0">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
@@ -90,6 +93,22 @@
           
           <div class="step-actions-header">
             <span class="save-status" :class="saveStatus.value">{{ saveStatusText }}</span>
+          </div>
+        </div>
+        <div v-if="activeEpisode" class="context-strip">
+          <div class="context-card">
+            <div class="context-card-header">
+              <span>项目全局风格</span>
+              <button class="context-card-action" @click="openProjectStyleModal">编辑</button>
+            </div>
+            <p>{{ projectGlobalStyleSummary }}</p>
+          </div>
+          <div class="context-card">
+            <div class="context-card-header">
+              <span>本章视觉设定</span>
+              <button class="context-card-action" @click="openUpdateEpisodeModal">编辑</button>
+            </div>
+            <p>{{ episodeVisualSettingSummary }}</p>
           </div>
         </div>
         
@@ -1800,6 +1819,14 @@
                 <label class="form-label">章节名称</label>
                 <input type="text" class="input" v-model="updateEpisodeForm.name" placeholder="请输入章节名称" />
               </div>
+              <div class="form-group">
+                <label class="form-label">章节视觉设定</label>
+                <textarea
+                  class="input textarea"
+                  v-model="updateEpisodeForm.visualSetting"
+                  placeholder="例如：现代三甲医院，冷白灯光，白大褂与病号服；或：穿越后的古代府邸，木结构建筑，烛火照明，古装发髻。"
+                ></textarea>
+              </div>
             </div>
             <div class="modal-footer">
               <button class="btn btn-secondary" @click="showUpdateEpisodeModal = false">取消</button>
@@ -1810,6 +1837,55 @@
                   </circle>
                 </svg>
                 更新章节
+              </button>
+            </div>
+          </div>
+        </div>
+      </transition>
+    </Teleport>
+
+    <Teleport to="body">
+      <transition name="modal">
+        <div v-if="showProjectStyleModal" class="modal-overlay" @click.self="showProjectStyleModal = false">
+          <div class="modal project-style-modal">
+            <div class="modal-header">
+              <h3 class="title-h3">项目风格设定</h3>
+              <button class="close-btn" @click="showProjectStyleModal = false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label class="form-label">基础风格预设</label>
+                <div class="style-options compact-style-options">
+                  <label
+                    v-for="style in projectStyleOptions"
+                    :key="style.value"
+                    class="style-option"
+                    :class="{ selected: projectStyleForm.style === style.value }"
+                  >
+                    <input type="radio" v-model="projectStyleForm.style" :value="style.value" />
+                    <div class="style-preview" :style="{ background: style.preview }"></div>
+                    <span>{{ style.label }}</span>
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">项目全局风格定义</label>
+                <textarea
+                  class="input textarea"
+                  v-model="projectStyleForm.globalStylePrompt"
+                  placeholder="填写整个项目都尽量保持不变的视觉要求，例如：真人写实、冷灰色调、纪实电影感、不要卡通化、不要网红磨皮。"
+                ></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" @click="showProjectStyleModal = false">取消</button>
+              <button class="btn btn-primary" @click="saveProjectStyle" :disabled="savingProjectStyle">
+                {{ savingProjectStyle ? '保存中...' : '保存风格设定' }}
               </button>
             </div>
           </div>
@@ -2151,10 +2227,19 @@ const toast = useToast()
 const projectId = route.params.id
 const projectName = ref('')
 const consistency = ref(0)
+const projectMeta = ref({
+  id: Number(projectId),
+  name: '',
+  description: '',
+  cover: '',
+  styleId: 1,
+  globalStylePrompt: ''
+})
 const currentStep = ref(0)
 const maxReachedStep = ref(0)
 const activeEpisode = ref(null)
 const currentEpisodeName = ref('')
+const currentEpisodeVisualSetting = ref('')
 const overallProgress = ref(0)
 const currentContent = ref('')
 const lastSavedContent = ref('')
@@ -2168,10 +2253,17 @@ const newEpisode = ref({
 })
 const showChapterModal = ref(false)
 const showUpdateEpisodeModal = ref(false)
+const showProjectStyleModal = ref(false)
 const updatingEpisodeMeta = ref(false)
+const savingProjectStyle = ref(false)
 const updateEpisodeForm = ref({
   chapterNumber: null,
-  name: ''
+  name: '',
+  visualSetting: ''
+})
+const projectStyleForm = ref({
+  style: 1,
+  globalStylePrompt: ''
 })
 const projectCharacters = ref([])
 const projectScenes = ref([])
@@ -2504,6 +2596,13 @@ const workflowSteps = [
   { id: 'edit', name: '视频编辑' }
 ]
 
+const projectStyleOptions = [
+  { value: 1, label: '写实风格', preview: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)' },
+  { value: 2, label: '动漫风格', preview: 'linear-gradient(135deg, #E8C49A 0%, #CD7F32 100%)' },
+  { value: 3, label: '油画质感', preview: 'linear-gradient(135deg, #F4E4BA 0%, #D4AF37 100%)' },
+  { value: 4, label: '赛博朋克', preview: 'linear-gradient(135deg, #FFD700 0%, #B8860B 100%)' }
+]
+
 const saveStatusText = computed(() => {
   const texts = { saved: '已保存', saving: '保存中...', unsaved: '未保存' }
   return texts[saveStatus.value] || texts.saved
@@ -2562,14 +2661,43 @@ const canUpdateEpisodeMeta = computed(() => {
   return Number.isFinite(chapterNumber) && chapterNumber > 0 && chapterName.length > 0
 })
 
+const summarizeSetting = (value, emptyText) => {
+  const text = String(value || '').trim()
+  if (!text) return emptyText
+  return text.length > 120 ? `${text.slice(0, 120)}...` : text
+}
+
+const projectGlobalStyleSummary = computed(() =>
+  summarizeSetting(
+    projectMeta.value.globalStylePrompt,
+    '未设置项目级全局风格定义。建议在这里填写整个项目都应长期保持一致的视觉原则。'
+  )
+)
+
+const episodeVisualSettingSummary = computed(() =>
+  summarizeSetting(
+    currentEpisodeVisualSetting.value,
+    '未设置章节视觉设定。若本章存在时空切换、服装变化、场景体系变化，建议补充。'
+  )
+)
+
 const openUpdateEpisodeModal = () => {
   if (!activeEpisode.value) return
   const episodeMeta = episodes.value.find(e => e.id === activeEpisode.value) || {}
   updateEpisodeForm.value = {
     chapterNumber: episodeMeta.chapterNumber ?? null,
-    name: episodeMeta.name || currentEpisodeName.value || ''
+    name: episodeMeta.name || currentEpisodeName.value || '',
+    visualSetting: episodeMeta.visualSetting ?? currentEpisodeVisualSetting.value ?? ''
   }
   showUpdateEpisodeModal.value = true
+}
+
+const openProjectStyleModal = () => {
+  projectStyleForm.value = {
+    style: projectMeta.value.styleId || 1,
+    globalStylePrompt: projectMeta.value.globalStylePrompt || ''
+  }
+  showProjectStyleModal.value = true
 }
 
 const handleAddChapter = async () => {
@@ -2600,14 +2728,17 @@ const handleUpdateEpisodeMeta = async () => {
       projectId: Number(projectId),
       chapterNumber: Number(updateEpisodeForm.value.chapterNumber),
       name: String(updateEpisodeForm.value.name || '').trim(),
-      content: currentContent.value ?? ''
+      content: currentContent.value ?? '',
+      visualSetting: String(updateEpisodeForm.value.visualSetting || '').trim()
     })
     const idx = episodes.value.findIndex(e => e.id === activeEpisode.value)
     if (idx !== -1) {
       episodes.value[idx].chapterNumber = Number(updateEpisodeForm.value.chapterNumber)
       episodes.value[idx].name = String(updateEpisodeForm.value.name || '').trim()
+      episodes.value[idx].visualSetting = String(updateEpisodeForm.value.visualSetting || '').trim()
     }
     currentEpisodeName.value = String(updateEpisodeForm.value.name || '').trim()
+    currentEpisodeVisualSetting.value = String(updateEpisodeForm.value.visualSetting || '').trim()
     showUpdateEpisodeModal.value = false
     result.value = { success: true, message: '章节信息已更新' }
     showResult.value = true
@@ -2699,6 +2830,7 @@ const loadEpisodeContent = async (episodeId, forceStepZero = false) => {
       console.log('加载章节数据:', episode) // 调试日志
       currentEpisodeName.value = episode.name || '未命名章节'
       currentContent.value = episode.content || ''
+      currentEpisodeVisualSetting.value = episode.visualSetting || ''
       console.log('设置内容:', episode.content) // 调试日志
 
       // 处理 currentStep，支持数字和枚举对象格式
@@ -2738,6 +2870,7 @@ const loadEpisodeContent = async (episodeId, forceStepZero = false) => {
       // 设置默认值
       currentEpisodeName.value = '未命名章节'
       currentContent.value = ''
+      currentEpisodeVisualSetting.value = ''
       currentStep.value = 0
       maxReachedStep.value = 0
       overallProgress.value = 0
@@ -2750,6 +2883,7 @@ const loadEpisodeContent = async (episodeId, forceStepZero = false) => {
     // 设置默认值以防完全失败
     currentEpisodeName.value = '加载失败'
     currentContent.value = ''
+    currentEpisodeVisualSetting.value = ''
     currentStep.value = 0
     overallProgress.value = 0
     lastSavedContent.value = ''
@@ -2800,6 +2934,7 @@ const generateCharacterImage = async (character, actionType) => {
       modelInstanceId: defaultModel.id,
       characterId: character.id,
       projectId: projectId,
+      actionType: actionType || 'generate',
       description: character.description || `${character.name}的形象描述`
     }
 
@@ -3332,6 +3467,32 @@ const openExtractedResultEditor = (type, item) => {
       name: item.name || '',
       description: item.description || ''
     }
+  }
+}
+
+const saveProjectStyle = async () => {
+  if (savingProjectStyle.value) return
+  savingProjectStyle.value = true
+  try {
+    await projectApi.update({
+      id: Number(projectId),
+      name: projectMeta.value.name,
+      description: projectMeta.value.description || '',
+      cover: projectMeta.value.cover || '',
+      style: projectStyleForm.value.style,
+      globalStylePrompt: String(projectStyleForm.value.globalStylePrompt || '').trim()
+    })
+    projectMeta.value.styleId = projectStyleForm.value.style
+    projectMeta.value.globalStylePrompt = String(projectStyleForm.value.globalStylePrompt || '').trim()
+    currentStyle.value = resolveStyleMeta(projectMeta.value.styleId)
+    showProjectStyleModal.value = false
+    result.value = { success: true, message: '项目风格设定已更新' }
+    showResult.value = true
+  } catch (err) {
+    result.value = { success: false, message: err.message || '更新项目风格设定失败' }
+    showResult.value = true
+  } finally {
+    savingProjectStyle.value = false
   }
 }
 
@@ -4985,6 +5146,15 @@ const fetchProject = async () => {
     const result = await projectApi.get(projectId)
     if (result.code === 200 && result.data) {
       const project = result.data
+      const styleId = project.styleId ?? project.style ?? 1
+      projectMeta.value = {
+        id: project.id,
+        name: project.name || '',
+        description: project.description || '',
+        cover: project.cover || '',
+        styleId,
+        globalStylePrompt: project.globalStylePrompt || ''
+      }
       projectName.value = project.name
       consistency.value = project.consistency || 0
       
@@ -4994,8 +5164,8 @@ const fetchProject = async () => {
         3: { name: '油画质感', preview: 'linear-gradient(135deg, #F4E4BA 0%, #D4AF37 100%)' },
         4: { name: '赛博朋克', preview: 'linear-gradient(135deg, #FFD700 0%, #B8860B 100%)' }
       }
-      if (project.style && styleMap[project.style]) {
-        currentStyle.value = styleMap[project.style]
+      if (styleMap[styleId]) {
+        currentStyle.value = styleMap[styleId]
       }
     }
   } catch (err) {
@@ -5441,6 +5611,71 @@ onUnmounted(() => {
   position: relative;
 }
 
+.context-strip {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  padding: 16px 24px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+  flex-shrink: 0;
+}
+
+.context-card {
+  background: rgba(255, 250, 242, 0.96);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  box-shadow: 0 10px 24px rgba(26, 18, 7, 0.08);
+  min-height: 108px;
+}
+
+.context-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 10px;
+
+  span {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.4;
+  }
+}
+
+.context-card p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.7;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.context-card-action {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: rgba(212, 175, 55, 0.12);
+  color: #8f6220;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+
+  &:hover {
+    background: rgba(212, 175, 55, 0.2);
+    border-color: var(--gold-primary);
+    color: var(--text-primary);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.12);
+  }
+}
+
 .workflow-progress {
   display: flex;
   gap: 8px;
@@ -5579,6 +5814,20 @@ onUnmounted(() => {
   max-width: 900px;
   margin: 0 auto;
   min-height: calc(100vh - 200px);
+}
+
+.step-content > .title-h3 {
+  margin: 0 0 8px;
+  color: var(--gold-light);
+  text-shadow: 0 2px 10px rgba(212, 175, 55, 0.18);
+}
+
+.step-content > .step-desc {
+  margin: 0 0 18px;
+  color: rgba(255, 247, 233, 0.82);
+  font-size: 14px;
+  line-height: 1.7;
+  max-width: 760px;
 }
 
 .step-content.video-step {
@@ -6092,6 +6341,7 @@ onUnmounted(() => {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  margin-bottom: 12px;
 }
 
 .section-header-actions {
@@ -6659,11 +6909,11 @@ onUnmounted(() => {
 
 .section-title {
   font-size: 14px;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 12px;
+  font-weight: 700;
+  color: var(--gold-light);
+  margin: 0;
   padding-bottom: 8px;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.18);
 }
 
 .generation-tabs {
@@ -6692,12 +6942,18 @@ onUnmounted(() => {
 .gen-tab {
   padding: 6px 14px;
   font-size: 12px;
-  color: var(--text-tertiary);
-  background: var(--bg-glass);
-  border: 1px solid var(--border-color);
+  color: rgba(255, 247, 233, 0.74);
+  background: rgba(255, 250, 242, 0.08);
+  border: 1px solid rgba(212, 175, 55, 0.18);
   border-radius: 4px;
   cursor: pointer;
   transition: all var(--transition-base);
+
+  &:hover {
+    color: var(--gold-light);
+    border-color: rgba(212, 175, 55, 0.35);
+    background: rgba(212, 175, 55, 0.12);
+  }
   
   &.active {
     background: var(--gold-primary);
@@ -7226,14 +7482,38 @@ onUnmounted(() => {
   gap: 6px;
 }
 
+.input {
+  width: 100%;
+  border: 1px solid rgba(212, 175, 55, 0.26);
+  background: rgba(255, 251, 245, 0.96);
+  color: var(--text-primary);
+  border-radius: 12px;
+  padding: 12px 14px;
+  outline: none;
+  transition: all var(--transition-base);
+  font-size: 14px;
+  line-height: 1.6;
+
+  &::placeholder {
+    color: var(--text-muted);
+  }
+
+  &:focus {
+    border-color: var(--gold-primary);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.14);
+    background: #fffdf9;
+  }
+}
+
 .form-label {
   font-size: 13px;
-  font-weight: 500;
-  color: var(--text-secondary);
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
 .textarea {
-  min-height: 100px;
+  min-height: 120px;
+  resize: vertical;
 }
 
 .modal-footer {
@@ -7248,6 +7528,69 @@ onUnmounted(() => {
   padding: 10px 20px;
   border-radius: 4px;
   font-size: 13px;
+}
+
+.project-style-modal {
+  max-width: 760px;
+}
+
+.style-options {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.compact-style-options {
+  margin-top: 4px;
+}
+
+.style-option {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  cursor: pointer;
+  padding: 10px;
+  border: 1px solid rgba(212, 175, 55, 0.14);
+  border-radius: 14px;
+  background: rgba(255, 251, 245, 0.72);
+  transition: all var(--transition-base);
+
+  input {
+    display: none;
+  }
+
+  span {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  &:hover {
+    border-color: rgba(212, 175, 55, 0.3);
+    box-shadow: 0 8px 20px rgba(125, 91, 34, 0.08);
+    transform: translateY(-1px);
+  }
+
+  &.selected {
+    border-color: var(--gold-primary);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.12);
+    background: rgba(255, 248, 233, 0.95);
+
+    span {
+      color: var(--text-primary);
+    }
+  }
+}
+
+.style-preview {
+  width: 100%;
+  height: 68px;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .modal-enter-active,
@@ -7340,6 +7683,22 @@ onUnmounted(() => {
   .modal {
     transform: scale(0.95) translateY(5px);
     opacity: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .style-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .project-style-modal {
+    max-width: calc(100vw - 32px);
+  }
+}
+
+@media (max-width: 560px) {
+  .style-options {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -8447,6 +8806,7 @@ onUnmounted(() => {
   height: 120px;
   object-fit: cover;
   border-radius: 8px;
+  cursor: pointer;
 }
 
 .config-empty {
@@ -8562,6 +8922,7 @@ onUnmounted(() => {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    cursor: pointer;
   }
 }
 
@@ -8610,20 +8971,10 @@ onUnmounted(() => {
   flex: 1;
   justify-content: center;
 }
+
+@media (max-width: 1200px) {
+  .context-strip {
+    grid-template-columns: 1fr;
+  }
+}
 </style>
-.config-thumb {
-  cursor: pointer;
-}
-
-.config-character-avatar img {
-  cursor: pointer;
-}
-
-
-
-
-
-
-
-
-

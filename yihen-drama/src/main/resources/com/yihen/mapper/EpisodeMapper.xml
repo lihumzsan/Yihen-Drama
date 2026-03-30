@@ -10,6 +10,7 @@
         <result column="project_id" property="projectId"/>
         <result column="chapter_number" property="chapterNumber"/>
         <result column="name" property="name"/>
+        <result column="visual_setting" property="visualSetting"/>
         <result column="status" property="status"/>
         <result column="progress" property="progress"/>
         <result column="current_step" property="currentStep"/>
@@ -25,6 +26,7 @@
         project_id,
         chapter_number,
         name,
+        visual_setting,
         status,
         progress,
         current_step,

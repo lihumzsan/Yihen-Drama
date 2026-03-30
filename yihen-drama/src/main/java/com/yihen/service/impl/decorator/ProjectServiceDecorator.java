@@ -115,9 +115,13 @@ public class ProjectServiceDecorator extends ServiceImpl<ProjectMapper, Project>
     @Override
     public void updateProjectById(Project project) {
         projectService.updateProjectById(project);
+        Project latestProject = projectService.getProjectById(project.getId());
+        redisUtils.delete(ProjectRedisConstant.PROJECT_INFO_KEY + project.getId());
+        redisUtils.putHash(ProjectRedisConstant.PROJECT_INFO_KEY + project.getId(), latestProject, 1, TimeUnit.DAYS);
+        redisUtils.set(ProjectRedisConstant.PROJECT_STYLE_KEY + project.getId(), latestProject.getStyleId(), 1, TimeUnit.DAYS);
 
         // 发送同步ES消息
-        rabbitTemplate.convertAndSend(ProjectMQConstant.PROJECT_INFO_EXCHANGE, ProjectMQConstant.PROJECT_INFO_UPDATE_KEY, project);
+        rabbitTemplate.convertAndSend(ProjectMQConstant.PROJECT_INFO_EXCHANGE, ProjectMQConstant.PROJECT_INFO_UPDATE_KEY, latestProject);
 
     }
 

@@ -28,12 +28,15 @@ public class Episode extends BaseEntity {
     @Schema(description = "章节摘要")
     private String abstraction;
 
+    @Schema(description = "章节视觉设定")
+    private String visualSetting;
+
     @Schema(description = "状态: 0-待开始 1-处理中 2-已完成")
     private EpisodeStatus status;
 
     @Schema(description = "处理进度百分比")
     private Integer progress;
 
-    @Schema(description = "当前步骤: 0-输入内容 1-提取信息 2-生成图片 4-固定角色 5-生成分镜 6-生成视频 7-合成完成")
+    @Schema(description = "当前步骤")
     private EpisodeStep currentStep;
 }

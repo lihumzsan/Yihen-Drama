@@ -91,7 +91,8 @@ export const projectApi = {
     name: data.name,
     description: data.description || '',
     style: data.style,
-    cover: generateRandomCover(data.name, data.style)
+    cover: generateRandomCover(data.name, data.style),
+    globalStylePrompt: data.globalStylePrompt || ''
   }),
   upload: (projectId, file) => {
     const formData = new FormData()

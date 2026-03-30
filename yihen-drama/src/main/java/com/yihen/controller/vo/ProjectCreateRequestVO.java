@@ -1,7 +1,5 @@
 package com.yihen.controller.vo;
 
-import com.yihen.enums.ProjectStatus;
-import com.yihen.enums.ProjectStyle;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -15,6 +13,12 @@ public class ProjectCreateRequestVO {
     @Schema(description = "项目描述")
     private String description;
 
-    @Schema(description = "风格: 1-动漫 3-油画 4-赛博朋克")
+    @Schema(description = "风格")
     private Long style;
+
+    @Schema(description = "项目封面")
+    private String cover;
+
+    @Schema(description = "项目级全局风格定义")
+    private String globalStylePrompt;
 }

@@ -264,6 +264,14 @@
                 </div>
               </div>
               <div class="form-group">
+                <label class="form-label">全局风格定义</label>
+                <textarea
+                  class="input textarea"
+                  v-model="newProject.globalStylePrompt"
+                  placeholder="例如：真人写实风格，冷灰色调，纪实电影感，不要卡通感，不要网红磨皮。"
+                ></textarea>
+              </div>
+              <div class="form-group">
                 <label class="form-label">项目封面（可选）</label>
                 <div class="cover-upload">
                   <input
@@ -325,6 +333,29 @@
               <div class="form-group">
                 <label class="form-label">项目描述</label>
                 <textarea class="input textarea" v-model="editProject.description" placeholder="输入项目描述（可选）"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label">选择风格</label>
+                <div class="style-options">
+                  <label
+                    v-for="style in styleOptions"
+                    :key="style.value"
+                    class="style-option"
+                    :class="{ selected: editProject.style === style.value }"
+                  >
+                    <input type="radio" v-model="editProject.style" :value="style.value" />
+                    <div class="style-preview" :style="{ background: style.preview }"></div>
+                    <span>{{ style.label }}</span>
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">全局风格定义</label>
+                <textarea
+                  class="input textarea"
+                  v-model="editProject.globalStylePrompt"
+                  placeholder="例如：真人写实风格，冷灰色调，纪实电影感，不要卡通感，不要网红磨皮。"
+                ></textarea>
               </div>
               <div class="form-group">
                 <label class="form-label">项目封面（可选）</label>
@@ -437,14 +468,17 @@ const styleOptions = [
 const newProject = ref({
   name: '',
   description: '',
-  style: 1
+  style: 1,
+  globalStylePrompt: ''
 })
 
 const editProject = ref({
   id: null,
   name: '',
   description: '',
-  cover: ''
+  cover: '',
+  style: 1,
+  globalStylePrompt: ''
 })
 
 const projects = ref([])
@@ -570,7 +604,7 @@ const fetchSearchSuggestions = async (prefix) => {
 }
 
 const createProject = () => {
-  newProject.value = { name: '', description: '', style: 1 }
+  newProject.value = { name: '', description: '', style: 1, globalStylePrompt: '' }
   createCoverFile.value = null
   createCoverPreview.value = ''
   if (createCoverInputRef.value) {
@@ -641,7 +675,8 @@ const handleCreateProject = async () => {
     const result = await projectApi.create({
       name: newProject.value.name,
       description: newProject.value.description,
-      style: newProject.value.style
+      style: newProject.value.style,
+      globalStylePrompt: newProject.value.globalStylePrompt
     })
     
     if (result.code === 200 && result.data) {
@@ -658,7 +693,7 @@ const handleCreateProject = async () => {
       }
       projects.value.unshift(createdProject)
       showCreateModal.value = false
-      newProject.value = { name: '', description: '', style: 1 }
+      newProject.value = { name: '', description: '', style: 1, globalStylePrompt: '' }
       clearCreateCoverFile()
       toast.success('创建成功')
       router.push(`/workspace/${createdProject.id}`)
@@ -707,7 +742,9 @@ const openEditModal = (project) => {
     id: project.id,
     name: project.name,
     description: project.description || '',
-    cover: project.cover || ''
+    cover: project.cover || '',
+    style: project.styleId ?? project.style ?? 1,
+    globalStylePrompt: project.globalStylePrompt || ''
   }
   editCoverFile.value = null
   editCoverPreview.value = project.cover || ''
@@ -727,7 +764,9 @@ const handleUpdateProject = async () => {
       id: editProject.value.id,
       name: editProject.value.name,
       description: editProject.value.description,
-      cover: editProject.value.cover
+      cover: editProject.value.cover,
+      style: editProject.value.style,
+      globalStylePrompt: editProject.value.globalStylePrompt
     })
     
     if (result.code === 200) {
@@ -746,6 +785,8 @@ const handleUpdateProject = async () => {
       if (index > -1) {
         projects.value[index].name = editProject.value.name
         projects.value[index].description = editProject.value.description
+        projects.value[index].styleId = editProject.value.style
+        projects.value[index].globalStylePrompt = editProject.value.globalStylePrompt
         if (latestProject?.cover) {
           projects.value[index].cover = latestProject.cover
         }

@@ -1,6 +1,8 @@
 package com.yihen.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yihen.asyn.EpisodePersistFacade;
@@ -121,7 +123,14 @@ public class EpisodeServiceImpl extends ServiceImpl<EpisodeMapper, Episode> impl
 
     @Override
     public void updateEpisode(Episode episode) {
-        updateById(episode);
+        LambdaUpdateWrapper<Episode> updateWrapper = Wrappers.lambdaUpdate(Episode.class)
+                .eq(Episode::getId, episode.getId())
+                .set(Episode::getProjectId, episode.getProjectId())
+                .set(Episode::getChapterNumber, episode.getChapterNumber())
+                .set(Episode::getName, episode.getName())
+                .set(Episode::getContent, episode.getContent())
+                .set(Episode::getVisualSetting, episode.getVisualSetting());
+        update(updateWrapper);
     }
 
 }

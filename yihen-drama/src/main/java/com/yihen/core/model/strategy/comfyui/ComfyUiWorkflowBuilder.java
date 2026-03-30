@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
@@ -29,7 +30,10 @@ public class ComfyUiWorkflowBuilder {
             "PrimitiveBoolean",
             "PrimitiveCombo",
             "Reroute",
-            "Note"
+            "Note",
+            "MarkdownNote",
+            "Image Comparer (rgthree)",
+            "Fast Groups Muter (rgthree)"
     );
 
     private final ComfyUiClient comfyUiClient;
@@ -405,10 +409,23 @@ public class ComfyUiWorkflowBuilder {
         if ("image".equalsIgnoreCase(binding.type()) || "file".equalsIgnoreCase(binding.type())) {
             return true;
         }
+        if (StringUtils.hasText(binding.type())) {
+            return false;
+        }
         if (value instanceof byte[]) {
             return true;
         }
-        return value instanceof String text && (text.startsWith("http://") || text.startsWith("https://") || Files.exists(Paths.get(text)));
+        if (value instanceof String text) {
+            if (text.startsWith("http://") || text.startsWith("https://")) {
+                return true;
+            }
+            try {
+                return Files.exists(Paths.get(text));
+            } catch (InvalidPathException ignore) {
+                return false;
+            }
+        }
+        return false;
     }
 
     private String uploadInputAsset(

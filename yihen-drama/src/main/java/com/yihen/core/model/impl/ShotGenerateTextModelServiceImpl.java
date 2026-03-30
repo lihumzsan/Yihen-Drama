@@ -65,7 +65,11 @@ public class ShotGenerateTextModelServiceImpl extends TextModelServiceImpl imple
         }
 
         // 4) 替换模板变量
-        String message = applyProjectPromptContext(promptTemplate.getPromptContent(), textModelRequestVO.getProjectId())
+        String message = applyProjectPromptContext(
+                promptTemplate.getPromptContent(),
+                textModelRequestVO.getProjectId(),
+                textModelRequestVO.getEpisodeId()
+        )
                 .replace("{{input}}", safePromptText(textModelRequestVO.getText()))
                 .replace("{{existing_characters}}", JSON.toJSONString(property == null || property.getCharacters() == null ? List.of() : property.getCharacters()))
                 .replace("{{existing_scenes}}", JSON.toJSONString(property == null || property.getScenes() == null ? List.of() : property.getScenes()));

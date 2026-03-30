@@ -3,9 +3,12 @@ package com.yihen.controller.vo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import java.util.Map;
+
 @Data
 @Schema(description = "图像请求参数")
 public class ImageModelRequestVO {
+
     @Schema(description = "模型实例id")
     private Long modelInstanceId;
 
@@ -18,4 +21,6 @@ public class ImageModelRequestVO {
     @Schema(description = "对象")
     private Object object;
 
+    @Schema(description = "覆盖模型参数")
+    private Map<String, Object> paramsOverride;
 }

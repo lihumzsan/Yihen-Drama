@@ -25,7 +25,11 @@ public class ShotVideoGenerateTextModelServiceImpl extends TextModelServiceImpl 
 
         Storyboard storyboard = (Storyboard) textModelRequestVO.getObject();
 
-        String message = applyProjectPromptContext(promptTemplate.getPromptContent(), textModelRequestVO.getProjectId())
+        String message = applyProjectPromptContext(
+                promptTemplate.getPromptContent(),
+                textModelRequestVO.getProjectId(),
+                textModelRequestVO.getEpisodeId()
+        )
                 .replace("{{shot_description}}", safePromptText(storyboard.getDescription()))
                 .replace("{{first_frame_prompt}}", safePromptText(storyboard.getImagePrompt()))
                 .replace("{{characters_json}}", JSON.toJSONString(storyboard.getCharacters() == null ? List.of() : storyboard.getCharacters()))

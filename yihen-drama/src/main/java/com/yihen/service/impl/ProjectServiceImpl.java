@@ -70,7 +70,10 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
         // 创建项目对象
         Project createdProject = new Project();
         createdProject.setName(project.getName());
+        createdProject.setDescription(project.getDescription());
         createdProject.setStyleId(project.getStyle());
+        createdProject.setCover(project.getCover());
+        createdProject.setGlobalStylePrompt(project.getGlobalStylePrompt());
 
         save(createdProject);
         return createdProject;
@@ -126,7 +129,14 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
 
     @Override
     public void updateProjectById(Project project) {
-        updateById(project);
+        LambdaUpdateWrapper<Project> updateWrapper = Wrappers.lambdaUpdate(Project.class)
+                .eq(Project::getId, project.getId())
+                .set(Project::getName, project.getName())
+                .set(Project::getDescription, project.getDescription())
+                .set(Project::getCover, project.getCover())
+                .set(Project::getStyleId, project.getStyleId())
+                .set(Project::getGlobalStylePrompt, project.getGlobalStylePrompt());
+        update(updateWrapper);
     }
 
     @Override

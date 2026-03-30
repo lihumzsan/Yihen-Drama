@@ -89,6 +89,7 @@ public class ProjectController {
     public Result<Project> update(@RequestBody ProjectUpdateRequestVO projectUpdateRequestVO) {
         Project project = new Project();
         BeanUtils.copyProperties(projectUpdateRequestVO, project);
+        project.setStyleId(projectUpdateRequestVO.getStyle());
         projectService.updateProjectById(project);
         return Result.success(project);
     }

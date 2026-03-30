@@ -1,13 +1,10 @@
 package com.yihen.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.yihen.enums.ProjectStyle;
 import com.yihen.enums.ProjectStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import java.util.Map;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -24,8 +21,11 @@ public class Project extends BaseEntity {
     @Schema(description = "封面URL")
     private String cover;
 
-    @Schema(description = "风格: 2-动漫 1-写实 3-油画 4-赛博朋克")
+    @Schema(description = "风格: 1-写实 2-动漫 3-油画 4-赛博朋克")
     private Long styleId;
+
+    @Schema(description = "项目级全局风格定义")
+    private String globalStylePrompt;
 
     @Schema(description = "状态: 0-草稿 1-处理中 2-已完成")
     private ProjectStatus status;

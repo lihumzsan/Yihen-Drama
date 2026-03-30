@@ -1,35 +1,45 @@
 package com.yihen.core.model.impl;
 
 import com.yihen.controller.vo.CharactersRequestVO;
+import com.yihen.controller.vo.ImageModelRequestVO;
 import com.yihen.controller.vo.SceneRequestVO;
 import com.yihen.core.model.PropertyGenerateImgModelService;
+import com.yihen.core.model.support.PromptContextSupport;
 import com.yihen.entity.Characters;
+import com.yihen.entity.ModelInstance;
 import com.yihen.entity.PromptTemplate;
 import com.yihen.entity.Scene;
-import com.yihen.entity.StyleTemplate;
 import com.yihen.enums.SceneCode;
-import com.yihen.mapper.ProjectMapper;
 import com.yihen.service.CharacterService;
 import com.yihen.service.PromptTemplateService;
 import com.yihen.service.SceneService;
-import com.yihen.service.StyleTemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @Service
 public class PropertyGenerateImgModelServiceImpl extends ImgModelServiceImpl implements PropertyGenerateImgModelService {
 
+    private static final String ACTION_REGENERATE = "regenerate";
+    private static final String DEFAULT_CHARACTER_REGENERATE_WORKFLOW_PATH =
+            "D:\\comfui\\workflows\\baseimage\\02_character_consistency\\P1_QwenImageEdit2511三工作流组合_QwenImageEdit2511\\角色一致性-QwenImageEdit2511三工作流组合-RunningHub原始工作流.json";
+    private static final String CHARACTER_REGENERATE_OUTPUT_NODE_ID = "46";
+    private static final String CHARACTER_REGENERATE_LOAD_IMAGE_NODE_ID = "49";
+    private static final String CHARACTER_REGENERATE_PROMPT_NODE_ID = "44";
+
     @Autowired
     private PromptTemplateService promptTemplateService;
 
     @Autowired
-    private StyleTemplateService styleTemplateService;
+    private PromptContextSupport promptContextSupport;
 
     @Autowired
     private CharacterService characterService;
@@ -37,30 +47,38 @@ public class PropertyGenerateImgModelServiceImpl extends ImgModelServiceImpl imp
     @Autowired
     private SceneService sceneService;
 
-    @Autowired
-    private ProjectMapper projectMapper;
-
     @Override
     public Characters generateCharacter(CharactersRequestVO charactersRequestVO) throws Exception {
-        Long projectStyleId = projectMapper.getProjectStyleById(charactersRequestVO.getProjectId());
-        String stylePrompt = buildCharacterStylePrompt(projectStyleId);
+        Characters characters = characterService.getById(charactersRequestVO.getCharacterId());
+        Long episodeId = characters == null ? null : characters.getEpisodeId();
+        String stylePrompt = buildCharacterStylePrompt(charactersRequestVO.getProjectId(), episodeId);
 
         PromptTemplate promptTemplate = promptTemplateService.getDefaultTemplateBySceneCode(SceneCode.CHARACTER_GEN);
         String message = promptTemplate.getPromptContent()
                 .replace("{{input}}", charactersRequestVO.getDescription())
                 .replace("{{style_template}}", stylePrompt);
 
-        String imgUrl = generate(charactersRequestVO.getModelInstanceId(), message);
+        String imgUrl;
+        if (shouldUseCharacterRegenerateWorkflow(charactersRequestVO, characters)) {
+            ImageModelRequestVO requestVO = new ImageModelRequestVO();
+            requestVO.setModelInstanceId(charactersRequestVO.getModelInstanceId());
+            requestVO.setDescription(message);
+            requestVO.setObject(characters);
+            requestVO.setParamsOverride(buildCharacterRegenerateParams(charactersRequestVO.getModelInstanceId()));
+            imgUrl = generate(requestVO);
+        } else {
+            imgUrl = generate(charactersRequestVO.getModelInstanceId(), message);
+        }
 
-        Characters characters = characterService.getById(charactersRequestVO.getCharacterId());
         characters.setAvatar(imgUrl);
         return characters;
     }
 
     @Override
     public Scene generateScene(SceneRequestVO sceneRequestVO) throws Exception {
-        Long projectStyleId = projectMapper.getProjectStyleById(sceneRequestVO.getProjectId());
-        String stylePrompt = buildSceneStylePrompt(projectStyleId);
+        Scene scene = sceneService.getById(sceneRequestVO.getSceneId());
+        Long episodeId = scene == null ? null : scene.getEpisodeId();
+        String stylePrompt = buildSceneStylePrompt(sceneRequestVO.getProjectId(), episodeId);
 
         PromptTemplate promptTemplate = promptTemplateService.getDefaultTemplateBySceneCode(SceneCode.SCENE_GEN);
         String message = promptTemplate.getPromptContent()
@@ -68,43 +86,107 @@ public class PropertyGenerateImgModelServiceImpl extends ImgModelServiceImpl imp
                 .replace("{{style_template}}", stylePrompt);
 
         String imgUrl = generate(sceneRequestVO.getModelInstanceId(), message);
-
-        Scene scene = sceneService.getById(sceneRequestVO.getSceneId());
         scene.setThumbnail(imgUrl);
         return scene;
     }
 
-    private String buildCharacterStylePrompt(Long projectStyleId) {
-        String baseStyle = getStyleDescription(projectStyleId);
+    private String buildCharacterStylePrompt(Long projectId, Long episodeId) {
+        String baseStyle = promptContextSupport.buildStylePrompt(projectId, episodeId);
         List<String> parts = new ArrayList<>();
         if (StringUtils.hasText(baseStyle)) {
             parts.add(baseStyle.trim());
         }
-        parts.add("真人写实风格，影视人物设定照质感，真实中国人五官比例与皮肤质感");
-        parts.add("必须严格忠实输入中的年龄、体型、脸型、眼睛特征、发型、服装与气质，不得擅自改成更年轻、更瘦、更性感或更时尚的版本");
-        parts.add("不得年轻化、瘦身、美型化、网红化、二次元化，不得改变为露脐装、短裤、紧身时装或与描述不符的服饰");
-        parts.add("严格禁止卡通风、动漫风、插画风、Q版、3D渲染、玩偶感、游戏角色建模感");
-        parts.add("角色必须为成年真人体态与真实面部结构，不得幼态化，不得夸张大眼，不得出现塑料皮肤");
-        parts.add("服装、发型、身材与年龄气质保持现实世界可成立的真实效果");
-        return String.join("；", parts);
+        parts.add("photorealistic live-action Chinese character design, realistic skin texture, realistic human proportions");
+        parts.add("strictly preserve the age, body shape, face shape, eyes, hairstyle, clothing, and temperament from the input description");
+        parts.add("do not make the character younger, slimmer, sexier, trendier, cartoonish, anime, toy-like, or stylized");
+        parts.add("adult realistic human anatomy only, no childlike face, no oversized eyes, no plastic skin");
+        parts.add("clothing, hairstyle, physique, and age impression must remain believable in a real-world setting");
+        return String.join("; ", parts);
     }
 
-    private String buildSceneStylePrompt(Long projectStyleId) {
-        String baseStyle = getStyleDescription(projectStyleId);
+    private String buildSceneStylePrompt(Long projectId, Long episodeId) {
+        String baseStyle = promptContextSupport.buildStylePrompt(projectId, episodeId);
         List<String> parts = new ArrayList<>();
         if (StringUtils.hasText(baseStyle)) {
             parts.add(baseStyle.trim());
         }
-        parts.add("电影级真实场景质感，真实光影，真实材质");
-        parts.add("禁止卡通风、动漫风、插画风、3D游戏场景感、过度概念设计稿风格");
-        return String.join("；", parts);
+        parts.add("cinematic realistic environment, believable lighting, believable materials");
+        parts.add("no cartoon, anime, illustration, game-like render, or exaggerated concept-art style");
+        return String.join("; ", parts);
     }
 
-    private String getStyleDescription(Long projectStyleId) {
-        if (projectStyleId == null) {
-            return "";
+    private boolean shouldUseCharacterRegenerateWorkflow(CharactersRequestVO charactersRequestVO, Characters characters) {
+        return characters != null
+                && StringUtils.hasText(characters.getAvatar())
+                && ACTION_REGENERATE.equalsIgnoreCase(charactersRequestVO.getActionType());
+    }
+
+    private Map<String, Object> buildCharacterRegenerateParams(Long modelInstanceId) {
+        ModelInstance modelInstance = getById(modelInstanceId);
+        Map<String, Object> baseParams = modelInstance == null || modelInstance.getParams() == null
+                ? Map.of()
+                : modelInstance.getParams();
+        Map<String, Object> overrides = new LinkedHashMap<>();
+
+        overrides.put("workflowPath", firstNonBlank(
+                asText(baseParams.get("regenerateWorkflowPath")),
+                DEFAULT_CHARACTER_REGENERATE_WORKFLOW_PATH
+        ));
+
+        String apiWorkflowPath = asText(baseParams.get("regenerateApiWorkflowPath"));
+        if (StringUtils.hasText(apiWorkflowPath)) {
+            overrides.put("apiWorkflowPath", apiWorkflowPath);
         }
-        StyleTemplate styleTemplate = styleTemplateService.getById(projectStyleId);
-        return styleTemplate == null ? "" : styleTemplate.getDescription();
+
+        overrides.put("inputMapping", firstNonNull(
+                baseParams.get("regenerateInputMapping"),
+                defaultCharacterRegenerateInputMapping()
+        ));
+        overrides.put("outputMapping", firstNonNull(
+                baseParams.get("regenerateOutputMapping"),
+                Map.of("nodeId", CHARACTER_REGENERATE_OUTPUT_NODE_ID)
+        ));
+
+        return overrides;
+    }
+
+    private Map<String, Object> defaultCharacterRegenerateInputMapping() {
+        Map<String, Object> imageMapping = new LinkedHashMap<>();
+        imageMapping.put("nodeId", CHARACTER_REGENERATE_LOAD_IMAGE_NODE_ID);
+        imageMapping.put("field", "image");
+        imageMapping.put("type", "image");
+        imageMapping.put("filenamePrefix", "character-regenerate");
+
+        Map<String, Object> promptMapping = new LinkedHashMap<>();
+        promptMapping.put("nodeId", CHARACTER_REGENERATE_PROMPT_NODE_ID);
+        promptMapping.put("field", "prompt");
+        promptMapping.put("type", "string");
+
+        Map<String, Object> inputMapping = new LinkedHashMap<>();
+        inputMapping.put("image", imageMapping);
+        inputMapping.put("prompt", promptMapping);
+        return inputMapping;
+    }
+
+    private Object firstNonNull(Object... values) {
+        for (Object value : values) {
+            if (value != null) {
+                return value;
+            }
+        }
+        return null;
+    }
+
+    private String firstNonBlank(String... values) {
+        for (String value : values) {
+            if (StringUtils.hasText(value)) {
+                return value;
+            }
+        }
+        return null;
+    }
+
+    private String asText(Object value) {
+        return value == null ? null : Objects.toString(value, null);
     }
 }

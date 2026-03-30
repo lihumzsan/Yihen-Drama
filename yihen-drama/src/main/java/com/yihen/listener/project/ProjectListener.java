@@ -55,7 +55,9 @@ public class ProjectListener {
         projectSearchRepository.save(ProjectDocMapper.toDoc(project));
         // Redis同步
         // 更新对应缓存
-        redisUtils.updateHashPartial(ProjectRedisConstant.PROJECT_INFO_KEY + project.getId(), project);
+        redisUtils.delete(ProjectRedisConstant.PROJECT_INFO_KEY + project.getId());
+        redisUtils.putHash(ProjectRedisConstant.PROJECT_INFO_KEY + project.getId(), project, 1, java.util.concurrent.TimeUnit.DAYS);
+        redisUtils.set(ProjectRedisConstant.PROJECT_STYLE_KEY + project.getId(), project.getStyleId(), 1, java.util.concurrent.TimeUnit.DAYS);
         projectInitializer.run(null);
     }
 

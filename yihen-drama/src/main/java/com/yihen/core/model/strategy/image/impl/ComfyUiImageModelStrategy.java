@@ -13,6 +13,7 @@ import com.yihen.entity.Storyboard;
 import com.yihen.mapper.ModelDefinitionMapper;
 import com.yihen.service.ModelManageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -41,11 +42,12 @@ public class ComfyUiImageModelStrategy implements ImageModelStrategy {
 
     @Override
     public String create(ImageModelRequestVO imageModelRequestVO) throws Exception {
-        ModelInstance modelInstance = modelManageService.getModelInstanceById(imageModelRequestVO.getModelInstanceId());
+        ModelInstance modelInstance = resolveModelInstance(imageModelRequestVO);
         String baseUrl = modelDefinitionMapper.getBaseUrlById(modelInstance.getModelDefId());
 
         Map<String, Object> runtimeInputs = new HashMap<>();
         applyPromptAliases(runtimeInputs, resolvePrompt(imageModelRequestVO.getDescription(), null));
+        applyReferenceImages(runtimeInputs, imageModelRequestVO.getObject());
         applyResolution(runtimeInputs, modelInstance);
 
         ComfyUiWorkflowBuilder.PromptBuildResult promptBuildResult =
@@ -61,13 +63,15 @@ public class ComfyUiImageModelStrategy implements ImageModelStrategy {
 
     @Override
     public String createByTextAndImage(ImageModelRequestVO imageModelRequestVO) throws Exception {
-        ModelInstance modelInstance = modelManageService.getModelInstanceById(imageModelRequestVO.getModelInstanceId());
+        ModelInstance modelInstance = resolveModelInstance(imageModelRequestVO);
         String baseUrl = modelDefinitionMapper.getBaseUrlById(modelInstance.getModelDefId());
         Storyboard storyboard = (Storyboard) imageModelRequestVO.getObject();
 
         Map<String, Object> runtimeInputs = new HashMap<>();
-        applyPromptAliases(runtimeInputs, resolvePrompt(storyboard == null ? null : storyboard.getImagePrompt(),
-                storyboard == null ? null : storyboard.getDescription()));
+        applyPromptAliases(runtimeInputs, resolvePrompt(
+                storyboard == null ? null : storyboard.getImagePrompt(),
+                storyboard == null ? null : storyboard.getDescription()
+        ));
         applyResolution(runtimeInputs, modelInstance);
 
         List<String> referenceImages = collectReferenceImages(storyboard);
@@ -160,6 +164,29 @@ public class ComfyUiImageModelStrategy implements ImageModelStrategy {
         return new ArrayList<>(referenceImages).subList(0, Math.min(referenceImages.size(), MAX_REFERENCE_IMAGES));
     }
 
+    private void applyReferenceImages(Map<String, Object> runtimeInputs, Object object) {
+        if (object instanceof Storyboard storyboard) {
+            List<String> referenceImages = collectReferenceImages(storyboard);
+            if (!referenceImages.isEmpty()) {
+                runtimeInputs.put("images", referenceImages);
+                runtimeInputs.put("refImages", referenceImages);
+                runtimeInputs.put("image", referenceImages.get(0));
+            }
+            return;
+        }
+        if (object instanceof Characters character && StringUtils.hasText(character.getAvatar())) {
+            runtimeInputs.put("image", character.getAvatar());
+            runtimeInputs.put("images", List.of(character.getAvatar()));
+            runtimeInputs.put("refImages", List.of(character.getAvatar()));
+            return;
+        }
+        if (object instanceof Scene scene && StringUtils.hasText(scene.getThumbnail())) {
+            runtimeInputs.put("image", scene.getThumbnail());
+            runtimeInputs.put("images", List.of(scene.getThumbnail()));
+            runtimeInputs.put("refImages", List.of(scene.getThumbnail()));
+        }
+    }
+
     private void applyPromptAliases(Map<String, Object> runtimeInputs, String prompt) {
         runtimeInputs.put("prompt", prompt);
         runtimeInputs.put("text", prompt);
@@ -235,5 +262,22 @@ public class ComfyUiImageModelStrategy implements ImageModelStrategy {
 
     private Map<String, Object> safeParams(ModelInstance modelInstance) {
         return modelInstance.getParams() == null ? Collections.emptyMap() : modelInstance.getParams();
+    }
+
+    private ModelInstance resolveModelInstance(ImageModelRequestVO imageModelRequestVO) {
+        ModelInstance modelInstance = modelManageService.getModelInstanceById(imageModelRequestVO.getModelInstanceId());
+        Map<String, Object> paramsOverride = imageModelRequestVO.getParamsOverride();
+        if (modelInstance == null || paramsOverride == null || paramsOverride.isEmpty()) {
+            return modelInstance;
+        }
+        ModelInstance effectiveInstance = new ModelInstance();
+        BeanUtils.copyProperties(modelInstance, effectiveInstance);
+        Map<String, Object> mergedParams = new HashMap<>();
+        if (modelInstance.getParams() != null) {
+            mergedParams.putAll(modelInstance.getParams());
+        }
+        mergedParams.putAll(paramsOverride);
+        effectiveInstance.setParams(mergedParams);
+        return effectiveInstance;
     }
 }
