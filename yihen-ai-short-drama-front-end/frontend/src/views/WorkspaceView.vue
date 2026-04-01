@@ -1592,7 +1592,8 @@
                   </svg>
                 </div>
                 <div class="model-info">
-                  <span class="model-name">{{ model.instanceName || model.modelCode }}</span>
+                  <span class="model-name">{{ getModelDisplayName(model) }}</span>
+                  <span v-if="getModelWorkflowSummary(model)" class="model-workflow">{{ getModelWorkflowSummary(model) }}</span>
                   <span class="model-provider">{{ model.providerCode || '未知提供商' }}</span>
                 </div>
                 <span class="model-badge" v-if="isDefaultModel(model)">默认</span>
@@ -2219,6 +2220,7 @@ import { useRoute } from 'vue-router'
 import { projectApi, episodeApi, modelInstanceApi, characterApi, sceneApi, storyboardApi } from '@/api'
 import { useGlobalStore } from '@/stores/global'
 import { useToast } from '@/composables/useToast'
+import { formatWorkflowReference } from '@/composables/useModelConfig'
 
 const route = useRoute()
 const globalStore = useGlobalStore()
@@ -4567,6 +4569,42 @@ const selectedVideoModelName = computed(() => {
   const model = videoModels.value.find(m => m.id === id)
   return model?.instanceName || model?.modelCode || model?.modelName || model?.name || ''
 })
+
+const parseModelParams = (model) => {
+  const params = model?.params
+  if (!params) return {}
+  if (typeof params === 'string') {
+    try {
+      return JSON.parse(params)
+    } catch (err) {
+      return {}
+    }
+  }
+  return params
+}
+
+const getModelDisplayName = (model) => {
+  return model?.instanceName || model?.modelCode || model?.modelName || model?.name || '模型'
+}
+
+const getModelWorkflowSummary = (model) => {
+  const params = parseModelParams(model)
+  const primary = formatWorkflowReference(
+    params.workflowPath,
+    params.workflowGroup,
+    params.workflowName
+  )
+  const regenerate = formatWorkflowReference(
+    params.regenerateWorkflowPath,
+    params.regenerateWorkflowGroup,
+    params.regenerateWorkflowName
+  )
+
+  if (primary && regenerate) {
+    return `${primary} | 重生成：${regenerate}`
+  }
+  return primary || regenerate || ''
+}
 
 const generateFirstFramePrompt = async () => {
   if (!selectedStoryboard.value || generatingFirstFrame.value) return
@@ -7314,6 +7352,14 @@ onUnmounted(() => {
   font-size: 12px;
   font-weight: 500;
   color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.model-workflow {
+  font-size: 10px;
+  line-height: 1.4;
+  color: var(--gold-dark, #8b6914);
+  word-break: break-word;
 }
 
 .model-provider {

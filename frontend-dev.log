@@ -3,12 +3,12 @@
 > vite --host 0.0.0.0
 
 
-  [32m[1mVITE[22m v5.4.21[39m  [2mready in [0m[1m246[22m[2m[0m ms[22m
+  [32m[1mVITE[22m v5.4.21[39m  [2mready in [0m[1m228[22m[2m[0m ms[22m
 
   [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m3000[22m/[39m
-  [32m➜[39m  [1mNetwork[22m: [36mhttp://172.26.160.1:[1m3000[22m/[39m
   [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.0.114:[1m3000[22m/[39m
   [32m➜[39m  [1mNetwork[22m: [36mhttp://172.26.165.56:[1m3000[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://172.26.160.1:[1m3000[22m/[39m
 [2m[32m  ➜[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m
 DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
 
@@ -34,6 +34,52 @@ DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be
 
 More info: https://sass-lang.com/d/legacy-js-api
 
+[2m12:27:36[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /api/models/model-instance-by-type/TEXT?page=1&size=6[39m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1142:49)
+    at afterConnectMultiple (node:net:1723:7)
+[2m12:27:36[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /api/models/model-instance-by-type/TEXT?page=1&size=1[39m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1142:49)
+    at afterConnectMultiple (node:net:1723:7)
+[2m12:27:36[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /api/models/model-instance-by-type/IMAGE?page=1&size=1[39m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1142:49)
+    at afterConnectMultiple (node:net:1723:7)
+[2m12:27:36[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /api/models/model-instance-by-type/VIDEO?page=1&size=1[39m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1142:49)
+    at afterConnectMultiple (node:net:1723:7)
+[2m12:27:36[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /api/models/model-instance-by-type/AUDIO?page=1&size=1[39m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1142:49)
+    at afterConnectMultiple (node:net:1723:7)
+[2m12:27:36[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /api/models/model-instance-by-type/VECTOR?page=1&size=1[39m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1142:49)
+    at afterConnectMultiple (node:net:1723:7)
+[2m12:27:36[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /api/models/model-definition/list?page=1&size=6[39m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1142:49)
+    at afterConnectMultiple (node:net:1723:7)
+[2m12:46:04[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/SettingsView.vue[22m
+[2m12:46:21[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/SettingsView.vue[22m
+[2m12:46:47[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/SettingsView.vue[22m
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+[2m12:48:02[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/SettingsView.vue[22m
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+[2m12:48:13[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/SettingsView.vue[22m
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+[2m12:48:39[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/SettingsView.vue?vue&type=style&index=0&scoped=5e0b544f&lang.scss[22m
 DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
 
 More info: https://sass-lang.com/d/legacy-js-api
@@ -42,23 +88,42 @@ DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be
 
 More info: https://sass-lang.com/d/legacy-js-api
 
-[2m13:31:12[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/WorkspaceView.vue?vue&type=style&index=0&scoped=f1666959&lang.scss[22m
 DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
 
 More info: https://sass-lang.com/d/legacy-js-api
 
-[2m13:37:14[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/WorkspaceView.vue?vue&type=style&index=0&scoped=f1666959&lang.scss[22m
 DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
 
 More info: https://sass-lang.com/d/legacy-js-api
 
-[2m13:42:23[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/WorkspaceView.vue?vue&type=style&index=0&scoped=f1666959&lang.scss, /src/views/WorkspaceView.vue[22m
 DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
 
 More info: https://sass-lang.com/d/legacy-js-api
 
-[2m14:07:36[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/WorkspaceView.vue[22m
-[2m14:07:36[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/WorkspaceView.vue[22m
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+[2m13:11:03[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/WorkspaceView.vue[22m
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+[2m13:11:09[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/WorkspaceView.vue[22m
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+[2m13:11:21[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/WorkspaceView.vue[22m
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+[2m13:11:32[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/WorkspaceView.vue?vue&type=style&index=0&scoped=f1666959&lang.scss[22m
 DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
 
 More info: https://sass-lang.com/d/legacy-js-api

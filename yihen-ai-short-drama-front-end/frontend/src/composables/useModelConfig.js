@@ -167,10 +167,18 @@ const createDefaultConfig = (type) => {
         resolution: '1024x1024',
         quality: 'standard',
         workflowMode: 'auto',
+        workflowGroup: '',
+        workflowName: '',
         workflowPath: '',
         apiWorkflowPath: '',
         inputMappingText: '',
         outputMappingText: '',
+        regenerateWorkflowGroup: '',
+        regenerateWorkflowName: '',
+        regenerateWorkflowPath: '',
+        regenerateApiWorkflowPath: '',
+        regenerateInputMappingText: '',
+        regenerateOutputMappingText: '',
         pollIntervalMs: 3000,
         historyTimeoutMs: 180000,
         sceneCode: 'CHARACTER_GEN'
@@ -244,6 +252,118 @@ const stringifyJson = (value) => {
   return JSON.stringify(value, null, 2)
 }
 
+const WORKFLOW_ROOT_SEGMENTS = ['baseimage', 'basevideo', 'tool']
+
+const normalizeWorkflowPath = (workflowPath) => {
+  if (!workflowPath || typeof workflowPath !== 'string') return ''
+  return workflowPath.replace(/\\/g, '/').replace(/\/+/g, '/').trim()
+}
+
+const getWorkflowFileName = (workflowPath) => {
+  const normalized = normalizeWorkflowPath(workflowPath)
+  if (!normalized) return ''
+  const filename = normalized.split('/').pop() || ''
+  return filename.replace(/\.json$/i, '')
+}
+
+const joinWorkflowParts = (...parts) => parts.filter(Boolean).join(' / ')
+
+const getWorkflowPathSegments = (workflowPath) => {
+  const normalized = normalizeWorkflowPath(workflowPath)
+  if (!normalized) return []
+  return normalized.split('/').filter(Boolean)
+}
+
+const findWorkflowRootIndex = (segments = []) => {
+  for (let index = segments.length - 1; index >= 0; index -= 1) {
+    if (WORKFLOW_ROOT_SEGMENTS.includes(String(segments[index] || '').toLowerCase())) {
+      return index
+    }
+  }
+  return -1
+}
+
+export const resolveWorkflowReference = (workflowPath, fallbackGroup = '', fallbackName = '') => {
+  if (!workflowPath || typeof workflowPath !== 'string') {
+    return {
+      group: fallbackGroup || '',
+      name: fallbackName || ''
+    }
+  }
+
+  const segments = getWorkflowPathSegments(workflowPath)
+  if (!segments.length) {
+    return {
+      group: fallbackGroup || '',
+      name: fallbackName || ''
+    }
+  }
+
+  const directorySegments = segments.slice(0, -1)
+  const rootIndex = findWorkflowRootIndex(directorySegments)
+  const groupSegments = rootIndex >= 0
+    ? directorySegments.slice(rootIndex + 1)
+    : directorySegments
+
+  return {
+    group: groupSegments.join(' / ') || fallbackGroup || '',
+    name: getWorkflowFileName(workflowPath) || fallbackName || ''
+  }
+}
+
+export const formatWorkflowReference = (workflowPath, fallbackGroup = '', fallbackName = '') => {
+  const { group, name } = resolveWorkflowReference(workflowPath, fallbackGroup, fallbackName)
+  return joinWorkflowParts(group, name)
+}
+
+const normalizeWorkflowParams = (type, params = {}) => {
+  if (!params || typeof params !== 'object') return {}
+
+  const normalized = { ...params }
+  const primary = resolveWorkflowReference(
+    normalized.workflowPath,
+    normalized.workflowGroup,
+    normalized.workflowName
+  )
+  normalized.workflowGroup = primary.group
+  normalized.workflowName = primary.name
+
+  if (type === 'image') {
+    const regenerate = resolveWorkflowReference(
+      normalized.regenerateWorkflowPath,
+      normalized.regenerateWorkflowGroup,
+      normalized.regenerateWorkflowName
+    )
+    normalized.regenerateWorkflowGroup = regenerate.group
+    normalized.regenerateWorkflowName = regenerate.name
+  }
+
+  return normalized
+}
+
+const buildWorkflowSummary = (type, params = {}) => {
+  if (!params || (type !== 'image' && type !== 'video')) return ''
+
+  const primary = formatWorkflowReference(
+    params.workflowPath,
+    params.workflowGroup,
+    params.workflowName
+  )
+
+  if (type !== 'image') return primary
+
+  const regenerate = formatWorkflowReference(
+    params.regenerateWorkflowPath,
+    params.regenerateWorkflowGroup,
+    params.regenerateWorkflowName
+  )
+
+  if (primary && regenerate) {
+    return `主流程：${primary} | 重生成：${regenerate}`
+  }
+  return primary || regenerate
+}
+
 export function useModelConfig() {
   const instances = ref([])
   const instanceTotals = reactive({ text: 0, image: 0, video: 0, audio: 0, vector: 0 })
@@ -280,6 +400,7 @@ export function useModelConfig() {
     } catch (err) {
       params = {}
     }
+    params = normalizeWorkflowParams(type, params)
 
     return {
       id: item.id,
@@ -288,6 +409,7 @@ export function useModelConfig() {
       isDefault: false,
       defaultScope: '',
       sceneCode: item.sceneCode || '',
+      workflowSummary: buildWorkflowSummary(type, params),
       config: {
         ...cloneDefaultConfig(type),
         provider: item.providerCode || 'custom',
@@ -299,7 +421,9 @@ export function useModelConfig() {
         sceneCode: item.sceneCode || getDefaultSceneCode(mapTypeToApi(type)),
         ...params,
         inputMappingText: stringifyJson(params.inputMapping),
-        outputMappingText: stringifyJson(params.outputMapping)
+        outputMappingText: stringifyJson(params.outputMapping),
+        regenerateInputMappingText: stringifyJson(params.regenerateInputMapping),
+        regenerateOutputMappingText: stringifyJson(params.regenerateOutputMapping)
       }
     }
   }
@@ -333,6 +457,13 @@ export function useModelConfig() {
       if (config.workflowMode) params.workflowMode = config.workflowMode
       if (config.workflowPath) params.workflowPath = config.workflowPath.trim()
       if (config.apiWorkflowPath) params.apiWorkflowPath = config.apiWorkflowPath.trim()
+      const workflowRef = resolveWorkflowReference(
+        config.workflowPath,
+        config.workflowGroup,
+        config.workflowName
+      )
+      if (workflowRef.group) params.workflowGroup = workflowRef.group
+      if (workflowRef.name) params.workflowName = workflowRef.name
       if (config.pollIntervalMs != null && config.pollIntervalMs !== '') {
         params.pollIntervalMs = Number(config.pollIntervalMs)
       }
@@ -343,6 +474,22 @@ export function useModelConfig() {
       const outputMapping = tryParseJson(config.outputMappingText)
       if (inputMapping) params.inputMapping = inputMapping
       if (outputMapping) params.outputMapping = outputMapping
+    }
+
+    if (uiData.type === 'image') {
+      if (config.regenerateWorkflowPath) params.regenerateWorkflowPath = config.regenerateWorkflowPath.trim()
+      if (config.regenerateApiWorkflowPath) params.regenerateApiWorkflowPath = config.regenerateApiWorkflowPath.trim()
+      const regenerateWorkflowRef = resolveWorkflowReference(
+        config.regenerateWorkflowPath,
+        config.regenerateWorkflowGroup,
+        config.regenerateWorkflowName
+      )
+      if (regenerateWorkflowRef.group) params.regenerateWorkflowGroup = regenerateWorkflowRef.group
+      if (regenerateWorkflowRef.name) params.regenerateWorkflowName = regenerateWorkflowRef.name
+      const regenerateInputMapping = tryParseJson(config.regenerateInputMappingText)
+      const regenerateOutputMapping = tryParseJson(config.regenerateOutputMappingText)
+      if (regenerateInputMapping) params.regenerateInputMapping = regenerateInputMapping
+      if (regenerateOutputMapping) params.regenerateOutputMapping = regenerateOutputMapping
     }
 
     return {

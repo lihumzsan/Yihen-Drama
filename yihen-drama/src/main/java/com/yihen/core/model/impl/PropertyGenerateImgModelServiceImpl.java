@@ -30,7 +30,7 @@ public class PropertyGenerateImgModelServiceImpl extends ImgModelServiceImpl imp
 
     private static final String ACTION_REGENERATE = "regenerate";
     private static final String DEFAULT_CHARACTER_REGENERATE_WORKFLOW_PATH =
-            "D:\\comfui\\workflows\\baseimage\\02_character_consistency\\P1_QwenImageEdit2511三工作流组合_QwenImageEdit2511\\角色一致性-QwenImageEdit2511三工作流组合-RunningHub原始工作流.json";
+            "D:\\comfui\\workflows\\baseimage\\图片编辑\\qwen\\单图编辑.json";
     private static final String CHARACTER_REGENERATE_OUTPUT_NODE_ID = "46";
     private static final String CHARACTER_REGENERATE_LOAD_IMAGE_NODE_ID = "49";
     private static final String CHARACTER_REGENERATE_PROMPT_NODE_ID = "44";
@@ -128,10 +128,13 @@ public class PropertyGenerateImgModelServiceImpl extends ImgModelServiceImpl imp
                 : modelInstance.getParams();
         Map<String, Object> overrides = new LinkedHashMap<>();
 
-        overrides.put("workflowPath", firstNonBlank(
-                asText(baseParams.get("regenerateWorkflowPath")),
-                DEFAULT_CHARACTER_REGENERATE_WORKFLOW_PATH
-        ));
+        String regenerateWorkflowPath = asText(baseParams.get("regenerateWorkflowPath"));
+        if (!StringUtils.hasText(regenerateWorkflowPath)) {
+            log.warn("Character regenerate workflow is not explicitly configured for modelInstanceId={}, fallback to primary workflowPath", modelInstanceId);
+            return overrides;
+        }
+
+        overrides.put("workflowPath", regenerateWorkflowPath);
 
         String apiWorkflowPath = asText(baseParams.get("regenerateApiWorkflowPath"));
         if (StringUtils.hasText(apiWorkflowPath)) {
@@ -190,3 +193,4 @@ public class PropertyGenerateImgModelServiceImpl extends ImgModelServiceImpl imp
         return value == null ? null : Objects.toString(value, null);
     }
 }
+

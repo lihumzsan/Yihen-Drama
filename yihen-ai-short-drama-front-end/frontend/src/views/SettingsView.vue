@@ -141,6 +141,7 @@
                   <span class="instance-name">{{ instance.name }}</span>
                   <span class="instance-provider">{{ getProviderName(activeModelType, instance.config.provider) }}</span>
                   <span class="instance-scene">{{ getSceneLabel(instance.type, instance.config.sceneCode) }}</span>
+                  <span v-if="instance.workflowSummary" class="instance-workflow">{{ instance.workflowSummary }}</span>
                 </div>
                 <div class="instance-badges">
                   <span v-if="instance.isDefault" class="badge default">默认</span>
@@ -409,6 +410,10 @@
                     placeholder="例如: D:\comfui\workflows\baseimage\..."
                   />
                 </div>
+                <div v-if="currentWorkflowLabel" class="config-row">
+                  <label class="config-label">目录分类</label>
+                  <div class="workflow-meta">{{ currentWorkflowLabel }}</div>
+                </div>
                 <div class="config-row">
                   <label class="config-label">API工作流</label>
                   <textarea
@@ -417,6 +422,20 @@
                     placeholder="例如: D:\comfui\workflows\api\image\..."
                   />
                 </div>
+                <template v-if="activeModelType === 'image'">
+                  <div class="config-row">
+                    <label class="config-label">重生成工作流</label>
+                    <textarea
+                      class="config-input config-textarea"
+                      v-model="currentConfig.config.regenerateWorkflowPath"
+                      placeholder="例如: D:\comfui\workflows\baseimage\图片编辑\..."
+                    />
+                  </div>
+                  <div v-if="currentRegenerateWorkflowLabel" class="config-row">
+                    <label class="config-label">重生成分类</label>
+                    <div class="workflow-meta">{{ currentRegenerateWorkflowLabel }}</div>
+                  </div>
+                </template>
                 <div class="config-row">
                   <label class="config-label">输入映射</label>
                   <textarea
@@ -616,6 +635,7 @@ import { useGlobalStore } from '@/stores/global'
 import { modelInstanceApi, modelDefinitionApi } from '@/api'
 import { 
   useModelConfig,
+  formatWorkflowReference,
   modelTypes, 
   modelProviders, 
   resolutionOptions, 
@@ -684,6 +704,16 @@ const settings = reactive({
 
 const voices = computed(() => voiceOptions['zh-CN'] || [])
 const resolutions = resolutionOptions
+const currentWorkflowLabel = computed(() => formatWorkflowReference(
+  currentConfig.config.workflowPath,
+  currentConfig.config.workflowGroup,
+  currentConfig.config.workflowName
+))
+const currentRegenerateWorkflowLabel = computed(() => formatWorkflowReference(
+  currentConfig.config.regenerateWorkflowPath,
+  currentConfig.config.regenerateWorkflowGroup,
+  currentConfig.config.regenerateWorkflowName
+))
 
 // 厂商管理方法
 const loadProviders = async () => {
@@ -1041,6 +1071,7 @@ const onProviderChange = () => {
 .instance-name { font-size: 15px; font-weight: 600; }
 .instance-provider { font-size: 12px; color: var(--text-tertiary); }
 .instance-scene { font-size: 12px; color: var(--text-muted); }
+.instance-workflow { font-size: 12px; color: var(--gold-dark, #8b6914); line-height: 1.5; }
 .instance-badges { display: flex; gap: 8px; }
 .badge { padding: 4px 10px; font-size: 11px; border-radius: 4px;
   &.default { background: var(--gold-primary); color: var(--text-on-accent); font-weight: 600; }
@@ -1097,6 +1128,7 @@ const onProviderChange = () => {
 }
 .config-textarea { min-height: 96px; resize: vertical; font-family: inherit; }
 .config-code { font-family: "Consolas", "Courier New", monospace; }
+.workflow-meta { flex: 1; padding: 10px 14px; font-size: 13px; line-height: 1.6; color: var(--gold-dark, #8b6914); background: rgba(212, 175, 55, 0.08); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 4px; word-break: break-word; }
 .input-with-action { flex: 1; display: flex; align-items: center; position: relative;
   .config-input { flex: 1; padding-right: 44px; }
   .input-action { position: absolute; right: 8px; width: 32px; height: 32px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
