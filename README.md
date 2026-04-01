@@ -240,6 +240,10 @@ docker compose -f docker-compose.full.yml up -d --build
 
 - 初始化脚本：`yihen-drama/sql/init_schema.sql`
 - MySQL 数据卷为空时自动执行
+- 该脚本已包含当前默认模型、ComfyUI 工作流路径和默认项，适用于全新环境初始化
+- 如果是已有旧库升级，还需要手动执行：`yihen-drama/sql/patches/2026-04-01_sync_runtime_model_seed_data.sql`
+- 当前 ComfyUI 工作流依赖本地目录：`D:\comfui\workflows\baseimage` 和 `D:\comfui\workflows\basevideo`
+- Git 中提交的第三方模型 `api_key` 为占位值或空串，启动后需要在设置页补充真实密钥
 - 若要重置：
 ```bash
 docker compose -f docker-compose.full.yml down -v
